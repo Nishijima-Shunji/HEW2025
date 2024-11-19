@@ -1,0 +1,21 @@
+﻿  compilation object save succeeded; see C:\Users\takum\OneDrive - nkz.ac.jp\二年次\06_HEW\HEWGame\HEWGame\x64\Debug\PixelShader.cso
+  compilation object save succeeded; see C:\Users\takum\OneDrive - nkz.ac.jp\二年次\06_HEW\HEWGame\HEWGame\x64\Debug\VertexShader.cso
+  Game.cpp
+  GameScene.cpp
+C:\Users\takum\OneDrive - nkz.ac.jp\二年次\06_HEW\HEWGame\HEWGame\HEWGame\GameScene.cpp(67,25): warning C4267: '=': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  Input.cpp
+  Object.cpp
+  ResultScene.cpp
+  SceneManager.cpp
+  TextureManager.cpp
+  TitleScene.cpp
+  main.cpp
+  mapfile.cpp
+C:\Users\takum\OneDrive - nkz.ac.jp\二年次\06_HEW\HEWGame\HEWGame\HEWGame\mapfile.cpp(70,43): warning C4244: '=': 'float' から '_Ty' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Ty=int
+          ]
+  sound.cpp
+  コードを生成中...
+  HEWGame.vcxproj -> C:\Users\takum\OneDrive - nkz.ac.jp\二年次\06_HEW\HEWGame\HEWGame\x64\Debug\HEWGame.exe
