@@ -3,7 +3,7 @@
 #include "Game.h"
 #include <algorithm>
 
-
+//‚ 
 GameScene::GameScene() {
 	textureManager = new TextureManager(g_pDevice);
 
