@@ -7,6 +7,7 @@
 class Object
 {
 private:
+protected:
 	Vertex vertexList[4] =
 	{
 		//=============TRIANGLE================
@@ -45,6 +46,8 @@ private:
 	//テクスチャが縦横に何分割されているか
 	int splitX = 1;
 	int splitY = 1;
+
+//protected:
 
 public:
 
