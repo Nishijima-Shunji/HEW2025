@@ -30,8 +30,8 @@
 //!	@retval 
 //==============================================================================
 
-Player::Player(int startX, int startY, float spd)
-    : x(startX), y(startY), targetX(startX), targetY(startY), speed(spd) {}
+//コンストラクタ
+//: x(startX), y(startY), targetX(startX), targetY(startY), speed(spd) {}
 
 void Player::Init()
 {

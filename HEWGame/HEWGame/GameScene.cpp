@@ -1,47 +1,37 @@
 #include "GameScene.h"
-#include "GameScene.h"
 #include "Game.h"
 #include <algorithm>
 
+#include "Player.h"
+#include "Enemy.h"
+#include "Wall.h"
+
+// textureMappingの初期化
+	//マップからオブジェクトを生成する際に参照するキー
+static std::unordered_map<int, std::wstring> textureMapping = {
+	{1, L"asset/wall.png"},		//壁
+	{2, L"asset/player.png"},	//プレイヤー
+	{3, L"asset/enemy.png"}		//敵
+};
 
 GameScene::GameScene() {
 	textureManager = new TextureManager(g_pDevice);
 
-	game_bg_list.resize(1000);  // オブジェクトを1000個生成する
-
-	for (int i = 0; i < 1000; ++i) {
-		game_bg_list[i] = new Object;  // オブジェクト生成
-		printf("game_bg[%d] 生成\n", i);
-		game_bg_list[i]->Init(textureManager, L"asset/Game_test.png", 8, 4);
-		game_bg_list[i]->SetPos(0.0f + i * 10, 0.0f, 0.0f);  // 位置を少しずつずらす例
-		game_bg_list[i]->SetSize(300.0f, 300.0f, 0.0f);  // 大きさを設定
-		game_bg_list[i]->SetAngle(0.0f);  // 角度を設定
-		game_bg_list[i]->SetColor(1.0f, 1.0f, 1.0f, 1.0f);  // 色を設定
-	}
-	//マップ読み込み
+	// マップデータをロード
 	LoadMapData();
-	for (int i = 0; i < maplist.size(); ++i) {
-		if (maplist[i] != 0) {
-			switch (maplist[i]) {
-			case 0: mapdata[i]->Init(textureManager, L"asset/map_0.png", 8, 4); break;
-			case 1: mapdata[i]->Init(textureManager, L"asset/map_1.png", 8, 4); break;
-			case 2: mapdata[i]->Init(textureManager, L"asset/map_2.png", 8, 4); break;
-			}
-			mapdata[i]->SetPos((i % 10) * 20.0f - 100.0f, ((i / 10) * -20.0f) + 100.0f, 0.0f);	//位置を設定
-			mapdata[i]->SetSize(20.0f, 20.0f, 0.0f);	//大きさを設定
-			mapdata[i]->SetAngle(0.0f);	//角度を設定
-			mapdata[i]->SetColor(1.0f, 1.0f, 1.0f, 1.0f);	//色を設定
-		}
-	}
 }
 
 GameScene::~GameScene() {
-	for (int i = 0; i < 1000; ++i) {
-		game_bg_list[i]->Uninit();			//タイトルを終了
-		printf("game_bg 解放\n");
-		delete game_bg_list[i];
+	// mapdataのリソースを解放
+	for (auto& row : mapdata) {
+		for (auto& obj : row) {
+			obj.reset(); // unique_ptr のリソース解放
+		}
 	}
-	delete textureManager;					//テクスチャマネージャーの削除
+	mapdata.clear(); // 明示的にベクトルをクリア
+
+	// TextureManagerを解放
+	delete textureManager;
 }
 
 void GameScene::Update() {
@@ -52,35 +42,64 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-	for (int i = 0; i < 1000; i++) {
-		game_bg_list[i]->Draw();
-	}
-	for (int i = 0; i < mapdata.size(); i++) {
-		mapdata[i]->Draw();
+	for (const auto& row : mapdata) {
+		for (const auto& obj : row) {
+			if (obj) {
+				obj->Draw();
+			}
+		}
 	}
 }
 
 void GameScene::LoadMapData() {
-	mapdata.resize(0);
+	mapdata.clear();
 
-	maplist = Loadmap("Data/TestData.csv");		//マップの情報を取得
-	mapval = maplist.size();
+	// マップデータをCSVから読み込む
+	maplist = Loadmap("Data/TestData.csv");
+	mapdata.resize(maplist.size()); // 外側のベクトルをリサイズ
 
-	/*Object* obj[3] = { nullptr };
-	obj[0] = map_0;
-	obj[1] = map_1;
-	obj[2] = map_2;*/
+	for (int i = 0; i < maplist.size(); ++i) {
+		mapdata[i].resize(maplist[i].size()); // 各行をリサイズ
+		for (int j = 0; j < maplist[i].size(); ++j) {
+			int objectType = maplist[i][j];
+			if (objectType != 0) {
+				auto obj = CreateObject(objectType, textureManager); // Factory関数でオブジェクト生成
+				if (obj) {
+					float x = j * 30.0f - 500.0f; // x座標		列 * Objectの大きさ * オフセット
+					float y = i * -30.0f + 280.0f; // y座標		行 * Objectの大きさ * オフセット
 
-	for (int i = 0; i < mapval; i++) {
-		mapdata.emplace_back(std::make_unique<Object>());	//マップのオブジェクト数分を追加
+					obj->SetPos(x, y, 0.0f);
+					obj->SetSize(30.0f, 30.0f, 0.0f);
+					obj->SetAngle(0.0f);
+					obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+					mapdata[i][j] = std::move(obj);
+				}
+			}
+		}
+	}
+}
+
+std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* textureManager) {
+	std::unique_ptr<Object> obj;
+
+	//オブジェクトを生成
+	switch (objectType) {
+	case 1: obj = std::make_unique<Player>(); break;
+	case 2: obj = std::make_unique<Wall>(); break;
+	case 3: obj = std::make_unique<Enemy>(); break;
+	default: return nullptr;
 	}
 
-	//for (int i = 0; i < mapval; i++) {
-	//	for (int j = 0; j < 70; j++) {
-	//		int dataValue = maplist[j];
-	//		if (dataValue != 0 && dataValue < 3) {  // 0以外かつ範囲内のデータ
-	//			mapdata[i] = std::make_unique<Object>(*obj[dataValue]);
-	//		}
-	//	}
-	//}
+	//textureMappingに設定したパスを探す
+	auto it = textureMapping.find(objectType);
+	if (it != textureMapping.end()) {
+		obj->Init(textureManager, it->second.c_str());
+	}
+	else {
+		obj->Init(textureManager, L"asset/default.png");
+	}
+
+	return obj;
 }
+

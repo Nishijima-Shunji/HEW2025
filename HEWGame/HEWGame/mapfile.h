@@ -4,7 +4,7 @@
 #include <vector>
 #include<DirectXMath.h>
 
-#define MAP_WIDTH (10)
-#define MAP_HEIGHT (7)
+#define MAP_WIDTH (32)
+#define MAP_HEIGHT (18)
 
-std::vector<int> Loadmap(const char* filePath);
+std::vector<std::vector<int>> Loadmap(const char* filePath);

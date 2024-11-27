@@ -74,12 +74,12 @@ void Game::Draw() {
 	//======================
 	//デバッグ	マップ数値表示
 	if (a == 0) {
-		for (int i = 0; i < 70; i++) {
+		for (int i = 0; i < 18; i++) {
+			for (int j = 0; j < 32; j++) {
 
-			std::cout << DataTable[i] << ",";
-			if (i % 10 == 9) {
-				std::cout << std::endl;
+				std::cout << DataTable[i][j] << ",";
 			}
+			std::cout << std::endl;
 		}
 		a++;
 	}

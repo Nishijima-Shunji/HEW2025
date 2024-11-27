@@ -19,8 +19,6 @@ public:
 	float numU = 0;
 	float numV = 0;
 
-    Player(int startX, int startY, float spd);
-
 	void Init();
     void Update(int newX, int newY, float deltaTime);
 	void Draw();

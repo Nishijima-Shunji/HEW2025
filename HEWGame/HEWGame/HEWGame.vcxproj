@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="direct3d.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -141,12 +142,14 @@
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="Wall.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
     <ClCompile Include="Light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="direct3d.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Input.h" />
@@ -157,6 +160,7 @@
     <ClInclude Include="sound.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Wall.h" />
     <ClInclude Include="WICTextureLoader.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Light.h" />

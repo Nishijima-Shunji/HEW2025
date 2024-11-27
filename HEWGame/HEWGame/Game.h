@@ -20,7 +20,7 @@ private:
 	int a = 0;
 	
 public:
-	std::vector<int> DataTable;
+	std::vector<std::vector<int>> DataTable;
 
 	Object title_bg;		//タイトルオブジェクト
 	//Object game_bg;			//ゲームオブジェクト
