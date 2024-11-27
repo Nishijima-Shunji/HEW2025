@@ -11,6 +11,8 @@
 #include "SceneManager.h"
 #include "mapfile.h"
 
+#include "Light.h"
+
 class Game
 {
 private:
@@ -18,6 +20,8 @@ private:
 	Sound sound;
 	SceneManager sm;
 	int a = 0;
+
+	Light light;
 	
 public:
 	std::vector<std::vector<int>> DataTable;
