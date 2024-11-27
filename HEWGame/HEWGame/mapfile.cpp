@@ -32,49 +32,60 @@
 //!	@param	
 //!	@retval 
 //==============================================================================
-std::vector<int> Loadmap(const char* filePath) {
-	//返す配列
-	std::vector<int> DataTable(70);
+std::vector<std::vector<int>> Loadmap(const char* filePath) {
+    std::vector<std::vector<int>> DataTable(MAP_HEIGHT, std::vector<int>(MAP_WIDTH));
 
-	//ファイルオープン
-	std::ifstream fileStream(filePath);
-	if (!fileStream)
-	{
-		std::cout << "ファイルオープン失敗" << std::endl;
-		return DataTable;
-	}
+    // ファイルを開く
+    std::ifstream fileStream(filePath);
+    if (!fileStream) {
+        std::cout << "ファイルオープン失敗" << std::endl;
+        return DataTable;
+    }
 
-	//何行目か
-	int i = 0;
+    std::string bufferString;
 
-	//ファイルが終わるまで読み込み
-	while (!fileStream.eof())
-	{
-		i++;
-		std::string bufferString;
-		fileStream >> bufferString;
+    // 1行目の読み込みとBOMのチェック
+    if (std::getline(fileStream, bufferString)) {
+        // BOMを検出して削除
+        const std::string BOM = "\xEF\xBB\xBF"; // UTF-8 BOM　削除
+        if (bufferString.compare(0, BOM.size(), BOM) == 0) {
+            bufferString.erase(0, BOM.size());
+        }
+    }
 
-		//データを項目ごとに抽出
-		std::istringstream stringStream(bufferString);
-		std::vector<std::string> datas;
-		std::string tmp;
-		//カンマ区切りでデータを切り分け
-		while (getline(stringStream, tmp, ','))
-		{
-			datas.push_back(tmp);
-		}
+    // 何行目か
+    int i = 0;
 
-		if (i <= MAP_HEIGHT) {
-			//各番号を配列に格納
-			for (int j = 0; j < MAP_WIDTH; j++) {
-				DataTable[((i - 1) * 10) + j] = strtof(datas[j].c_str(), NULL);	//各行のデータを1次元配列に格納
-			}
-		}
-	}
-	//ファイルクローズ
-	fileStream.close();
-	return DataTable;
+    // ファイルが終わるまで読み込み
+    do {
+        if (bufferString.empty()) continue;
+
+        i++;
+        std::istringstream stringStream(bufferString);
+        std::vector<std::string> datas;
+        std::string tmp;
+
+        // カンマ区切りでデータを切り分け
+        while (std::getline(stringStream, tmp, ',')) {
+            datas.push_back(tmp);
+        }
+
+        if (i <= MAP_HEIGHT) {
+            // 各番号を配列に格納
+            for (int j = 0; j < MAP_WIDTH; j++) {
+                // 空白や無効値の場合に0を設定
+                DataTable[i - 1][j] = (j < datas.size() && !datas[j].empty())
+                    ? std::strtol(datas[j].c_str(), nullptr, 10)
+                    : 0;
+            }
+        }
+    } while (std::getline(fileStream, bufferString));
+
+    // ファイルクローズ
+    fileStream.close();
+    return DataTable;
 }
+
 
 //******************************************************************************
 //	End of file.
