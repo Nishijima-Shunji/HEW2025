@@ -11,7 +11,8 @@
 static std::unordered_map<int, std::wstring> textureMapping = {
 	{1, L"asset/wall.png"},		//壁
 	{2, L"asset/player.png"},	//プレイヤー
-	{3, L"asset/enemy.png"}		//敵
+	{3, L"asset/map_0.png"},	//ライト
+	{4, L"asset/enemy.png"}		//敵
 };
 
 GameScene::GameScene() {
@@ -36,6 +37,10 @@ GameScene::~GameScene() {
 
 void GameScene::Update() {
 	input.Update();
+
+	light->Update(WidthMAX, HeightMAX, maplist);
+	maplist = light->Map(maplist);
+
 	if (input.GetKeyTrigger(VK_3)) {
 		SceneManager::ChangeScene(SceneManager::RESULT);
 	}
@@ -60,6 +65,7 @@ void GameScene::LoadMapData() {
 
 	for (int i = 0; i < maplist.size(); ++i) {
 		mapdata[i].resize(maplist[i].size()); // 各行をリサイズ
+	  //↑データ入ってる
 		for (int j = 0; j < maplist[i].size(); ++j) {
 			int objectType = maplist[i][j];
 			if (objectType != 0) {
@@ -85,9 +91,10 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 
 	//オブジェクトを生成
 	switch (objectType) {
-	case 1: obj = std::make_unique<Player>(); break;
-	case 2: obj = std::make_unique<Wall>(); break;
-	case 3: obj = std::make_unique<Enemy>(); break;
+	case 1: obj = std::make_unique<Wall>(); break;
+	case 2: obj = std::make_unique<Player>(); break;
+	case 3: obj = std::make_unique<Light>(); break;
+	case 4: obj = std::make_unique<Enemy>(); break;
 	default: return nullptr;
 	}
 
@@ -98,8 +105,28 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	}
 	else {
 		obj->Init(textureManager, L"asset/default.png");
+		//obj->Init(textureManager, L"asset/map_0.png");
 	}
 
 	return obj;
 }
 
+void GameScene::GetMapSize()
+{
+	//現在マップの最大高さ
+	for (int i = 0; i < 18; i++)
+	{
+		if (maplist[i][0] == 1)
+		{
+			HeightMAX++;
+		}
+	}
+	//現在マップの最大横幅
+	for (int j = 0; j < 32; j++)
+	{
+		if (maplist[0][j] == 1)
+		{
+			WidthMAX++;
+		}
+	}
+}

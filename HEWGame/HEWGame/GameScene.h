@@ -3,12 +3,16 @@
 #include <unordered_map>
 #include <memory>
 
+
+#include "Light.h"
+
 const int MAP_HEIGHT = 18;
 const int MAP_WIDTH = 32;
 class Game;
 class GameScene : public BaseScene
 {
 private:
+    Light* light;
 
     Object* game_bg;
 
@@ -19,6 +23,9 @@ private:
     std::vector<std::vector<std::unique_ptr<Object>>> mapdata;
     std::vector<std::vector<int>> maplist;
 
+    int WidthMAX = 0;
+    int HeightMAX = 0;
+
 public:
     GameScene();
     ~GameScene();
@@ -28,5 +35,7 @@ public:
 
     void LoadMapData();
     std::unique_ptr<Object> CreateObject(int objectType, TextureManager* textureManager);
+
+    void GetMapSize();
 };
 
