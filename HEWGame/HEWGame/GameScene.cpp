@@ -33,13 +33,14 @@ GameScene::~GameScene() {
 
 	// TextureManager‚ð‰ð•ú
 	delete textureManager;
+
 }
 
 void GameScene::Update() {
 	input.Update();
 
 	light->Update(WidthMAX, HeightMAX, maplist);
-	maplist = light->Map(maplist);
+	//maplist = light->MapUpdate(maplist);
 
 	if (input.GetKeyTrigger(VK_3)) {
 		SceneManager::ChangeScene(SceneManager::RESULT);
