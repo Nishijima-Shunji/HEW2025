@@ -20,7 +20,7 @@ public:
 	float numV = 0;
 
 	void Init();
-    void Update(int newX, int newY, float deltaTime);
+	std::vector<std::vector<int>> Update(int newX, int newY, float deltaTime);
 	void Draw();
 	void Uninit();
 };

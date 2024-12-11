@@ -65,7 +65,7 @@ public:
 	float numV = 0;
 
 	virtual void Init(TextureManager* textureManager, const wchar_t* imgname, int sx = 1, int sy = 1);
-	virtual void Update(std::vector<std::vector<int>>);
+	virtual std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
 	virtual void Draw();
 	virtual void Uninit();
    

@@ -44,8 +44,30 @@ void GameScene::Update() {
 			if (obj) {
 				//std::cout << "row:" << 'row' << std::endl;
 				//std::cout << "obj:" << 'obj' << std::endl;
-				obj->Update(maplist);
-				//maplist = obj->Update(maplist);
+				//obj->Update(maplist);
+				maplist = obj->Update(maplist);
+			}
+		}
+	}
+
+	for (int i = 0; i < maplist.size(); ++i) {
+		mapdata[i].resize(maplist[i].size()); // 各行をリサイズ
+	  //↑データ入ってる
+		for (int j = 0; j < maplist[i].size(); ++j) {
+			int objectType = maplist[i][j];
+			if (objectType != 0) {
+				auto obj = CreateObject(objectType, textureManager); // Factory関数でオブジェクト生成
+				if (obj) {
+					float x = j * 30.0f - 500.0f; // x座標		列 * Objectの大きさ * オフセット
+					float y = i * -30.0f + 280.0f; // y座標		行 * Objectの大きさ * オフセット
+
+					obj->SetPos(x, y, 0.0f);
+					obj->SetSize(30.0f, 30.0f, 0.0f);
+					obj->SetAngle(0.0f);
+					obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+					mapdata[i][j] = std::move(obj);
+				}
 			}
 		}
 	}

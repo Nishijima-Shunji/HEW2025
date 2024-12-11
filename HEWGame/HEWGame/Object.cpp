@@ -58,9 +58,13 @@ void Object::Init(TextureManager* textureManager, const wchar_t* imgname, int sx
 	}
 }
 
-void Object::Update(std::vector<std::vector<int>> MapDate)
+std::vector<std::vector<int>> Object::Update(std::vector<std::vector<int>> MapDate)
 {
+	Map = MapDate;
+
 	//std::cout << "Ž¸”s" << std::endl;
+
+	return Map;
 }
 
 void Object::Draw() {

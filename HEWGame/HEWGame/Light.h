@@ -32,7 +32,7 @@ public:
 	std::vector<std::vector<int>> MapUpdate();
 	
 	//ライトの更新
-	void Update(std::vector<std::vector<int>>);
+	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
 	
 	//更新のパーツ分担
 	//ライトの変更

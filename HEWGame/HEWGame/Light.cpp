@@ -49,14 +49,14 @@ Light::~Light() {
 //
 
 
-void Light::Update(std::vector<std::vector<int>> MapData)
+std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDate)
 {
 	//引数　：　横幅、高さ、マップデータ
 	//std::cout << "ライト" << std::endl;
 
 	//Width = WidthMAX;
 	//Height = HeightMAX;
-	Map = MapData;
+	Map = MapDate;
 
 	switch (Mode)
 	{
@@ -64,7 +64,7 @@ void Light::Update(std::vector<std::vector<int>> MapData)
 		//座標取得
 		//=============================================================================================
 		Position();
-		Mode++;
+		//Mode++;
 		break;
 	case 1:
 		//ライト切り替え
@@ -80,6 +80,7 @@ void Light::Update(std::vector<std::vector<int>> MapData)
 
 	MapUpdate();
 
+	return Map;
 }
 
 void Light::Change() {
@@ -141,8 +142,8 @@ void Light::Move() {
 	//移動処理
 //===========================================================================================
 
-	Old_Pos_X = Pos_X;
-	Old_Pos_Y = Pos_Y;
+	//Old_Pos_X = Pos_X;
+	//Old_Pos_Y = Pos_Y;
 
 	//左に移動
 	if (input.GetKeyTrigger(VK_A)) {
@@ -193,6 +194,8 @@ void Light::Move() {
 			Pos_X += 1;
 		}
 	}
+	Pos_X++;
+
 }
 
 void Light::Flash() {
