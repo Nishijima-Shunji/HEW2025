@@ -39,8 +39,16 @@ GameScene::~GameScene() {
 void GameScene::Update() {
 	input.Update();
 
-	light->Update(WidthMAX, HeightMAX, maplist);
-	//maplist = light->MapUpdate(maplist);
+	for (const auto& row : mapdata) {
+		for (const auto& obj : row) {
+			if (obj) {
+				//std::cout << "row:" << 'row' << std::endl;
+				//std::cout << "obj:" << 'obj' << std::endl;
+				obj->Update(maplist);
+				//maplist = obj->Update(maplist);
+			}
+		}
+	}
 
 	if (input.GetKeyTrigger(VK_3)) {
 		SceneManager::ChangeScene(SceneManager::RESULT);

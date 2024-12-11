@@ -12,7 +12,7 @@ class Game;
 class GameScene : public BaseScene
 {
 private:
-    Light* light;
+    //Light* light;
 
     Object* game_bg;
 
@@ -21,12 +21,13 @@ private:
 
     int mapval = 0;
     std::vector<std::vector<std::unique_ptr<Object>>> mapdata;
-    std::vector<std::vector<int>> maplist;
+    //std::vector<std::vector<int>> maplist;
 
     int WidthMAX = 0;
     int HeightMAX = 0;
 
 public:
+
     GameScene();
     ~GameScene();
 

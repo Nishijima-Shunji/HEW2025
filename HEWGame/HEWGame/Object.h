@@ -3,6 +3,8 @@
 #include "direct3d.h"
 #include "WICTextureLoader.h"
 #include "TextureManager.h"
+#include <iostream>
+#include <vector>
 
 class Object
 {
@@ -47,7 +49,9 @@ protected:
 	int splitX = 1;
 	int splitY = 1;
 
-//protected:
+protected:
+
+	std::vector<std::vector<int>> Map = {};
 
 public:
 
@@ -60,13 +64,18 @@ public:
 	float numU = 0;
 	float numV = 0;
 
-	void Init(TextureManager* textureManager, const wchar_t* imgname, int sx = 1, int sy = 1);
-	void Draw();
-	void Uninit();
-
+	virtual void Init(TextureManager* textureManager, const wchar_t* imgname, int sx = 1, int sy = 1);
+	virtual void Update(std::vector<std::vector<int>>);
+	virtual void Draw();
+	virtual void Uninit();
+   
 	void SetPos(float x, float y, float z);	//座標をセット
 	void SetSize(float x, float y, float z);//大きさをセット
 	void SetAngle(float a);	//角度をセット
 	void SetColor(float r, float g, float b, float a);
+
+	std::vector<std::vector<int>> GetMap(std::vector<std::vector<int>>);
+
+
 };
 

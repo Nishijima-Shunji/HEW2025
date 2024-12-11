@@ -3,7 +3,7 @@
 
 class Enemy : public Object
 {
-
+	void Update(std::vector<std::vector<int>>);
 };
 
 

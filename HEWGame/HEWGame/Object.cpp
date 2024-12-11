@@ -58,6 +58,11 @@ void Object::Init(TextureManager* textureManager, const wchar_t* imgname, int sx
 	}
 }
 
+void Object::Update(std::vector<std::vector<int>> MapDate)
+{
+	//std::cout << "Ž¸”s" << std::endl;
+}
+
 void Object::Draw() {
 	UINT strides = sizeof(Vertex);
 	UINT offsets = 0;
@@ -141,6 +146,13 @@ float Object::GetAngle(void) {
 
 DirectX::XMFLOAT4 Object::GetColor(void) {
 	return color;
+}
+
+std::vector<std::vector<int>> Object::GetMap(std::vector<std::vector<int>> Mapdate)
+{
+	Map = Mapdate;
+
+	return Mapdate;
 }
 
 //******************************************************************************

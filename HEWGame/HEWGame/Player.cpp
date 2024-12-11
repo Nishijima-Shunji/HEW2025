@@ -38,10 +38,11 @@ void Player::Init()
 
 }
 
-void Player::Update(int newX, int newY,float deltaTime) 
+void Player::Update(int newX, int newY, float deltaTime)
 {
-
+    //std::cout << "味方" << std::endl;
     /*アニメーション*/
+    /*
     //目標座標を設定
     targetX = newX;
     targetY = newY;
@@ -50,6 +51,7 @@ void Player::Update(int newX, int newY,float deltaTime)
         x += (targetX - x) * speed * deltaTime;
     if (std::abs(y - targetY) > 0.01f)
         y += (targetY - y) * speed * deltaTime;
+        */
 }
 
 void Player::Draw()

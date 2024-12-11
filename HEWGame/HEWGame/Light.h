@@ -10,7 +10,6 @@ class Light : public Object
 private:
 	int Width = 0;
 	int Height = 0;
-	std::vector<std::vector<int>> Map = {};
 
 	std::vector<int>Lightpos_X = {};
 	std::vector<int>Lightpos_Y = {};
@@ -22,7 +21,7 @@ private:
 	int Pos_X = 0;
 	int Pos_Y = 0;
 	int Count = 0;
-	int Number = 1;
+	int Number = 0;
 
 public:
 
@@ -30,10 +29,10 @@ public:
 	~Light();
 
 	//マップデータの更新
-	std::vector<std::vector<int>> MapUpdate(std::vector<std::vector<int>>);
+	std::vector<std::vector<int>> MapUpdate();
 	
 	//ライトの更新
-	void Update(int,int, std::vector<std::vector<int>>);
+	void Update(std::vector<std::vector<int>>);
 	
 	//更新のパーツ分担
 	//ライトの変更
