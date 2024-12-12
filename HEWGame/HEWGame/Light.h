@@ -14,6 +14,9 @@ private:
 	std::vector<int>Lightpos_X = {};
 	std::vector<int>Lightpos_Y = {};
 
+
+	bool LightOn = false;
+
 	int Mode = 0;
 
 	int Old_Pos_X = 0;
@@ -30,6 +33,7 @@ public:
 
 	//マップデータの更新
 	std::vector<std::vector<int>> MapUpdate();
+	void DebugMap();
 	
 	//ライトの更新
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
