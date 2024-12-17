@@ -36,6 +36,7 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 	//マップ情報の更新
 	//=============================================================================================
 	//マップデータが更新されていたら
+	
 	if (Map != MapDate)
 	{
 		//新しいマップ情報を取得
@@ -132,9 +133,10 @@ void Light::Move() {
 	Old_Pos_X = Pos_X;
 	Old_Pos_Y = Pos_Y;
 
-
+	// input.GetKeyPress
+	// input.GetKeyTrigger
 	//上に移動を検知
-	if (input.GetKeyTrigger(VK_W)) {
+	if (input.GetKeyPress(VK_W)) {
 		//右レーンに存在
 		if (Pos_Y == Width)
 		{
@@ -170,7 +172,7 @@ void Light::Move() {
 			//それ以外なら
 			else
 			{
-				Pos_X += 1;
+				Pos_X -= 1;
 			}
 		}
 
@@ -178,7 +180,7 @@ void Light::Move() {
 	}
 
 	//下に移動を検知
-	if (input.GetKeyTrigger(VK_S)) {
+	if (input.GetKeyPress(VK_S)) {
 		//右レーンに存在
 		if (Pos_Y == Width)
 		{
@@ -222,7 +224,7 @@ void Light::Move() {
 	}
 
 	//右に移動を検知
-	if (input.GetKeyTrigger(VK_D)) {
+	if (input.GetKeyPress(VK_D)) {
 		//上部レーンに存在
 		if (Pos_X == 0)
 		{
@@ -266,7 +268,7 @@ void Light::Move() {
 	}
 
 	//左に移動を検知
-	if (input.GetKeyTrigger(VK_A)) {
+	if (input.GetKeyPress(VK_A)) {
 		//上部レーンに存在
 		if (Pos_X == 0)
 		{
