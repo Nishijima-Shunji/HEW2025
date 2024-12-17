@@ -76,7 +76,7 @@ std::vector<std::vector<int>> Loadmap(const char* filePath) {
                 // ‹ó”’‚â–³Œø’l‚Ìê‡‚É0‚ğİ’è
                 DataTable[i - 1][j] = (j < datas.size() && !datas[j].empty())
                     ? std::strtol(datas[j].c_str(), nullptr, 10)
-                    : 0;
+                    : -1;
             }
         }
     } while (std::getline(fileStream, bufferString));

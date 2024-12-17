@@ -13,6 +13,10 @@ private:
     int targetX, targetY; // 移動先のマス座標
     float speed;       // 移動速度
 
+	int newX;
+	int newY;
+	float deltaTime;
+
 public:
 
 	//右上から何個目を切り抜いて表示するか
@@ -20,7 +24,7 @@ public:
 	float numV = 0;
 
 	void Init();
-	std::vector<std::vector<int>> Update(int newX, int newY, float deltaTime);
+	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
 	void Draw();
 	void Uninit();
 };

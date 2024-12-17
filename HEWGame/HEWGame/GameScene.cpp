@@ -9,10 +9,12 @@
 // textureMappingの初期化
 	//マップからオブジェクトを生成する際に参照するキー
 static std::unordered_map<int, std::wstring> textureMapping = {
+	{0, L"asset/map_3.png"},	//壁
 	{1, L"asset/wall.png"},		//壁
 	{2, L"asset/player.png"},	//プレイヤー
 	{3, L"asset/map_0.png"},	//ライト
-	{4, L"asset/enemy.png"}		//敵
+	{4, L"asset/enemy.png"},	//敵
+	{5, L"asset/map_2.png"}	//発光
 };
 
 GameScene::GameScene() {
@@ -39,23 +41,41 @@ GameScene::~GameScene() {
 void GameScene::Update() {
 	input.Update();
 
+	//古いマップデータの保存
+	oldlist = maplist;
+
 	for (const auto& row : mapdata) {
 		for (const auto& obj : row) {
 			if (obj) {
-				//std::cout << "row:" << 'row' << std::endl;
-				//std::cout << "obj:" << 'obj' << std::endl;
-				//obj->Update(maplist);
 				maplist = obj->Update(maplist);
 			}
 		}
 	}
 
+	//マップデータの更新
 	for (int i = 0; i < maplist.size(); ++i) {
 		mapdata[i].resize(maplist[i].size()); // 各行をリサイズ
-	  //↑データ入ってる
 		for (int j = 0; j < maplist[i].size(); ++j) {
+
+			//古いマップデータと比較
+			int OldObject = oldlist[i][j];
+			int NewObject = maplist[i][j];
+
+			//マップデータが変化しているなら
+			if (NewObject != OldObject)
+			{
+				//古いオブジェクトを削除
+				std::cout << "削除" << std::endl;
+				mapdata[i][j] = CreateObject(NewObject, textureManager);
+
+				//int D i * 18 + j;
+				
+				//mapdata.erase(std::remove_if(mapdata.begin(), mapdata.end(), [](const std::unique_ptr<Object>& obj) {return obj->id == 2; }), mapdata.end());
+				
+			}
+			
 			int objectType = maplist[i][j];
-			if (objectType != 0) {
+			if (objectType != -1) {
 				auto obj = CreateObject(objectType, textureManager); // Factory関数でオブジェクト生成
 				if (obj) {
 					float x = j * 30.0f - 500.0f; // x座標		列 * Objectの大きさ * オフセット
@@ -99,7 +119,7 @@ void GameScene::LoadMapData() {
 	  //↑データ入ってる
 		for (int j = 0; j < maplist[i].size(); ++j) {
 			int objectType = maplist[i][j];
-			if (objectType != 0) {
+			if (objectType != -1) {
 				auto obj = CreateObject(objectType, textureManager); // Factory関数でオブジェクト生成
 				if (obj) {
 					float x = j * 30.0f - 500.0f; // x座標		列 * Objectの大きさ * オフセット
@@ -122,10 +142,12 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 
 	//オブジェクトを生成
 	switch (objectType) {
+	case 0: obj = std::make_unique<Object>(); break;
 	case 1: obj = std::make_unique<Wall>(); break;
 	case 2: obj = std::make_unique<Player>(); break;
 	case 3: obj = std::make_unique<Light>(); break;
 	case 4: obj = std::make_unique<Enemy>(); break;
+	case 5: obj = std::make_unique<Object>(); break;
 	default: return nullptr;
 	}
 
@@ -140,24 +162,4 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	}
 
 	return obj;
-}
-
-void GameScene::GetMapSize()
-{
-	//現在マップの最大高さ
-	for (int i = 0; i < 18; i++)
-	{
-		if (maplist[i][0] == 1)
-		{
-			HeightMAX++;
-		}
-	}
-	//現在マップの最大横幅
-	for (int j = 0; j < 32; j++)
-	{
-		if (maplist[0][j] == 1)
-		{
-			WidthMAX++;
-		}
-	}
 }

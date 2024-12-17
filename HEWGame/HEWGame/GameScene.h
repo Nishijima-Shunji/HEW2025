@@ -36,6 +36,7 @@ public:
 
     void LoadMapData();
     std::unique_ptr<Object> CreateObject(int objectType, TextureManager* textureManager);
+    std::unique_ptr<Object> DeleteObject(int objectType, TextureManager* textureManager);
 
     void GetMapSize();
 };
