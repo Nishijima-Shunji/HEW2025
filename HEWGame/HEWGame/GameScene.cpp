@@ -9,12 +9,12 @@
 // textureMappingの初期化
 	//マップからオブジェクトを生成する際に参照するキー
 static std::unordered_map<int, std::wstring> textureMapping = {
-	{0, L"asset/map_3.png"},	//壁
-	{1, L"asset/wall.png"},		//壁
-	{2, L"asset/player.png"},	//プレイヤー
-	{3, L"asset/map_0.png"},	//ライト
-	{4, L"asset/enemy.png"},	//敵
-	{5, L"asset/map_2.png"}	//発光
+	{0, L"asset/S_Water.png"},	//無
+	{1, L"asset/S_Wall.png"},	//壁
+	{2, L"asset/S_Player.png"},	//プレイヤー
+	{3, L"asset/S_Light.png"},	//ライト
+	{4, L"asset/S_Enemy.png"},	//敵
+	{5, L"asset/S_Lumine.png"}	//発光
 };
 
 GameScene::GameScene() {

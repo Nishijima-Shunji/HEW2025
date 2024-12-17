@@ -359,18 +359,18 @@ void Light::Flash() {
 		else if (Pos_Y == Width)
 		{
 			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Pos_X][Pos_Y + i] == 0; i++)
+			for (int i = 1; Map[Pos_X][Pos_Y - i] == 0; i++)
 			{
-				Map[Pos_X][Pos_Y + i] = 5;
+				Map[Pos_X][Pos_Y - i] = 5;
 			}
 		}
 		//左
 		else if (Pos_Y == 0)
 		{
 			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Pos_X][Pos_Y - i] == 0; i++)
+			for (int i = 1; Map[Pos_X][Pos_Y + i] == 0; i++)
 			{
-				Map[Pos_X][Pos_Y - i] = 5;
+				Map[Pos_X][Pos_Y + i] = 5;
 			}
 		}
 	}
@@ -398,18 +398,18 @@ void Light::Flash() {
 		else if (Old_Pos_Y == Width)
 		{
 			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Old_Pos_X][Old_Pos_Y + i] == 5; i++)
+			for (int i = 1; Map[Old_Pos_X][Old_Pos_Y - i] == 5; i++)
 			{
-				Map[Old_Pos_X][Old_Pos_Y + i] = 0;
+				Map[Old_Pos_X][Old_Pos_Y - i] = 0;
 			}
 		}
 		//左
 		else if (Old_Pos_Y == 0)
 		{
 			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Old_Pos_X][Old_Pos_Y - i] == 5; i++)
+			for (int i = 1; Map[Old_Pos_X][Old_Pos_Y + i] == 5; i++)
 			{
-				Map[Old_Pos_X][Old_Pos_Y - i] = 0;
+				Map[Old_Pos_X][Old_Pos_Y + i] = 0;
 			}
 		}
 	}
