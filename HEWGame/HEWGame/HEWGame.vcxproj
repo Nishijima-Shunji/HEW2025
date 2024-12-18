@@ -144,7 +144,9 @@
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
-    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Light.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseScene.h" />
@@ -163,7 +165,9 @@
     <ClInclude Include="Wall.h" />
     <ClInclude Include="WICTextureLoader.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Light.h" />
+    <ClInclude Include="Light.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">

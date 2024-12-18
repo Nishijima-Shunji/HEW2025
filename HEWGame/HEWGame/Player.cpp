@@ -38,9 +38,13 @@ void Player::Init()
 
 }
 
-void Player::Update(int newX, int newY,float deltaTime) 
+std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDate)
 {
+    Map = MapDate;
 
+
+
+    //std::cout << "味方" << std::endl;
     /*アニメーション*/
     //目標座標を設定
     targetX = newX;
@@ -50,6 +54,9 @@ void Player::Update(int newX, int newY,float deltaTime)
         x += (targetX - x) * speed * deltaTime;
     if (std::abs(y - targetY) > 0.01f)
         y += (targetY - y) * speed * deltaTime;
+        
+
+    return Map;
 }
 
 void Player::Draw()

@@ -10,6 +10,9 @@ class Game;
 class BaseScene {
 protected:
     Input input;
+    std::vector<std::vector<int>> maplist;
+    std::vector<std::vector<int>> oldlist;
+
 public:
     BaseScene();
     virtual ~BaseScene();

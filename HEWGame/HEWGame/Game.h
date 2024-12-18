@@ -13,6 +13,10 @@
 
 #include "Light.h"
 
+#define XON			(0)
+#define YON			(1)
+
+
 class Game
 {
 private:
@@ -21,7 +25,7 @@ private:
 	SceneManager sm;
 	int a = 0;
 
-	Light light;
+	Light Light;
 	
 public:
 	std::vector<std::vector<int>> DataTable;
