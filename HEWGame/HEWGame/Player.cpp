@@ -54,14 +54,13 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
         x += (targetX - x) * speed * deltaTime;
     if (std::abs(y - targetY) > 0.01f)
         y += (targetY - y) * speed * deltaTime;
-        
 
+    // ==================ƒeƒXƒg==================
+    DirectX::XMFLOAT3 pos = GetPos();
+    pos.x += 0.1f;
+    SetPos(pos.x,pos.y,pos.z);
+    //===========================================
     return Map;
-}
-
-void Player::Draw()
-{
-
 }
 
 void Player::Uninit()

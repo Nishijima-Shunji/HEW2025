@@ -25,6 +25,5 @@ public:
 
 	void Init();
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
-	void Draw();
 	void Uninit();
 };
