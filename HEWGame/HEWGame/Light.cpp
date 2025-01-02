@@ -321,7 +321,7 @@ void Light::Move() {
 		}
 		else if(LightOn == true)
 		{
-			LightOn == false;
+			LightOn = false;
 		}
 	}
 

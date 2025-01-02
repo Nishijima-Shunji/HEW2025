@@ -59,7 +59,7 @@ void TitleScene::InitTitleObjects(int count) {
 void TitleScene::Update() {
     input.Update();  // キー入力の判定
     if (input.GetKeyTrigger(VK_2)) {
-        SceneManager::ChangeScene(SceneManager::GAME);  // シーンをGAMEへ移行
+        SceneManager::ChangeScene(SceneManager::SELECT);  // シーンをGAMEへ移行
     }
 }
 

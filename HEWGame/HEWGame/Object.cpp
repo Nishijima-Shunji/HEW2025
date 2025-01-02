@@ -52,10 +52,10 @@ void Object::Init(TextureManager* textureManager, const wchar_t* imgname, int sx
 
 	// TextureManagerを通じてテクスチャを取得
 	m_pTextureView = textureManager->GetTexture(imgname);
-	if (!m_pTextureView) {
+	/*if (!m_pTextureView) {
 		MessageBoxA(NULL, "テクスチャ読み込み失敗", "エラー", MB_ICONERROR | MB_OK);
 		return;
-	}
+	}*/
 }
 
 std::vector<std::vector<int>> Object::Update(std::vector<std::vector<int>> MapDate)
@@ -157,6 +157,10 @@ std::vector<std::vector<int>> Object::GetMap(std::vector<std::vector<int>> Mapda
 	Map = Mapdate;
 
 	return Mapdate;
+}
+
+void Object::SetTexture(TextureManager* textureManager, const wchar_t* imgname) {
+	m_pTextureView = textureManager->GetTexture(imgname);
 }
 
 //******************************************************************************

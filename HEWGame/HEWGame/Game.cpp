@@ -57,7 +57,9 @@ void Game::Init(HWND hWnd) {
 	sm.ChangeScene(sm.TITLE);
 
 	//マップデータを読み込み
-	DataTable = Loadmap("Data/TestData.csv");
+	//std::wstring mapPath = L"asset/Data/TestData.csv";
+	std::wstring mapPath = L"C:/GitLocal/HEWGame/HEW2025/HEWGame/HEWGame/Data/TestData.csv";
+	DataTable = Loadmap(mapPath.c_str());
 
 
 }

@@ -42,7 +42,12 @@ TextureManager::~TextureManager() {
     ReleaseAllTextures();
 }
 
-ID3D11ShaderResourceView* TextureManager::GetTexture(const wchar_t* imgname) {
+    ID3D11ShaderResourceView* TextureManager::GetTexture(const wchar_t* imgname) {
+    // imgnameがnullptrの場合、何も行わずにnullptrを返す
+    if (imgname == nullptr) {
+        return nullptr;
+    }
+
     // ファイルパスを絶対パスに変換
     wchar_t fullPath[MAX_PATH];
     GetFullPathName(imgname, MAX_PATH, fullPath, NULL);
@@ -54,7 +59,6 @@ ID3D11ShaderResourceView* TextureManager::GetTexture(const wchar_t* imgname) {
     if (it != textureCache.end()) {
         // キャッシュに存在する場合、参照カウントを増やして返す
         it->second->AddRef();
-        //printf("存在するテクスチャ\n");
         return it->second;
     }
 
@@ -68,9 +72,9 @@ ID3D11ShaderResourceView* TextureManager::GetTexture(const wchar_t* imgname) {
 
     // キャッシュに追加
     textureCache[imgPath] = textureView;
-    printf("新しく登録\n");
     return textureView;
 }
+
 
 HRESULT TextureManager::LoadTextureFromFile(const wchar_t* imgname, ID3D11ShaderResourceView** textureView) {
     // テクスチャをファイルから読み込む

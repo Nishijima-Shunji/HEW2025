@@ -17,10 +17,12 @@ static std::unordered_map<int, std::wstring> textureMapping = {
 	{5, L"asset/S_Lumine.png"}	//発光
 };
 
-GameScene::GameScene() {
+GameScene::GameScene(int stage) {
 	textureManager = new TextureManager(g_pDevice);
 	// マップデータをロード
-	LoadMapData();
+	LoadMapData(stage);
+
+
 }
 
 GameScene::~GameScene() {
@@ -42,13 +44,13 @@ void GameScene::Update() {
 	//古いマップデータの保存
 	oldlist = maplist;
 
-	for (const auto& row : mapdata) {
+	/*for (const auto& row : mapdata) {
 		for (const auto& obj : row) {
 			if (obj) {
 				maplist = obj->Update(maplist);
 			}
 		}
-	}
+	}*/
 
 	for (const auto& obj : characterObj) {
 		obj->Update(maplist);
@@ -108,11 +110,19 @@ void GameScene::Draw() {
 	}
 }
 
-void GameScene::LoadMapData() {
+void GameScene::LoadMapData(int stage) {
 	mapdata.clear();
 
 	// マップデータをCSVから読み込む
-	maplist = Loadmap("Data/TestData.csv");
+	/*std::wstring mapPath = L"asset/Data/Map";
+	mapPath += std::to_wstring(stage);
+	mapPath += L".png";*/
+
+	std::string stageStr = std::to_string(stage);  // int を文字列に変換
+	std::wstring mapPath = L"Data/Map" + std::wstring(stageStr.begin(), stageStr.end()) + L".csv";
+
+	maplist = Loadmap(mapPath.c_str());
+
 	mapdata.resize(maplist.size()); // 外側のベクトルをリサイズ
 
 	for (int i = 0; i < maplist.size(); ++i) {

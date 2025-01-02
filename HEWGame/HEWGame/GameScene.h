@@ -29,13 +29,13 @@ private:
 
 public:
 
-    GameScene();
+    GameScene(int stage);
     ~GameScene();
 
     void Update() override;
     void Draw() override;
 
-    void LoadMapData();
+    void LoadMapData(int stage);
     std::unique_ptr<Object> CreateObject(int objectType, TextureManager* textureManager);
     std::unique_ptr<Object> DeleteObject(int objectType, TextureManager* textureManager);
 
