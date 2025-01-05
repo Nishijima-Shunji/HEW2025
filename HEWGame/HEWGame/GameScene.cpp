@@ -19,7 +19,6 @@ static std::unordered_map<int, std::wstring> textureMapping = {
 
 GameScene::GameScene() {
 	textureManager = new TextureManager(g_pDevice);
-
 	// マップデータをロード
 	LoadMapData();
 }
@@ -35,7 +34,6 @@ GameScene::~GameScene() {
 
 	// TextureManagerを解放
 	delete textureManager;
-
 }
 
 void GameScene::Update() {
@@ -50,6 +48,10 @@ void GameScene::Update() {
 				maplist = obj->Update(maplist);
 			}
 		}
+	}
+
+	for (const auto& obj : characterObj) {
+		obj->Update(maplist);
 	}
 
 	//マップデータの更新
@@ -68,25 +70,21 @@ void GameScene::Update() {
 				std::cout << "削除" << std::endl;
 				mapdata[i][j] = CreateObject(NewObject, textureManager);
 
-				//int D i * 18 + j;
-				
-				//mapdata.erase(std::remove_if(mapdata.begin(), mapdata.end(), [](const std::unique_ptr<Object>& obj) {return obj->id == 2; }), mapdata.end());
-				
-			}
-			
-			int objectType = maplist[i][j];
-			if (objectType != -1) {
-				auto obj = CreateObject(objectType, textureManager); // Factory関数でオブジェクト生成
-				if (obj) {
-					float x = j * 30.0f - 500.0f; // x座標		列 * Objectの大きさ * オフセット
-					float y = i * -30.0f + 280.0f; // y座標		行 * Objectの大きさ * オフセット
+				// ↓重かった原因↓：if文の中に入れて変化時だけにしたらちょっと軽くなった
+				int objectType = maplist[i][j];
+				if (objectType != -1) {
+					auto obj = CreateObject(objectType, textureManager); // Factory関数でオブジェクト生成
+					if (obj) {
+						float x = j * 30.0f - 500.0f; // x座標		列 * Objectの大きさ * オフセット
+						float y = i * -30.0f + 280.0f; // y座標		行 * Objectの大きさ * オフセット
 
-					obj->SetPos(x, y, 0.0f);
-					obj->SetSize(30.0f, 30.0f, 0.0f);
-					obj->SetAngle(0.0f);
-					obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+						obj->SetPos(x, y, 0.0f);
+						obj->SetSize(30.0f, 30.0f, 0.0f);
+						obj->SetAngle(0.0f);
+						obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-					mapdata[i][j] = std::move(obj);
+						mapdata[i][j] = std::move(obj);
+					}
 				}
 			}
 		}
@@ -105,6 +103,9 @@ void GameScene::Draw() {
 			}
 		}
 	}
+	for (const auto& obj : characterObj) {
+		obj->Draw();
+	}
 }
 
 void GameScene::LoadMapData() {
@@ -116,11 +117,11 @@ void GameScene::LoadMapData() {
 
 	for (int i = 0; i < maplist.size(); ++i) {
 		mapdata[i].resize(maplist[i].size()); // 各行をリサイズ
-	  //↑データ入ってる
+		//↑データ入ってる
 		for (int j = 0; j < maplist[i].size(); ++j) {
 			int objectType = maplist[i][j];
-			if (objectType != -1) {
-				auto obj = CreateObject(objectType, textureManager); // Factory関数でオブジェクト生成
+			if (objectType != -1 && (objectType == 1 || objectType == 3)) {
+				auto obj = CreateObject(objectType, textureManager); // オブジェクト生成
 				if (obj) {
 					float x = j * 30.0f - 500.0f; // x座標		列 * Objectの大きさ * オフセット
 					float y = i * -30.0f + 280.0f; // y座標		行 * Objectの大きさ * オフセット
@@ -131,6 +132,21 @@ void GameScene::LoadMapData() {
 					obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 					mapdata[i][j] = std::move(obj);
+				}
+			}
+			else if (objectType != -1 && (objectType == 2 || objectType == 4)) {
+				auto obj = CreateObject(objectType, textureManager); // オブジェクト生成
+				if (obj) {
+					float x = j * 30.0f - 500.0f; // x座標		列 * Objectの大きさ * オフセット
+					float y = i * -30.0f + 280.0f; // y座標		行 * Objectの大きさ * オフセット
+
+					obj->SetPos(x, y, 0.0f);
+					obj->SetSize(30.0f, 30.0f, 0.0f);
+					obj->SetAngle(0.0f);
+					obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+					characterObj.emplace_back(std::move(obj));
+					maplist[i][j] = -1;
 				}
 			}
 		}
