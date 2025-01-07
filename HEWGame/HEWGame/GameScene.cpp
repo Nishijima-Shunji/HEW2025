@@ -119,7 +119,7 @@ void GameScene::LoadMapData(int stage) {
 	mapPath += L".png";*/
 
 	std::string stageStr = std::to_string(stage);  // int ‚ð•¶Žš—ñ‚É•ÏŠ·
-	std::wstring mapPath = L"Data/Map" + std::wstring(stageStr.begin(), stageStr.end()) + L".csv";
+	std::wstring mapPath = L"Data/MAP_STAGE" + std::wstring(stageStr.begin(), stageStr.end()) + L".csv";
 
 	maplist = Loadmap(mapPath.c_str());
 
