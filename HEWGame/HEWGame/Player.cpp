@@ -38,24 +38,13 @@ void Player::Init()
 
 }
 
-std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapData)
+std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDate)
 {
-    Map = MapData;
+    Map = MapDate;
 
     SetUp();
 
     Move();
-
-    //std::cout << "味方" << std::endl;
-    /*アニメーション*/
-    //目標座標を設定
-    /*targetX = newX;
-    targetY = newY;*/
-    // 滑らかに目標座標へ移動
-    if (std::abs(x - targetX) > 0.01f)
-        x += (targetX - x) * speed * deltaTime;
-    if (std::abs(y - targetY) > 0.01f)
-        y += (targetY - y) * speed * deltaTime;
 
     // 待機アニメーション
     SetUV(animcount % 4 , (animcount / 4) % 2);
@@ -74,7 +63,7 @@ void Player::SetUp()//ステージ更新ごとに行う
         for (int j = 0; j < 32; j++) {
             if (Map[i][j] == 2)
             {   //プレイヤーを登録
-                
+
                 //-1になっているから反応しない
                 MoveList[i][j] = 2;
                 Map[i][j] = 0;
@@ -99,12 +88,6 @@ void Player::SetUp()//ステージ更新ごとに行う
 
 void Player::Move()
 {
-    // ==================テスト==================
-    //DirectX::XMFLOAT3 pos = GetPos();
-    //pos.x += 0.1f;
-    //SetPos(pos.x, pos.y, pos.z);
-    //===========================================
-
     DirectX::XMFLOAT3 pos = GetPos();
 
     //プレイヤーのマップ上の座標を計算
@@ -182,8 +165,8 @@ void Player::Move()
 
 void Player::Animation()
 {
-   /*アニメーション*/
-    // 滑らかに目標座標へ移動
+    /*アニメーション*/
+     // 滑らかに目標座標へ移動
     if (std::abs(pos.x - targetX) > 0.01f)
         pos.x += (targetX - pos.x) * speed * deltaTime;
     if (std::abs(pos.y - targetY) > 0.01f)

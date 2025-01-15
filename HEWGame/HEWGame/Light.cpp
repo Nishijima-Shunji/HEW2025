@@ -32,11 +32,11 @@ Input input;
 std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDate)
 {
 	input.Update();
-	
+
 	//マップ情報の更新
 	//=============================================================================================
 	//マップデータが更新されていたら
-	
+
 	if (Map != MapDate)
 	{
 		//新しいマップ情報を取得
@@ -45,14 +45,20 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 		Width = 0;
 		Height = 0;
 		//横幅を取得
-		for (int i = 0; Map[0][i] != -1; i++)
+		for (int i = 0; i != 32; i++)
 		{
-			Width = i;
+			if (Map[0][i] != -1)
+			{
+				Width = i;
+			}
 		}
 		//高さを取得
-		for (int j = 0; Map[j][0] != 0; j++)
+		for (int j = 0; j != 16; j++)
 		{
-			Height = j;
+			if (Map[j][0] != 0)
+			{
+				Height = j;
+			}
 		}
 	}
 
@@ -481,7 +487,7 @@ void Light::Flash() {
 			}
 		}
 	}
-	else if(LightOn == false)
+	else if (LightOn == false)
 	{
 		Stop = false;
 
