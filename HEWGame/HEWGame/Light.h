@@ -15,11 +15,13 @@ private:
 	std::vector<int>Lightpos_Y = {};
 
 	bool LightOn = false;
+	bool Stop = false;
 
-	int Old_Pos_X = 0;
-	int Old_Pos_Y = 0;
-	int Pos_X = 0;
-	int Pos_Y = 0;
+	int Direction = 0;	//ライト方向	0：上　1：下　2：右　3：左
+	int Old_Pos_X = 0;	//移動前座標：X
+	int Old_Pos_Y = 0;	//移動前座標：Y
+	int Pos_X = 0;		//移動後座標：X
+	int Pos_Y = 0;		//移動後座標：Y
 	int Count = 0;
 	int Number = 0;
 
