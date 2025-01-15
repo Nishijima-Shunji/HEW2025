@@ -29,10 +29,10 @@ public:
 	//マップデータの更新
 	std::vector<std::vector<int>> MapUpdate();
 	void DebugMap();
-	
+
 	//ライトの更新
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
-	
+
 	//更新のパーツ分担
 	//ライトの変更
 	void Change();
@@ -42,7 +42,7 @@ public:
 	void Move();
 	//発光処理
 	void Flash();
-	//
-
 };
+
+
 

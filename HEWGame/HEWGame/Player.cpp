@@ -46,12 +46,11 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
 
     Move();
 
-<<<<<<< HEAD
     //std::cout << "味方" << std::endl;
     /*アニメーション*/
     //目標座標を設定
-    targetX = newX;
-    targetY = newY;
+    /*targetX = newX;
+    targetY = newY;*/
     // 滑らかに目標座標へ移動
     if (std::abs(x - targetX) > 0.01f)
         x += (targetX - x) * speed * deltaTime;
@@ -65,8 +64,7 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
     }
 
     framecount++;
-=======
->>>>>>> 02070fc3f424054de455876854b028e8f8a8ecc8
+
     return Map;
 }
 
