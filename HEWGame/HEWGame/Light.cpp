@@ -65,7 +65,7 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 	Change();
 
 	//移動処理
-	//===========================================================================================
+	//=============================================================================================
 	Move();
 
 	return Map;	//MapDate = Map
@@ -73,7 +73,7 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 
 void Light::Change() {
 	//ライト切り替え
-//=============================================================================================
+	//=============================================================================================
 	if (input.GetKeyTrigger(VK_Q)) {	//前に戻る
 		if (Number != 0)
 		{
@@ -90,7 +90,7 @@ void Light::Change() {
 
 void Light::Position() {
 	//座標取得
-//=============================================================================================
+	//=============================================================================================
 	Lightpos_X.clear();
 	Lightpos_Y.clear();
 
@@ -127,19 +127,20 @@ void Light::Position() {
 
 void Light::Move() {
 	//移動処理
-//===========================================================================================
+	//=============================================================================================
 
 	//古い座標情報を取得
 	Old_Pos_X = Pos_X;
 	Old_Pos_Y = Pos_Y;
 
-	// input.GetKeyPress
-	// input.GetKeyTrigger
 	//上に移動を検知
-	if (input.GetKeyPress(VK_W)) {
+	if (input.GetKeyTrigger(VK_W)) {
 		//右レーンに存在
 		if (Pos_Y == Width)
 		{
+			//ライト方向→右
+			Direction = 2;
+
 			//上端にいる
 			if (Pos_X == 1)
 			{
@@ -159,6 +160,9 @@ void Light::Move() {
 		//左レーンに存在
 		else if (Pos_Y == 0)
 		{
+			//ライト方向→左
+			Direction = 3;
+
 			//上端にいる
 			if (Pos_X == 1)
 			{
@@ -180,10 +184,13 @@ void Light::Move() {
 	}
 
 	//下に移動を検知
-	if (input.GetKeyPress(VK_S)) {
+	if (input.GetKeyTrigger(VK_S)) {
 		//右レーンに存在
 		if (Pos_Y == Width)
 		{
+			//ライト方向→右
+			Direction = 2;
+
 			//下端にいる
 			if (Pos_X == Height - 1)
 			{
@@ -203,6 +210,9 @@ void Light::Move() {
 		//左レーンに存在
 		else if (Pos_Y == 0)
 		{
+			//ライト方向→左
+			Direction = 3;
+
 			//下端にいる
 			if (Pos_X == Height - 1)
 			{
@@ -224,10 +234,13 @@ void Light::Move() {
 	}
 
 	//右に移動を検知
-	if (input.GetKeyPress(VK_D)) {
+	if (input.GetKeyTrigger(VK_D)) {
 		//上部レーンに存在
 		if (Pos_X == 0)
 		{
+			//ライト方向→上
+			Direction = 0;
+
 			//右端にいる
 			if (Pos_Y == Width - 1)
 			{
@@ -247,6 +260,9 @@ void Light::Move() {
 		//下部レーンに存在
 		else if (Pos_X == Height)
 		{
+			//ライト方向→下
+			Direction = 1;
+
 			//右端にいる
 			if (Pos_Y == Width - 1)
 			{
@@ -268,10 +284,13 @@ void Light::Move() {
 	}
 
 	//左に移動を検知
-	if (input.GetKeyPress(VK_A)) {
+	if (input.GetKeyTrigger(VK_A)) {
 		//上部レーンに存在
 		if (Pos_X == 0)
 		{
+			//ライト方向→上
+			Direction = 0;
+
 			//左端にいるなら
 			if (Pos_Y == 1)
 			{
@@ -291,6 +310,9 @@ void Light::Move() {
 		//下部レーンに存在
 		else if (Pos_X == Height)
 		{
+			//ライト方向→下
+			Direction = 1;
+
 			//左端にいるなら
 			if (Pos_Y == 1)
 			{
@@ -315,20 +337,21 @@ void Light::Move() {
 	//ライトの点灯を検知
 	if (input.GetKeyTrigger(VK_SPACE))
 	{
-		if (LightOn == false)
-		{
-			LightOn = true;
-		}
-		else if(LightOn == true)
+		if (LightOn == true)
 		{
 			LightOn = false;
 		}
+		else if (LightOn == false)
+		{
+			LightOn = true;
+		}
+		Flash();
 	}
 
-	//ライトの座標が更新されているなら
-	if (Old_Pos_X != Pos_X || Old_Pos_Y != Pos_Y || LightOn == true)
-	{
 
+	//ライトの座標が更新されているなら
+	if (Old_Pos_X != Pos_X || Old_Pos_Y != Pos_Y)
+	{
 		Flash();
 		MapUpdate();
 	}
@@ -336,101 +359,223 @@ void Light::Move() {
 }
 
 void Light::Flash() {
-
+	//発光処理
+	//=============================================================================================
 	if (LightOn == true)
 	{
-		//上
 		if (Pos_X == 0)
 		{
-			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Pos_X + i][Pos_Y] == 0; i++)
-			{
-				Map[Pos_X + i][Pos_Y] = 5;
-			}
+			Direction = 0;
 		}
-		//下
 		else if (Pos_X == Height)
 		{
-			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Pos_X - i][Pos_Y] == 0; i++)
-			{
-				Map[Pos_X - i][Pos_Y] = 5;
-			}
+			Direction = 1;
 		}
-		//右
 		else if (Pos_Y == Width)
 		{
-			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Pos_X][Pos_Y - i] == 0; i++)
-			{
-				Map[Pos_X][Pos_Y - i] = 5;
-			}
+			Direction = 2;
 		}
-		//左
 		else if (Pos_Y == 0)
 		{
-			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Pos_X][Pos_Y + i] == 0; i++)
-			{
-				Map[Pos_X][Pos_Y + i] = 5;
-			}
+			Direction = 3;
 		}
-	}
-	else
-	{
+
 		//上
-		if (Old_Pos_X == 0)
+		if (Direction == 0)
 		{
-			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Old_Pos_X + i][Old_Pos_Y] == 5; i++)
+			//衝突判定まで発光状態（５）に変える
+			for (int i = 1; Stop != true; i++)
 			{
-				Map[Old_Pos_X + i][Old_Pos_Y] = 0;
+				//次のマスが無（0）なら
+				if (Map[Pos_X + i][Pos_Y] == 0)
+				{
+					//発光状態（５）に変える
+					Map[Pos_X + i][Pos_Y] = 5;
+				}
+				//次のマスが壁（1）なら
+				else if (Map[Pos_X + i][Pos_Y] == 1)
+				{
+					//停止
+					Stop = true;
+				}
+				//次のマスが発光状態（５）なら
+				else if (Map[Pos_X + i][Pos_Y] == 5)
+				{
+					//爆発
+				}
 			}
 		}
 		//下
-		else if (Old_Pos_X == Height)
+		else if (Direction == 1)
 		{
-			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Old_Pos_X - i][Old_Pos_Y] == 5; i++)
+			//衝突判定まで発光状態（５）に変える
+			for (int i = 1; Stop != true; i++)
 			{
-				Map[Old_Pos_X - i][Old_Pos_Y] = 0;
+				//次のマスが無（0）なら
+				if (Map[Pos_X - i][Pos_Y] == 0)
+				{
+					//発光状態（５）に変える
+					Map[Pos_X - i][Pos_Y] = 5;
+				}
+				//次のマスが壁（1）なら
+				else if (Map[Pos_X - i][Pos_Y] == 1)
+				{
+					//停止
+					Stop = true;
+				}
+				//次のマスが発光状態（５）なら
+				else if (Map[Pos_X - i][Pos_Y] == 5)
+				{
+					//爆発
+				}
 			}
 		}
 		//右
-		else if (Old_Pos_Y == Width)
+		else if (Direction == 2)
 		{
-			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Old_Pos_X][Old_Pos_Y - i] == 5; i++)
+			//衝突判定まで発光状態（５）に変える
+			for (int i = 1; Stop != true; i++)
 			{
-				Map[Old_Pos_X][Old_Pos_Y - i] = 0;
+				//次のマスが無（0）なら
+				if (Map[Pos_X][Pos_Y - i] == 0)
+				{
+					//発光状態（５）に変える
+					Map[Pos_X][Pos_Y - i] = 5;
+				}
+				//次のマスが壁（1）なら
+				else if (Map[Pos_X][Pos_Y - i] == 1)
+				{
+					//停止
+					Stop = true;
+				}
+				//次のマスが発光状態（５）なら
+				else if (Map[Pos_X][Pos_Y - i] == 5)
+				{
+					//爆発
+				}
 			}
 		}
 		//左
-		else if (Old_Pos_Y == 0)
+		else if (Direction == 3)
 		{
-			//壁に当たるまで発光状態（５）に変える
-			for (int i = 1; Map[Old_Pos_X][Old_Pos_Y + i] == 5; i++)
+			//衝突判定まで発光状態（５）に変える
+			for (int i = 1; Stop != true; i++)
 			{
-				Map[Old_Pos_X][Old_Pos_Y + i] = 0;
+				//次のマスが無（0）なら
+				if (Map[Pos_X][Pos_Y + i] == 0)
+				{
+					//発光状態（５）に変える
+					Map[Pos_X][Pos_Y + i] = 5;
+				}
+				//次のマスが壁（1）なら
+				else if (Map[Pos_X][Pos_Y + i] == 1)
+				{
+					//停止
+					Stop = true;
+				}
+				//次のマスが発光状態（５）なら
+				else if (Map[Pos_X][Pos_Y + i] == 5)
+				{
+					//爆発
+				}
 			}
 		}
 	}
+	else if(LightOn == false)
+	{
+		Stop = false;
 
-	DebugMap();
-
+		//上
+		if (Direction == 0)
+		{
+			//衝突判定までに無（0）変える
+			for (int i = 1; Stop != true; i++)
+			{
+				//次のマスが発光状態（５）なら
+				if (Map[Old_Pos_X + i][Old_Pos_Y] == 5)
+				{
+					//無（0）に変える
+					Map[Old_Pos_X + i][Old_Pos_Y] = 0;
+				}
+				//次のマスが壁（1）なら
+				else if (Map[Old_Pos_X + i][Old_Pos_Y] == 1)
+				{
+					//停止
+					Stop = true;
+				}
+			}
+		}
+		//下
+		else if (Direction == 1)
+		{
+			//衝突判定まで無（0）に変える
+			for (int i = 1; Stop != true; i++)
+			{
+				//次のマスが発光状態（５）なら
+				if (Map[Old_Pos_X - i][Old_Pos_Y] == 5)
+				{
+					//無（0）に変える
+					Map[Old_Pos_X - i][Old_Pos_Y] = 0;
+				}
+				//次のマスが壁（1）なら
+				else if (Map[Old_Pos_X - i][Old_Pos_Y] == 1)
+				{
+					//停止
+					Stop = true;
+				}
+			}
+		}
+		//右
+		else if (Direction == 2)
+		{
+			//衝突判定まで無（0）に変える
+			for (int i = 1; Stop != true; i++)
+			{
+				//次のマスが発光状態（５）なら
+				if (Map[Old_Pos_X][Old_Pos_Y - i] == 5)
+				{
+					//無（0）に変える
+					Map[Old_Pos_X][Old_Pos_Y - i] = 0;
+				}
+				//次のマスが壁（1）なら
+				else if (Map[Old_Pos_X][Old_Pos_Y - i] == 1)
+				{
+					//停止
+					Stop = true;
+				}
+			}
+		}
+		//左
+		else if (Direction == 3)
+		{
+			//衝突判定まで無（0）に変える
+			for (int i = 1; Stop != true; i++)
+			{
+				//次のマスが発光状態（５）なら
+				if (Map[Old_Pos_X][Old_Pos_Y + i] == 5)
+				{
+					//無（0）に変える
+					Map[Old_Pos_X][Old_Pos_Y + i] = 0;
+				}
+				//次のマスが壁（1）なら
+				else if (Map[Old_Pos_X][Old_Pos_Y + i] == 1)
+				{
+					//停止
+					Stop = true;
+				}
+			}
+		}
+		Stop = false;
+	}
 }
 
 std::vector<std::vector<int>> Light::MapUpdate()
 {
 	//マップデータ更新
-	//===========================================================================================
+	//=============================================================================================
 	Map[Old_Pos_X][Old_Pos_Y] = 1;	//壁に戻す
 	Map[Pos_X][Pos_Y] = 3;	//ライトを移動
-
-
-	DebugMap();
-
-
+	//DebugMap();
 	return Map;
 }
 
