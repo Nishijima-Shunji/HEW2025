@@ -34,6 +34,11 @@ void Object::Init(TextureManager* textureManager, const wchar_t* imgname, int sx
 	splitX = sx;
 	splitY = sy;
 
+	vertexList[1].u = 1.0f / splitX;
+	vertexList[2].v = 1.0f / splitY;
+	vertexList[3].u = 1.0f / splitX;
+	vertexList[3].v = 1.0f / splitY;
+
 	// 頂点バッファを作成する
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.ByteWidth = sizeof(vertexList);
@@ -134,6 +139,11 @@ void Object::SetColor(float r, float g, float b, float a) {
 	color.y = g;
 	color.z = b;
 	color.w = a;
+}
+
+void Object::SetUV(int u, int v) {
+	numU = u;
+	numV = v;
 }
 
 DirectX::XMFLOAT3 Object::GetPos(void) {

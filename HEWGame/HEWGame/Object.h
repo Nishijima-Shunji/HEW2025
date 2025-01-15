@@ -73,6 +73,7 @@ public:
 	void SetSize(float x, float y, float z);//大きさをセット
 	void SetAngle(float a);	//角度をセット
 	void SetColor(float r, float g, float b, float a);
+	void SetUV(int u, int v);
 
 	std::vector<std::vector<int>> GetMap(std::vector<std::vector<int>>);
 

@@ -38,9 +38,9 @@ void Player::Init()
 
 }
 
-std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDate)
+std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapData)
 {
-    Map = MapDate;
+    Map = MapData;
 
 
 
@@ -55,11 +55,13 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
     if (std::abs(y - targetY) > 0.01f)
         y += (targetY - y) * speed * deltaTime;
 
-    // ==================テスト==================
-    DirectX::XMFLOAT3 pos = GetPos();
-    pos.x += 0.1f;
-    SetPos(pos.x,pos.y,pos.z);
-    //===========================================
+    // 待機アニメーション
+    SetUV(animcount % 4 , (animcount / 4) % 2);
+    if (framecount % 5 == 0) {
+        animcount++;
+    }
+
+    framecount++;
     return Map;
 }
 

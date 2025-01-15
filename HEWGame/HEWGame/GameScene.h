@@ -27,6 +27,8 @@ private:
     int WidthMAX = 0;
     int HeightMAX = 0;
 
+    int score = 0;
+
 public:
 
     GameScene(int stage);

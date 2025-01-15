@@ -11,7 +11,7 @@
 static std::unordered_map<int, std::wstring> textureMapping = {
 	{0, L"asset/S_Water.png"},	//無
 	{1, L"asset/S_Wall.png"},	//壁
-	{2, L"asset/S_Player.png"},	//プレイヤー
+	{2, L"asset/survivor3.png"},	//プレイヤー
 	{3, L"asset/S_Light.png"},	//ライト
 	{4, L"asset/S_Enemy.png"},	//敵
 	{5, L"asset/S_Lumine.png"}	//発光
@@ -19,7 +19,7 @@ static std::unordered_map<int, std::wstring> textureMapping = {
 
 GameScene::GameScene(int stage) {
 	textureManager = new TextureManager(g_pDevice);
-	// マップデータをロード
+	// ステージ選択で選んだ番号のマップデータをロード
 	LoadMapData(stage);
 
 
@@ -44,13 +44,13 @@ void GameScene::Update() {
 	//古いマップデータの保存
 	oldlist = maplist;
 
-	/*for (const auto& row : mapdata) {
+	for (const auto& row : mapdata) {
 		for (const auto& obj : row) {
 			if (obj) {
 				maplist = obj->Update(maplist);
 			}
 		}
-	}*/
+	}
 
 	for (const auto& obj : characterObj) {
 		obj->Update(maplist);
@@ -77,8 +77,8 @@ void GameScene::Update() {
 				if (objectType != -1) {
 					auto obj = CreateObject(objectType, textureManager); // Factory関数でオブジェクト生成
 					if (obj) {
-						float x = j * 30.0f - 500.0f; // x座標		列 * Objectの大きさ * オフセット
-						float y = i * -30.0f + 280.0f; // y座標		行 * Objectの大きさ * オフセット
+						float x = j * 30.0f - 500.0f;	// x座標		列 * Objectの大きさ * オフセット		※カメラあればオフセット要らないかも
+						float y = i * -30.0f + 280.0f;	// y座標		行 * Objectの大きさ * オフセット
 
 						obj->SetPos(x, y, 0.0f);
 						obj->SetSize(30.0f, 30.0f, 0.0f);
@@ -93,7 +93,8 @@ void GameScene::Update() {
 	}
 
 	if (input.GetKeyTrigger(VK_3)) {
-		SceneManager::ChangeScene(SceneManager::RESULT);
+		// スコアをリザルトに渡して移動
+		SceneManager::ChangeScene(SceneManager::RESULT,score);
 	}
 }
 
@@ -113,13 +114,9 @@ void GameScene::Draw() {
 void GameScene::LoadMapData(int stage) {
 	mapdata.clear();
 
-	// マップデータをCSVから読み込む
-	/*std::wstring mapPath = L"asset/Data/Map";
-	mapPath += std::to_wstring(stage);
-	mapPath += L".png";*/
-
-	std::string stageStr = std::to_string(stage);  // int を文字列に変換
-	std::wstring mapPath = L"Data/MAP_STAGE" + std::wstring(stageStr.begin(), stageStr.end()) + L".csv";
+	//std::string stageStr = std::to_string(stage);  // int を文字列に変換
+	//std::wstring mapPath = L"Data/MAP_STAGE" + std::wstring(stageStr.begin(), stageStr.end()) + L".csv";
+	std::wstring mapPath = L"Data/TestData.csv";
 
 	maplist = Loadmap(mapPath.c_str());
 
@@ -165,22 +162,22 @@ void GameScene::LoadMapData(int stage) {
 
 std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* textureManager) {
 	std::unique_ptr<Object> obj;
-
+	int u, v;
 	//オブジェクトを生成
 	switch (objectType) {
-	case 0: obj = std::make_unique<Object>(); break;
-	case 1: obj = std::make_unique<Wall>(); break;
-	case 2: obj = std::make_unique<Player>(); break;
-	case 3: obj = std::make_unique<Light>(); break;
-	case 4: obj = std::make_unique<Enemy>(); break;
-	case 5: obj = std::make_unique<Object>(); break;
+	case 0: obj = std::make_unique<Object>(); u = 1; v = 1;  break;
+	case 1: obj = std::make_unique<Wall>(); u = 1; v = 1; break;
+	case 2: obj = std::make_unique<Player>(); u = 4; v = 2; break;
+	case 3: obj = std::make_unique<Light>(); u = 1; v = 1; break;
+	case 4: obj = std::make_unique<Enemy>(); u = 1; v = 1; break;
+	case 5: obj = std::make_unique<Object>(); u = 1; v = 1; break;
 	default: return nullptr;
 	}
 
 	//textureMappingに設定したパスを探す
 	auto it = textureMapping.find(objectType);
 	if (it != textureMapping.end()) {
-		obj->Init(textureManager, it->second.c_str());
+		obj->Init(textureManager, it->second.c_str() , u , v);
 	}
 	else {
 		obj->Init(textureManager, L"asset/default.png");

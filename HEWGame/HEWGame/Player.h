@@ -17,6 +17,9 @@ private:
 	int newY;
 	float deltaTime;
 
+	int framecount;
+	int animcount;
+
 public:
 
 	//‰Eã‚©‚ç‰½ŒÂ–Ú‚ğØ‚è”²‚¢‚Ä•\¦‚·‚é‚©

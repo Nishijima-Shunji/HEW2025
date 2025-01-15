@@ -35,7 +35,7 @@ BaseScene* SceneManager::m_pScene = nullptr; // nullptr で初期化
 //!	@param	
 //!	@retval 
 //==============================================================================
-void SceneManager::ChangeScene(SCENE scene,int stage) {
+void SceneManager::ChangeScene(SCENE scene,int num) {
     if (m_pScene != nullptr) {
         delete m_pScene;
     }
@@ -45,10 +45,10 @@ void SceneManager::ChangeScene(SCENE scene,int stage) {
         m_pScene = new TitleScene(); // タイトルシーンを設定
         break;
     case SCENE::GAME:
-        m_pScene = new GameScene(stage);  // ゲームシーンを設定
+        m_pScene = new GameScene(num);  // ゲームシーンを設定
         break;
     case SCENE::RESULT:
-        m_pScene = new ResultScene(); // リザルトシーンを設定
+        m_pScene = new ResultScene(num); // リザルトシーンを設定
         break;
     case SCENE::SELECT:
         m_pScene = new StageSelectScene(); // リザルトシーンを設定
