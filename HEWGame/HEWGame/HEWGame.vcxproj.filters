@@ -84,6 +84,24 @@
     <ClCompile Include="StageSelectScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Ankou.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Kagamidai.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Kairyu.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Mendako.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Onikinme.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Trap.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -139,6 +157,24 @@
     </ClInclude>
     <ClInclude Include="StageSelectScene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Ankou.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Kagamidai.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Kairyu.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Mendako.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Onikinme.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Trap.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

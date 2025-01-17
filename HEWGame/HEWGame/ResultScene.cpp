@@ -27,8 +27,8 @@ ResultScene::ResultScene(int score) : score(score) {
 		tempScore /= 10;            // スコアを10で割って次の桁へ進む
 
 		// UVを桁の値に基づいて設定
-		//scoreNum[i]->SetUV(digit, 0);
-		scorest.emplace_back(digit);
+		scoreNum[i]->SetUV(digit, 0);
+		//scorest.emplace_back(digit);
 	}
 }
 

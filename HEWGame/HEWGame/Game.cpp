@@ -54,7 +54,8 @@ void Game::Init(HWND hWnd) {
 	//============================
 
 	//初期シーンをタイトルにする
-	sm.ChangeScene(sm.TITLE);
+	//sm.ChangeScene(sm.TITLE);
+	sm.ChangeScene(sm.SELECT);
 
 	//マップデータを読み込み
 	//std::wstring mapPath = L"asset/Data/TestData.csv";
@@ -78,15 +79,15 @@ void Game::Draw() {
 	sm.Render();
 	//======================
 	//デバッグ	マップ数値表示
-	if (a == 0) {
-		for (int i = 0; i < 18; i++) {
-			for (int j = 0; j < 32; j++) {
-				std::cout << DataTable[i][j] << ",";
-			}
-			std::cout << std::endl;
-		}
-		a++;
-	}
+	//if (a == 0) {
+	//	for (int i = 0; i < 18; i++) {
+	//		for (int j = 0; j < 32; j++) {
+	//			std::cout << DataTable[i][j] << ",";
+	//		}
+	//		std::cout << std::endl;
+	//	}
+	//	a++;
+	//}
 	//======================
 	D3D_FinishRender();
 }
