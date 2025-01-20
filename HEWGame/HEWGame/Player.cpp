@@ -30,9 +30,6 @@
 //!	@retval 
 //==============================================================================
 
-//コンストラクタ
-//: x(startX), y(startY), targetX(startX), targetY(startY), speed(spd) {}
-
 std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapData)
 {
     Map = MapData;
@@ -50,6 +47,7 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
     framecount++;
 
     return Map;
+    //原因↑返し値が代入されていない
 }
 
 void Player::SetUp()//ステージ更新ごとに行う
@@ -59,23 +57,47 @@ void Player::SetUp()//ステージ更新ごとに行う
             if (Map[i][j] == 2)
             {   //プレイヤーを登録
 
-                //-1になっているから反応しない
                 MoveList[i][j] = P_DIVER;//2
-                Map[i][j] = 0;
+                Map[i][j] = NOTHING;
 
                 X = i;
                 Y = j;
             }
-            else if (Map[i][j] == 6)
-            {   //ゴールをを登録
+            else if (Map[i][j] == 4)
+            {   //ゴールを登録
 
-                MoveList[i][j] = 6;
+                MoveList[i][j] = GOAL;
                 Goal_X = i;
                 Goal_Y = j;
             }
+            else if (Map[i][j] == 5)
+            {   //メンダコを登録
+
+             //   MoveList[i][j] = MENDAKO;
+            }
+            else if (Map[i][j] == 6)
+            {   //トラップを登録
+
+             //   MoveList[i][j] = TRAP;
+            }
+            else if (Map[i][j] == 9)
+            {   //海流(右)を登録
+
+            //    MoveList[i][j] = STREAM_R;
+            }
+            else if (Map[i][j] == 10)
+            {   //海流(左)を登録
+
+             //   MoveList[i][j] = STREAM_L;
+            }
+            else if (Map[i][j] == 15)
+            {   //オニキンメを登録
+
+             //   MoveList[i][j] = MOB_1;
+            }
             else
             {
-                MoveList[i][j] = 0;
+             //   MoveList[i][j] = SPACE;
             }
         }
     }

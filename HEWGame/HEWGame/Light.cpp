@@ -112,7 +112,7 @@ void Light::Position() {
 	Lightpos.push_back(99999);
 	for (int i = 0; i < 18; i++) {
 		for (int j = 0; j < 32; j++) {
-			if (Map[i][j] == 3)
+			if (Map[i][j] == 12 || Map[i][j] == 13 || Map[i][j] == 14 || Map[i][j] == 19)
 			{
 				int num = 10000 + (i * 100 + j);
 				Lightpos.push_back(num);
@@ -345,6 +345,23 @@ void Light::Move() {
 		{
 			LightOn = true;
 		}
+
+		if (Pos_X == 0)
+		{
+			Direction = 0;
+		}
+		else if (Pos_X == Height)
+		{
+			Direction = 1;
+		}
+		else if (Pos_Y == Width)
+		{
+			Direction = 2;
+		}
+		else if (Pos_Y == 0)
+		{
+			Direction = 3;
+		}
 		Flash();
 	}
 
@@ -363,48 +380,61 @@ void Light::Flash() {
 	//=============================================================================================
 	if (LightOn == true)
 	{
-		if (Pos_X == 0)
-		{
-			Direction = 0;
-		}
-		else if (Pos_X == Height)
-		{
-			Direction = 1;
-		}
-		else if (Pos_Y == Width)
-		{
-			Direction = 2;
-		}
-		else if (Pos_Y == 0)
-		{
-			Direction = 3;
-		}
-
 		//上
 		if (Direction == 0)
 		{
-			//衝突判定まで発光状態（５）に変える
+			//衝突判定がでるまで
 			for (int i = 1; Stop != true; i++)
 			{
-				//次のマスが無（0）なら
-				if (Map[Pos_X + i][Pos_Y] == 0)
+				//無（-1）
+				if (Map[Pos_X + i][Pos_Y] == NOTHING)
 				{
-					//発光状態（５）に変える
-					Map[Pos_X + i][Pos_Y] = 5;
+					//発光状態（20）に変える
+					Map[Pos_X + i][Pos_Y] = Luminous;
 				}
-				//次のマスが壁（1）なら
-				else if (Map[Pos_X + i][Pos_Y] == 1)
+				//空間（0）
+				else if (Map[Pos_X + i][Pos_Y] == 0)
 				{
-					//停止
-					Stop = true;
+					//発光状態（20）に変える
+					Map[Pos_X + i][Pos_Y] = Luminous;
 				}
-				//次のマスが発光状態（５）なら
-				else if (Map[Pos_X + i][Pos_Y] == 5)
+				//鏡鯛（右上がり）（7）
+				else if (Map[Pos_X + i][Pos_Y] == MIRROR_U)
+				{
+					//反射する
+					//　↓
+					//←／
+					Direction = 2;
+					Flash();
+
+				}
+				//鏡鯛（左下がり）（8）
+				else if (Map[Pos_X + i][Pos_Y] == MIRROR_D)
+				{
+					//反射する
+					//↓
+					//＼→
+					Direction = 3;
+					Flash();
+
+				}
+				//オニキンメ（15）
+				else if (Map[Pos_X + i][Pos_Y] == MOB_1)
+				{
+					//
+				}
+				//アンコウ（16）
+				else if (Map[Pos_X + i][Pos_Y] == MOB_2)
+				{
+					//
+				}
+				//発光マス（20）
+				else if (Map[Pos_X + i][Pos_Y] == Luminous)
 				{
 					//爆発
 				}
-				//次のマスがライト（3）なら
-				else if (Map[Pos_X + i][Pos_Y] == 3)
+				//壁(1)/ゴール(4)/マップ端(11)/ライト(12/13/14)
+				else
 				{
 					//停止
 					Stop = true;
@@ -417,25 +447,55 @@ void Light::Flash() {
 			//衝突判定まで発光状態（５）に変える
 			for (int i = 1; Stop != true; i++)
 			{
-				//次のマスが無（0）なら
-				if (Map[Pos_X - i][Pos_Y] == 0)
+				//無（-1）
+				if (Map[Pos_X - i][Pos_Y] == NOTHING)
 				{
-					//発光状態（５）に変える
-					Map[Pos_X - i][Pos_Y] = 5;
+					//発光状態（20）に変える
+					Map[Pos_X - i][Pos_Y] = Luminous;
 				}
-				//次のマスが壁（1）なら
-				else if (Map[Pos_X - i][Pos_Y] == 1)
+				//空間（0）
+				else if (Map[Pos_X - i][Pos_Y] == 0)
 				{
-					//停止
-					Stop = true;
+					//発光状態（20）に変える
+					Map[Pos_X - i][Pos_Y] = Luminous;
 				}
-				//次のマスが発光状態（５）なら
-				else if (Map[Pos_X - i][Pos_Y] == 5)
+				//鏡鯛（右上がり）（7）
+				else if (Map[Pos_X - i][Pos_Y] == MIRROR_U)
+				{
+					//反射する
+					//　↓
+					//←／
+					Direction = 2;
+					Flash();
+
+				}
+				//鏡鯛（左下がり）（8）
+				else if (Map[Pos_X - i][Pos_Y] == MIRROR_D)
+				{
+					//反射する
+					//↓
+					//＼→
+					Direction = 3;
+					Flash();
+
+				}
+				//オニキンメ（15）
+				else if (Map[Pos_X - i][Pos_Y] == MOB_1)
+				{
+					//
+				}
+				//アンコウ（16）
+				else if (Map[Pos_X - i][Pos_Y] == MOB_2)
+				{
+					//
+				}
+				//発光マス（20）
+				else if (Map[Pos_X - i][Pos_Y] == Luminous)
 				{
 					//爆発
 				}
-				//次のマスがライト（3）なら
-				else if (Map[Pos_X - i][Pos_Y] == 3)
+				//壁(1)/ゴール(4)/マップ端(11)/ライト(12/13/14)
+				else
 				{
 					//停止
 					Stop = true;
@@ -448,25 +508,55 @@ void Light::Flash() {
 			//衝突判定まで発光状態（５）に変える
 			for (int i = 1; Stop != true; i++)
 			{
-				//次のマスが無（0）なら
-				if (Map[Pos_X][Pos_Y - i] == 0)
+				//無（-1）
+				if (Map[Pos_X][Pos_Y - i] == NOTHING)
 				{
-					//発光状態（５）に変える
-					Map[Pos_X][Pos_Y - i] = 5;
+					//発光状態（20）に変える
+					Map[Pos_X][Pos_Y - i]  = Luminous;
 				}
-				//次のマスが壁（1）なら
-				else if (Map[Pos_X][Pos_Y - i] == 1)
+				//空間（0）
+				else if (Map[Pos_X][Pos_Y - i]  == 0)
 				{
-					//停止
-					Stop = true;
+					//発光状態（20）に変える
+					Map[Pos_X][Pos_Y - i]  = Luminous;
 				}
-				//次のマスが発光状態（５）なら
-				else if (Map[Pos_X][Pos_Y - i] == 5)
+				//鏡鯛（右上がり）（7）
+				else if (Map[Pos_X][Pos_Y - i]  == MIRROR_U)
+				{
+					//反射する
+					//　↓
+					//←／
+					Direction = 2;
+					Flash();
+
+				}
+				//鏡鯛（左下がり）（8）
+				else if (Map[Pos_X][Pos_Y - i]  == MIRROR_D)
+				{
+					//反射する
+					//↓
+					//＼→
+					Direction = 3;
+					Flash();
+
+				}
+				//オニキンメ（15）
+				else if (Map[Pos_X][Pos_Y - i]  == MOB_1)
+				{
+					//
+				}
+				//アンコウ（16）
+				else if (Map[Pos_X][Pos_Y - i]  == MOB_2)
+				{
+					//
+				}
+				//発光マス（20）
+				else if (Map[Pos_X][Pos_Y - i]  == Luminous)
 				{
 					//爆発
 				}
-				//次のマスがライト（3）なら
-				else if (Map[Pos_X][Pos_Y - i] == 3)
+				//壁(1)/ゴール(4)/マップ端(11)/ライト(12/13/14)
+				else
 				{
 					//停止
 					Stop = true;
@@ -479,25 +569,55 @@ void Light::Flash() {
 			//衝突判定まで発光状態（５）に変える
 			for (int i = 1; Stop != true; i++)
 			{
-				//次のマスが無（0）なら
-				if (Map[Pos_X][Pos_Y + i] == 0)
+				//無（-1）
+				if (Map[Pos_X][Pos_Y + i]  == NOTHING)
 				{
-					//発光状態（５）に変える
-					Map[Pos_X][Pos_Y + i] = 5;
+					//発光状態（20）に変える
+					Map[Pos_X][Pos_Y + i]  = Luminous;
 				}
-				//次のマスが壁（1）なら
-				else if (Map[Pos_X][Pos_Y + i] == 1)
+				//空間（0）
+				else if (Map[Pos_X][Pos_Y + i]  == 0)
 				{
-					//停止
-					Stop = true;
+					//発光状態（20）に変える
+					Map[Pos_X][Pos_Y + i]  = Luminous;
 				}
-				//次のマスが発光状態（５）なら
-				else if (Map[Pos_X][Pos_Y + i] == 5)
+				//鏡鯛（右上がり）（7）
+				else if (Map[Pos_X][Pos_Y + i]  == MIRROR_U)
+				{
+					//反射する
+					//　↓
+					//←／
+					Direction = 2;
+					Flash();
+
+				}
+				//鏡鯛（左下がり）（8）
+				else if (Map[Pos_X][Pos_Y + i]  == MIRROR_D)
+				{
+					//反射する
+					//↓
+					//＼→
+					Direction = 3;
+					Flash();
+
+				}
+				//オニキンメ（15）
+				else if (Map[Pos_X][Pos_Y + i]  == MOB_1)
+				{
+					//
+				}
+				//アンコウ（16）
+				else if (Map[Pos_X][Pos_Y + i]  == MOB_2)
+				{
+					//
+				}
+				//発光マス（20）
+				else if (Map[Pos_X][Pos_Y + i]  == Luminous)
 				{
 					//爆発
 				}
-				//次のマスがライト（3）なら
-				else if (Map[Pos_X][Pos_Y + i] == 3)
+				//壁(1)/ゴール(4)/マップ端(11)/ライト(12/13/14)
+				else
 				{
 					//停止
 					Stop = true;
@@ -515,20 +635,30 @@ void Light::Flash() {
 			//衝突判定までに無（0）変える
 			for (int i = 1; Stop != true; i++)
 			{
-				//次のマスが発光状態（５）なら
-				if (Map[Old_Pos_X + i][Old_Pos_Y] == 5)
+				//無（-1）
+				if (Map[Old_Pos_X + i][Old_Pos_Y] == NOTHING)
 				{
-					//無（0）に変える
-					Map[Old_Pos_X + i][Old_Pos_Y] = 0;
-				}
-				//次のマスが壁（1）なら
-				else if (Map[Old_Pos_X + i][Old_Pos_Y] == 1)
-				{
+					std::cout << "エラー" << std::endl;
 					//停止
 					Stop = true;
 				}
-				//次のマスがライト（3）なら
-				else if (Map[Old_Pos_X + i][Old_Pos_Y] == 3)
+				//鏡鯛（右上がり）（7）
+				else if (Map[Old_Pos_X + i][Old_Pos_Y] == MIRROR_U)
+				{
+					//
+				}
+				//鏡鯛（左下がり）（8）
+				else if (Map[Old_Pos_X + i][Old_Pos_Y] == MIRROR_D)
+				{
+					//
+				}
+				//発光マス（20）
+				else if (Map[Old_Pos_X + i][Old_Pos_Y] == Luminous)
+				{
+					//空間（0）に変える
+					Map[Old_Pos_X + i][Old_Pos_Y] = SPACE;
+				}
+				else
 				{
 					//停止
 					Stop = true;
@@ -541,20 +671,30 @@ void Light::Flash() {
 			//衝突判定まで無（0）に変える
 			for (int i = 1; Stop != true; i++)
 			{
-				//次のマスが発光状態（５）なら
-				if (Map[Old_Pos_X - i][Old_Pos_Y] == 5)
+				//無（-1）
+				if (Map[Old_Pos_X - i][Old_Pos_Y]== NOTHING)
 				{
-					//無（0）に変える
-					Map[Old_Pos_X - i][Old_Pos_Y] = 0;
-				}
-				//次のマスが壁（1）なら
-				else if (Map[Old_Pos_X - i][Old_Pos_Y] == 1)
-				{
+					std::cout << "エラー" << std::endl;
 					//停止
 					Stop = true;
 				}
-				//次のマスがライト（3）なら
-				else if (Map[Old_Pos_X - i][Old_Pos_Y] == 3)
+				//鏡鯛（右上がり）（7）
+				else if (Map[Old_Pos_X - i][Old_Pos_Y]== MIRROR_U)
+				{
+					//
+				}
+				//鏡鯛（左下がり）（8）
+				else if (Map[Old_Pos_X - i][Old_Pos_Y]== MIRROR_D)
+				{
+					//
+				}
+				//発光マス（20）
+				else if (Map[Old_Pos_X - i][Old_Pos_Y]== Luminous)
+				{
+					//空間（0）に変える
+					Map[Old_Pos_X - i][Old_Pos_Y]= SPACE;
+				}
+				else
 				{
 					//停止
 					Stop = true;
@@ -567,20 +707,30 @@ void Light::Flash() {
 			//衝突判定まで無（0）に変える
 			for (int i = 1; Stop != true; i++)
 			{
-				//次のマスが発光状態（５）なら
-				if (Map[Old_Pos_X][Old_Pos_Y - i] == 5)
+				//無（-1）
+				if (Map[Old_Pos_X][Old_Pos_Y - i] == NOTHING)
 				{
-					//無（0）に変える
-					Map[Old_Pos_X][Old_Pos_Y - i] = 0;
-				}
-				//次のマスが壁（1）なら
-				else if (Map[Old_Pos_X][Old_Pos_Y - i] == 1)
-				{
+					std::cout << "エラー" << std::endl;
 					//停止
 					Stop = true;
 				}
-				//次のマスがライト（3）なら
-				else if (Map[Old_Pos_X][Old_Pos_Y - i] == 3)
+				//鏡鯛（右上がり）（7）
+				else if (Map[Old_Pos_X][Old_Pos_Y - i] == MIRROR_U)
+				{
+					//
+				}
+				//鏡鯛（左下がり）（8）
+				else if (Map[Old_Pos_X][Old_Pos_Y - i] == MIRROR_D)
+				{
+					//
+				}
+				//発光マス（20）
+				else if (Map[Old_Pos_X][Old_Pos_Y - i] == Luminous)
+				{
+					//空間（0）に変える
+					Map[Old_Pos_X][Old_Pos_Y - i] = SPACE;
+				}
+				else
 				{
 					//停止
 					Stop = true;
@@ -593,20 +743,30 @@ void Light::Flash() {
 			//衝突判定まで無（0）に変える
 			for (int i = 1; Stop != true; i++)
 			{
-				//次のマスが発光状態（５）なら
-				if (Map[Old_Pos_X][Old_Pos_Y + i] == 5)
+				//無（-1）
+				if (Map[Old_Pos_X][Old_Pos_Y + i] == NOTHING)
 				{
-					//無（0）に変える
-					Map[Old_Pos_X][Old_Pos_Y + i] = 0;
-				}
-				//次のマスが壁（1）なら
-				else if (Map[Old_Pos_X][Old_Pos_Y + i] == 1)
-				{
+					std::cout << "エラー" << std::endl;
 					//停止
 					Stop = true;
 				}
-				//次のマスがライト（3）なら
-				else if (Map[Old_Pos_X][Old_Pos_Y + i] == 3)
+				//鏡鯛（右上がり）（7）
+				else if (Map[Old_Pos_X][Old_Pos_Y + i] == MIRROR_U)
+				{
+					//
+				}
+				//鏡鯛（左下がり）（8）
+				else if (Map[Old_Pos_X][Old_Pos_Y + i] == MIRROR_D)
+				{
+					//
+				}
+				//発光マス（20）
+				else if (Map[Old_Pos_X][Old_Pos_Y + i] == Luminous)
+				{
+					//空間（0）に変える
+					Map[Old_Pos_X][Old_Pos_Y + i] = SPACE;
+				}
+				else
 				{
 					//停止
 					Stop = true;
@@ -621,9 +781,10 @@ std::vector<std::vector<int>> Light::MapUpdate()
 {
 	//マップデータ更新
 	//=============================================================================================
-	Map[Old_Pos_X][Old_Pos_Y] = 1;	//壁に戻す
-	Map[Pos_X][Pos_Y] = 3;	//ライトを移動
-	//DebugMap();
+	Map[Pos_X][Pos_Y] = Map[Old_Pos_X][Old_Pos_Y];	//移動先座標に移動前座標のライトナンバーを挿入
+	Map[Old_Pos_X][Old_Pos_Y] = MAP_END;	//マップ端に戻す
+
+	DebugMap();
 	return Map;
 }
 

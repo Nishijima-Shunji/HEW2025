@@ -7,24 +7,26 @@
 #include <vector>
 
 //ステージオブジェクト一覧
-#define NOTHING (-1)
-#define SPACE (0)
-#define WALL (1);
-#define P_DIVER (2);
-#define E_SHARK (3);
-#define GOAL (4);
-#define MENDAKO (5);
-#define TRAP (6);
-#define MIRROR_U (7);
-#define MIRROR_D (8);
-#define STREAM_R (9);
-#define STREAM_L (10);
-#define MAP_END (11);
-#define LIGHT_1 (12);
-#define LIGHT_2 (13);
-#define LIGHT_3 (14);
-#define MOB_1 (15);
-#define MOB_2 (16);
+#define NOTHING  (-1)	//無
+#define SPACE    (0)	//空間
+#define WALL     (1)	//壁
+#define P_DIVER  (2)	//プレイヤー
+#define E_SHARK  (3)	//エネミー
+#define GOAL     (4)	//ゴール
+#define MENDAKO  (5)	//メンダコ
+#define TRAP     (6)	//トラップ
+#define MIRROR_U (7)	//鏡鯛（右上がり）
+#define MIRROR_D (8)	//鏡鯛（左下がり）
+#define STREAM_R (9)	//海流（右）
+#define STREAM_L (10)	//海流（左）
+#define MAP_END  (11)	//マップ端（ライトの移動場所）
+#define LIGHT_1  (12)	//ライト（レベル：1)
+#define LIGHT_2  (13)	//ライト（レベル：2）
+#define LIGHT_3  (14)	//ライト（レベル：3）
+#define MOB_1    (15)	//オニキンメ
+#define MOB_2    (16)	//アンコウ
+#define D_LIGHT  (19)	//デバッグ用ライト
+#define Luminous (20)	//発光マス
 
 class Object
 {
