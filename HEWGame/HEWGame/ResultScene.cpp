@@ -1,7 +1,7 @@
 #include "ResultScene.h"
 #include "Game.h"
 
-ResultScene::ResultScene(int score) : score(score) {
+ResultScene::ResultScene(int score) : Score(score) {
 	TextureManager* textureManager = new TextureManager(g_pDevice);
 
 	result_bg = new Object;
@@ -15,20 +15,9 @@ ResultScene::ResultScene(int score) : score(score) {
 		// UIの生成
 		scoreNum.emplace_back(std::make_unique<Object>());
 		scoreNum.back()->Init(textureManager, L"asset/num.png", 10, 1);	// 仮の画像を使用
-		scoreNum.back()->SetPos((i * 60.0f) - 125.0f, 0.0f, 0.0f);
+		scoreNum.back()->SetPos((i * 60.0f) + 120.0f, 0.0f, 0.0f);
 		scoreNum.back()->SetSize(60.0f, 60.0f, 0.0f);
 		scoreNum.back()->SetUV(0, 0);
-	}
-
-	// スコア表示
-	int tempScore = score;
-	for (int i = static_cast<int>(scoreNum.size()) - 1; i >= 0; i--) {
-		int digit = tempScore % 10;  // 右端の桁を取得
-		tempScore /= 10;            // スコアを10で割って次の桁へ進む
-
-		// UVを桁の値に基づいて設定
-		scoreNum[i]->SetUV(digit, 0);
-		//scorest.emplace_back(digit);
 	}
 }
 
@@ -37,26 +26,49 @@ ResultScene::~ResultScene() {
 }
 
 void ResultScene::Update() {
-	input.Update();
+    input.Update();
 
-	if (state == 0) {
-		// スコアを決まるまで適当に動かす
-		for (int i = 0; i < 5; i++) {
-			scoreNum[i]->SetUV(rand() % 10, rand() % 10);
-		}
-		if (count == 300) {
-			state = 1;
-		}
-		count++;
-	}
-	else if (state == 1) {
+    if (state == 0) {
+        // 数字を高速で回す
+        for (int i = 0; i < 5; i++) {
+            scoreNum[i]->SetUV(rand() % 10,0);
+        }
+        if (count == 300) {
+            state = 1;          // スコア確定フェーズへ移行
+            revealIndex = 0;    // 桁の表示開始位置
+            count = 0;          // カウントリセット
+        }
+    }
+    else if (state == 1) {
+        // 桁を右から順に1つずつ固定
+        if (count % 30 == 0 && revealIndex < static_cast<int>(scoreNum.size())) {
+            int digit = tempScore % 10;  // 右端の桁を取得
+            tempScore /= 10;             // 次の桁へ
+            scoreNum[scoreNum.size() - 1 - revealIndex]->SetUV(digit, 0);
+            revealIndex++;
+        }
 
-	}
+        // 確定した桁は固定し、未確定の桁は引き続きランダム表示
+        for (int i = 0; i < static_cast<int>(scoreNum.size()) - revealIndex; i++) {
+            scoreNum[i]->SetUV(rand() % 10, rand() % 10);
+        }
 
-	if (input.GetKeyTrigger(VK_1)) {
-		SceneManager::ChangeScene(SceneManager::TITLE);
-	}
+        // 全桁確定後、次の状態へ
+        if (revealIndex >= static_cast<int>(scoreNum.size())) {
+            state = 2;
+        }
+    }
+
+    if (input.GetKeyTrigger(VK_1)) {
+        SceneManager::ChangeScene(SceneManager::TITLE);
+    }
+    if (input.GetButtonTrigger(VK_LEFT)) {
+        SceneManager::ChangeScene(SceneManager::TITLE);
+    }
+    count++;
 }
+
+
 
 void ResultScene::Draw() {
 	result_bg->Draw();

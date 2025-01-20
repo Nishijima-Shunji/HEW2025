@@ -48,7 +48,7 @@ void TitleScene::InitTitleObjects(int count) {
 }
 
 void TitleScene::Update() {
-		input.Update();
+	input.Update();
 	//	=====ロゴ表示中に読み込み=====
 	if (state == 0) {
 		// タイトルに切り替わるまでのアニメーション
@@ -113,7 +113,7 @@ void TitleScene::InitAnimation() {
 	// タイトル名=======================
 	title_name = new Object;
 	title_name->Init(textureManager, L"asset/title.png");
-	title_name->SetPos(0.0f, 200.0f, 1.0f);       // 位置を設定
+	title_name->SetPos(0.0f, 250.0f, 1.0f);       // 位置を設定
 	title_name->SetSize(993.0f, 315.0f, 0.0f);  // 大きさを設定
 
 	// ボタン生成
@@ -131,19 +131,18 @@ void TitleScene::InitAnimation() {
 		icon[i]->SetPos((i * 375.0f) - 375.0f, -145.0f, 0.0f);
 		icon[i]->SetSize(150.0f, 150.0f, 0.0f);
 	}
-	button[0]->Init(textureManager, L"asset/START.png");
-	button[1]->Init(textureManager, L"asset/OPTION.png");
+	button[0]->Init(textureManager, L"asset/OPTION.png");
+	button[1]->Init(textureManager, L"asset/START.png");
 	button[2]->Init(textureManager, L"asset/EXIT.png");
-	icon[0]->Init(textureManager, L"asset/mendako_icon.png");
-	icon[0]->SetSize(150.0f,100.0f,0.0f);
-	icon[1]->Init(textureManager, L"asset/haguruma.png");
+	icon[0]->Init(textureManager, L"asset/haguruma.png");
+	icon[1]->Init(textureManager, L"asset/mendako_icon.png");
 	icon[2]->Init(textureManager, L"asset/batten.png");
 
 	// light表示
 	light = std::make_unique<Object>();
 	light->Init(textureManager, L"asset/FrashLight.png");
 	light->SetPos(-375.0f, -350.0f, 0.0f);
-	light->SetSize(400.0f, 400.0f, 0.0f);
+	light->SetSize(500.0f, 500.0f, 0.0f);
 	light->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// 設定ウィンドウ
@@ -235,6 +234,18 @@ void TitleScene::Select(Input* input) {
 		nowButton = selectButton;
 	}
 
+	// ボタンの全サイズをリセット
+	for (int i = 0; i < 3; i++) {
+		button[i]->SetSize(324.0f, 384.0f, 0.0f);
+		window[i]->SetSize(200.0f, 200.0f, 0.0f);
+		icon[i]->SetSize(150.0f, 150.0f, 0.0f);
+	}
+
+	// 選択中のボタンを強調
+	button[nowButton - 1]->SetSize(388.8f, 460.8f, 0.0f);
+	window[nowButton - 1]->SetSize(240.0f, 240.0f, 0.0f);
+	icon[nowButton - 1]->SetSize(180.0f, 180.0f, 0.0f);
+
 	switch (nowButton) {
 	case 1:
 		icon[0]->SetAngle(icon[0]->GetAngle() + 2.0f);
@@ -256,8 +267,8 @@ void TitleScene::Select(Input* input) {
 	// シーンの切り替えがあるから一番最後(途中にあるとシーンの知り替え後に消えた)
 	if (input->GetKeyTrigger(VK_RETURN)) {
 		switch (nowButton) {
-		case 1: SceneManager::ChangeScene(SceneManager::SELECT); break;
-		case 2: state = 2; break;
+		case 1: state = 2; break;
+		case 2: SceneManager::ChangeScene(SceneManager::SELECT); break;
 		case 3: break;
 		}
 	}
@@ -285,7 +296,7 @@ void TitleScene::OptionSelect(Input* input) {
 			state = 1;
 		}
 		break;
-	case 1: cursol->SetPos(-100.0f, 0.0f, 0.0f);break;
+	case 1: cursol->SetPos(-100.0f, 0.0f, 0.0f); break;
 	case 2: cursol->SetPos(-100.0f, -100.0f, 0.0f); break;
 	}
 }

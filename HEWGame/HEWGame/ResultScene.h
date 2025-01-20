@@ -9,9 +9,9 @@ private:
     Object* result_bg;
     std::vector<std::unique_ptr<Object>> scoreNum;
 
-    int score;
-    std::vector<int> scorest;
-
+    int Score;
+    int tempScore;
+    int revealIndex = 0;
     int count = 0;
     int state = 0;
 

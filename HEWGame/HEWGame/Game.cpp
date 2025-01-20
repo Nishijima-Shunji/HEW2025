@@ -56,13 +56,14 @@ void Game::Init(HWND hWnd) {
 	//初期シーンをタイトルにする
 	//sm.ChangeScene(sm.TITLE);
 	sm.ChangeScene(sm.SELECT);
+	//sm.ChangeScene(sm.RESULT);
+
+
 
 	//マップデータを読み込み
 	//std::wstring mapPath = L"asset/Data/TestData.csv";
 	std::wstring mapPath = L"C:/GitLocal/HEWGame/HEW2025/HEWGame/HEWGame/Data/TestData.csv";
 	DataTable = Loadmap(mapPath.c_str());
-
-
 }
 //==============================================================================
 //!	@fn		
