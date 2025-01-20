@@ -6,6 +6,26 @@
 #include <iostream>
 #include <vector>
 
+//ステージオブジェクト一覧
+#define NOTHING (-1)
+#define SPACE (0)
+#define WALL (1);
+#define P_DIVER (2);
+#define E_SHARK (3);
+#define GOAL (4);
+#define MENDAKO (5);
+#define TRAP (6);
+#define MIRROR_U (7);
+#define MIRROR_D (8);
+#define STREAM_R (9);
+#define STREAM_L (10);
+#define MAP_END (11);
+#define LIGHT_1 (12);
+#define LIGHT_2 (13);
+#define LIGHT_3 (14);
+#define MOB_1 (15);
+#define MOB_2 (16);
+
 class Object
 {
 private:

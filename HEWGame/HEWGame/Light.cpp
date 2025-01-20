@@ -29,7 +29,7 @@ Input input;
 //!	@param	
 //!	@retval 
 //==============================================================================
-std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDate)
+std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapData)
 {
 	input.Update();
 
@@ -37,17 +37,17 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 	//=============================================================================================
 	//マップデータが更新されていたら
 
-	if (Map != MapDate)
+	if (SetUp == false)
 	{
 		//新しいマップ情報を取得
-		Map = MapDate;
+		Map = MapData;
 
 		Width = 0;
 		Height = 0;
 		//横幅を取得
 		for (int i = 0; i != 32; i++)
 		{
-			if (Map[0][i] != -1)
+			if (Map[0][i] != NOTHING)
 			{
 				Width = i;
 			}
@@ -55,16 +55,20 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 		//高さを取得
 		for (int j = 0; j != 16; j++)
 		{
-			if (Map[j][0] != 0)
+			if (Map[j][0] != NOTHING)
 			{
 				Height = j;
 			}
 		}
+
+		//座標取得
+		//===============================================================================================
+		Position();
+
+		SetUp = true;
 	}
 
-	//座標取得
-	//=============================================================================================
-	Position();
+	
 
 	//ライト切り替え
 	//=============================================================================================
@@ -81,15 +85,23 @@ void Light::Change() {
 	//ライト切り替え
 	//=============================================================================================
 	if (input.GetKeyTrigger(VK_Q)) {	//前に戻る
-		if (Number != 0)
+		if (Number != 1)
 		{
-			Number -= 1;
+			int num = 10000 + (Pos_X * 100 + Pos_Y);
+			Lightpos[Number] = num;
+			Number--;
+			Pos_X = Lightpos[Number] / 100 - 100;
+			Pos_Y = Lightpos[Number] % 100;
 		}
 	}
 	if (input.GetKeyTrigger(VK_E)) {	//次に進む
-		if (Number != 0)
+		if (Number != LightMAX)//ライトの登録上限
 		{
-			Number += 1;
+			int num = 10000 + (Pos_X * 100 + Pos_Y);
+			Lightpos[Number] = num;
+			Number++;
+			Pos_X = Lightpos[Number] / 100 - 100;
+			Pos_Y = Lightpos[Number] % 100;
 		}
 	}
 }
@@ -97,38 +109,20 @@ void Light::Change() {
 void Light::Position() {
 	//座標取得
 	//=============================================================================================
-	Lightpos_X.clear();
-	Lightpos_Y.clear();
-
+	Lightpos.push_back(99999);
 	for (int i = 0; i < 18; i++) {
 		for (int j = 0; j < 32; j++) {
 			if (Map[i][j] == 3)
 			{
-				Lightpos_X.push_back(i);
-				Lightpos_Y.push_back(j);
+				int num = 10000 + (i * 100 + j);
+				Lightpos.push_back(num);
+				LightMAX++;
 			}
 		}
 	}
-	//X座標リストのN番目の数字を取得
-	Count = 0;
-	for (auto i = Lightpos_X.begin(); i != Lightpos_X.end(); i++)
-	{
-		if (Count == Number)
-		{
-			Pos_X = *i;
-		}
-		Count++;
-	}
-	//Y座標リストのN番目の数字を取得
-	Count = 0;
-	for (auto i = Lightpos_Y.begin(); i != Lightpos_Y.end(); i++)
-	{
-		if (Count == Number)
-		{
-			Pos_Y = *i;
-		}
-		Count++;
-	}
+
+	Pos_X = Lightpos[Number] / 100 - 100;
+	Pos_Y = Lightpos[Number] % 100;
 }
 
 void Light::Move() {
@@ -409,6 +403,12 @@ void Light::Flash() {
 				{
 					//爆発
 				}
+				//次のマスがライト（3）なら
+				else if (Map[Pos_X + i][Pos_Y] == 3)
+				{
+					//停止
+					Stop = true;
+				}
 			}
 		}
 		//下
@@ -433,6 +433,12 @@ void Light::Flash() {
 				else if (Map[Pos_X - i][Pos_Y] == 5)
 				{
 					//爆発
+				}
+				//次のマスがライト（3）なら
+				else if (Map[Pos_X - i][Pos_Y] == 3)
+				{
+					//停止
+					Stop = true;
 				}
 			}
 		}
@@ -459,6 +465,12 @@ void Light::Flash() {
 				{
 					//爆発
 				}
+				//次のマスがライト（3）なら
+				else if (Map[Pos_X][Pos_Y - i] == 3)
+				{
+					//停止
+					Stop = true;
+				}
 			}
 		}
 		//左
@@ -483,6 +495,12 @@ void Light::Flash() {
 				else if (Map[Pos_X][Pos_Y + i] == 5)
 				{
 					//爆発
+				}
+				//次のマスがライト（3）なら
+				else if (Map[Pos_X][Pos_Y + i] == 3)
+				{
+					//停止
+					Stop = true;
 				}
 			}
 		}
@@ -509,6 +527,12 @@ void Light::Flash() {
 					//停止
 					Stop = true;
 				}
+				//次のマスがライト（3）なら
+				else if (Map[Old_Pos_X + i][Old_Pos_Y] == 3)
+				{
+					//停止
+					Stop = true;
+				}
 			}
 		}
 		//下
@@ -525,6 +549,12 @@ void Light::Flash() {
 				}
 				//次のマスが壁（1）なら
 				else if (Map[Old_Pos_X - i][Old_Pos_Y] == 1)
+				{
+					//停止
+					Stop = true;
+				}
+				//次のマスがライト（3）なら
+				else if (Map[Old_Pos_X - i][Old_Pos_Y] == 3)
 				{
 					//停止
 					Stop = true;
@@ -549,6 +579,12 @@ void Light::Flash() {
 					//停止
 					Stop = true;
 				}
+				//次のマスがライト（3）なら
+				else if (Map[Old_Pos_X][Old_Pos_Y - i] == 3)
+				{
+					//停止
+					Stop = true;
+				}
 			}
 		}
 		//左
@@ -565,6 +601,12 @@ void Light::Flash() {
 				}
 				//次のマスが壁（1）なら
 				else if (Map[Old_Pos_X][Old_Pos_Y + i] == 1)
+				{
+					//停止
+					Stop = true;
+				}
+				//次のマスがライト（3）なら
+				else if (Map[Old_Pos_X][Old_Pos_Y + i] == 3)
 				{
 					//停止
 					Stop = true;
@@ -601,22 +643,3 @@ void Light::DebugMap()
 //******************************************************************************
 //	End of file.
 //******************************************************************************
-
-/*
-18×32
-
-何もない
-暗闇状態	100
-発光状態	200
-点灯状態	300
-
-壁
-ライト
-プレイヤー
-エネミー
-
-ライト強度
-1：無限
-2：５マス
-3：３マス
-*/

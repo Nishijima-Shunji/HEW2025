@@ -33,14 +33,9 @@
 //コンストラクタ
 //: x(startX), y(startY), targetX(startX), targetY(startY), speed(spd) {}
 
-void Player::Init()
+std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapData)
 {
-
-}
-
-std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDate)
-{
-    Map = MapDate;
+    Map = MapData;
 
     SetUp();
 
@@ -65,7 +60,7 @@ void Player::SetUp()//ステージ更新ごとに行う
             {   //プレイヤーを登録
 
                 //-1になっているから反応しない
-                MoveList[i][j] = 2;
+                MoveList[i][j] = P_DIVER;//2
                 Map[i][j] = 0;
 
                 X = i;
@@ -187,11 +182,6 @@ void Player::DebugList()
         std::cout << std::endl;
     }
     //======================
-}
-
-void Player::Uninit()
-{
-
 }
 
 //******************************************************************************

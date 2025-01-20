@@ -35,9 +35,9 @@ public:
 	float numU = 0;
 	float numV = 0;
 
-	void Init();
+	//void Init();
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
-	void Uninit();
+	//void Uninit();
 
 	void SetUp();
 	void Move();
