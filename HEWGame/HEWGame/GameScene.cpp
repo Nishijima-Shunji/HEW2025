@@ -72,7 +72,7 @@ void GameScene::Update() {
 		}
 	}
 	for (const auto& obj : characterObj) {
-		obj->Update(maplist);
+		maplist = obj->Update(maplist);
 	}
 
 	//マップデータの更新

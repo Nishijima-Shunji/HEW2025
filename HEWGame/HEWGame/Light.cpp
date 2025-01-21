@@ -402,11 +402,13 @@ void Light::Flash()
 					Map[Pos_X + i][Pos_Y] = Luminous;
 				}
 				//空間（0）
-				else if (Map[Pos_X + i][Pos_Y] == 0)
+				else if (Map[Pos_X + i][Pos_Y] == SPACE)
 				{
 					//発光状態（20）に変える
 					Map[Pos_X + i][Pos_Y] = Luminous;
 				}
+				//ゴール（4）
+				else if (Map[Pos_X + i][Pos_Y] == GOAL) {}
 				//鏡鯛（右上がり）（6）
 				else if (Map[Pos_X + i][Pos_Y] == MIRROR_U)
 				{
@@ -452,7 +454,7 @@ void Light::Flash()
 				{
 					//爆発
 				}
-				//壁(1)/ゴール(4)/マップ端(11)/ライト(12/13/14)
+				//壁(1)/マップ端(11)/ライト(12/13/14)
 				else
 				{
 					//停止
@@ -478,6 +480,8 @@ void Light::Flash()
 					//発光状態（20）に変える
 					Map[Pos_X - i][Pos_Y] = Luminous;
 				}
+				//ゴール（4）
+				else if (Map[Pos_X - i][Pos_Y] == GOAL) {}
 				//鏡鯛（右上がり）（6）
 				else if (Map[Pos_X - i][Pos_Y] == MIRROR_U)
 				{
@@ -549,6 +553,8 @@ void Light::Flash()
 					//発光状態（20）に変える
 					Map[Pos_X][Pos_Y - i]  = Luminous;
 				}
+				//ゴール（4）
+				else if (Map[Pos_X][Pos_Y - i] == GOAL) {}
 				//鏡鯛（右上がり）（6）
 				else if (Map[Pos_X][Pos_Y - i]  == MIRROR_U)
 				{
@@ -619,6 +625,8 @@ void Light::Flash()
 					//発光状態（20）に変える
 					Map[Pos_X][Pos_Y + i]  = Luminous;
 				}
+				//ゴール（4）
+				else if (Map[Pos_X][Pos_Y + i] == GOAL) {}
 				//鏡鯛（右上がり）（6）
 				else if (Map[Pos_X][Pos_Y + i]  == MIRROR_U)
 				{
