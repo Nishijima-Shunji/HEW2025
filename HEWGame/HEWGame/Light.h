@@ -40,6 +40,8 @@ public:
 	void Position();
 	//ˆÚ“®ˆ—
 	void Move();
+	//‰ñ“]ˆ—
+	void Spin();
 	//”­Œõˆ—
 	void Flash();
 };

@@ -15,10 +15,10 @@ private:
 
 
 
-	int X = 3;
-	int Y = 4;
-	int Goal_X = 5;
-	int Goal_Y = 8;
+	int X;
+	int Y;
+	int Goal_X;
+	int Goal_Y;
 	float deltaTime = 0.1f;
 
 	bool Vertical;	//‚’¼ˆÚ“®

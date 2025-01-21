@@ -112,16 +112,16 @@ void Player::Move()
     targetY = pos.y;
     //ライトとの接触確認
     //照射中
-    if (Map[X][Y] == 5)
+    if (Map[X][Y] == Luminous)
     {
         //ライト方向を確認
-        if (Map[X - 1][Y] == 5)
+        if (Map[X - 1][Y] == Luminous)
         {
             //上下移動
             Vertical = true;
             Horizontal = false;
         }
-        else if (Map[X + 1][Y] == 5)
+        else if (Map[X + 1][Y] == Luminous)
         {
             //上下移動（上は壁）
             Vertical = true;
