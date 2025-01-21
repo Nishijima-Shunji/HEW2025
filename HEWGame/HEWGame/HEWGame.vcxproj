@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Ankou.cpp" />
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="Bubble.cpp" />
     <ClCompile Include="direct3d.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="Ankou.h" />
     <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="Bubble.h" />
     <ClInclude Include="direct3d.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />

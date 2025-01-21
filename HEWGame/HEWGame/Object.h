@@ -34,15 +34,6 @@ private:
 protected:
 	Vertex vertexList[4] =
 	{
-		//=============TRIANGLE================
-		//{ -0.5f,  0.5f, 0.5f },  // ０番目の頂点座標　{ x, y, z }
-		//{  0.5f, -0.5f, 0.5f },  // １番目の頂点座標
-		//{ -0.5f, -0.5f, 0.5f },  // ２番目の頂点座標
-
-		//{  0.6f,  0.6f, 0.5f },  // ３番目の頂点座標
-		//{  0.6f, -0.4f, 0.5f },  // ４番目の頂点座標
-		//{ -0.4f,  0.6f, 0.5f },  // ５番目の頂点座標
-
 		//=============TRIANGLESTRIP===============
 		//	x      y     z     r     g     b     a     u     v
 		{-0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f},  // ０番目の頂点座標　{ x, y, z }
@@ -71,6 +62,8 @@ protected:
 	int splitX = 1;
 	int splitY = 1;
 
+	int direction = 0;
+
 protected:
 
 	std::vector<std::vector<int>> Map = {};
@@ -96,6 +89,7 @@ public:
 	void SetAngle(float a);	//角度をセット
 	void SetColor(float r, float g, float b, float a);
 	void SetUV(int u, int v);
+	void SetDirection(int);
 
 	std::vector<std::vector<int>> GetMap(std::vector<std::vector<int>>);
 

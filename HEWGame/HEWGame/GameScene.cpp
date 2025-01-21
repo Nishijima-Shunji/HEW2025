@@ -37,8 +37,12 @@ GameScene::GameScene(int stage) {
 	textureManager = new TextureManager(g_pDevice);
 	// ステージ選択で選んだ番号のマップデータをロード
 	LoadMapData(stage);
-
-
+	for (int i = 0; i < 4; i++) {
+		cylinder.emplace_back(std::make_unique<Object>());
+		cylinder[i]->Init(textureManager,L"asset/O2_1.png");
+		cylinder[i]->SetPos(500.0f, (i * 50.0f) + 300.0f,0.0f);
+		cylinder[i]->SetSize(50.0f, 100.0f, 0.0f);
+	}
 }
 
 GameScene::~GameScene() {
@@ -107,9 +111,21 @@ void GameScene::Update() {
 		}
 	}
 
+	//DirectX::XMFLOAT3 pos = characterObj->Get
+	//cylinder.back()->SetPos(pos.x, pos.y, pos.z);
+
+	for (const auto& obj : characterObj) {
+		Player* playerObj = dynamic_cast<Player*>(obj.get());
+		if (playerObj) {
+			DirectX::XMFLOAT3 pos = playerObj->GetPos();
+			cylinder.back()->SetPos(pos.x, pos.y, pos.z);
+			break;  // 見つかったらループを抜ける
+		}
+	}
+
 	if (input.GetKeyTrigger(VK_3)) {
 		// スコアをリザルトに渡して移動
-		SceneManager::ChangeScene(SceneManager::RESULT,score);
+		SceneManager::ChangeScene(SceneManager::RESULT, score);
 	}
 }
 
@@ -122,6 +138,9 @@ void GameScene::Draw() {
 		}
 	}
 	for (const auto& obj : characterObj) {
+		obj->Draw();
+	}
+	for (const auto& obj : cylinder) {
 		obj->Draw();
 	}
 }
@@ -178,19 +197,20 @@ void GameScene::LoadMapData(int stage) {
 std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* textureManager) {
 	std::unique_ptr<Object> obj;
 	int u, v;
+	int dir = 0;
 	//オブジェクトを生成
 	switch (objectType) {
-	case 0: obj = std::make_unique<Object>(); u = 1; v = 1;  break;
+	case 0: obj = std::make_unique<Object>(); u = 1; v = 1; break;
 	case 1: obj = std::make_unique<Wall>(); u = 1; v = 1; break;
 	case 2: obj = std::make_unique<Player>(); u = 4; v = 2; break;
 	case 3: obj = std::make_unique<Enemy>(); u = 8; v = 2; break;
 	case 4: obj = std::make_unique<Object>(); u = 1; v = 1; break;
 	case 5: obj = std::make_unique<Mendako>(); u = 4; v = 2; break;
 	case 6: obj = std::make_unique<Kagamidai>(); u = 4; v = 2; break;
-	case 7: obj = std::make_unique<Kagamidai>(); u = 4; v = 3; break;
+	case 7: obj = std::make_unique<Kagamidai>(); u = 4; v = 3; dir = 1; break;
 	case 8: obj = std::make_unique<Trap>(); u = 1; v = 1; break;
 	case 9: obj = std::make_unique<Kairyu>(); u = 1; v = 1; break;
-	case 10: obj = std::make_unique<Kairyu>(); u = 1; v = 1; break;
+	case 10: obj = std::make_unique<Kairyu>(); u = 1; v = 1; dir = 1; break;
 	case 11: obj = std::make_unique<Object>(); u = 1; v = 1; break;
 	case 15: obj = std::make_unique<Onikinme>(); u = 4; v = 1; break;
 	case 16: obj = std::make_unique<Ankou>(); u = 4; v = 2; break;
@@ -202,7 +222,8 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	//textureMappingに設定したパスを探す
 	auto it = textureMapping.find(objectType);
 	if (it != textureMapping.end()) {
-		obj->Init(textureManager, it->second.c_str() , u , v);
+		obj->Init(textureManager, it->second.c_str(), u, v);
+		obj->SetDirection(dir);
 	}
 	else {
 		obj->Init(textureManager, L"asset/default.png");

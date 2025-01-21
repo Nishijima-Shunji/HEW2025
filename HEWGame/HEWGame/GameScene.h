@@ -22,6 +22,8 @@ private:
     int mapval = 0;
     std::vector<std::vector<std::unique_ptr<Object>>> mapdata;
     std::vector<std::unique_ptr<Object>> characterObj;
+
+    std::vector<std::unique_ptr<Object>> cylinder;
     //std::vector<std::vector<int>> maplist;
 
     int WidthMAX = 0;

@@ -10,7 +10,7 @@ private:
     std::vector<std::unique_ptr<Object>> scoreNum;
 
     int Score;
-    int tempScore;
+    int tempScore = 0;
     int revealIndex = 0;
     int count = 0;
     int state = 0;

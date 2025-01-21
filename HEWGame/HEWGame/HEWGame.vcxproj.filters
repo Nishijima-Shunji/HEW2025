@@ -25,6 +25,9 @@
     <Filter Include="Object">
       <UniqueIdentifier>{1a06bc00-e4a2-4205-b20e-116038450e80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\アニメーション用">
+      <UniqueIdentifier>{8b47fc5a-ab54-447f-8541-1d9b7c2d957c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Input.cpp">
@@ -102,6 +105,9 @@
     <ClCompile Include="Trap.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="Bubble.cpp">
+      <Filter>Object\アニメーション用</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -175,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="Trap.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Bubble.h">
+      <Filter>Object\アニメーション用</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

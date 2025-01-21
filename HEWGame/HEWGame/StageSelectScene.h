@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseScene.h"
+#include "Bubble.h"
 
 class StageSelectScene : public BaseScene
 {
@@ -9,6 +10,7 @@ private:
     std::unique_ptr<Object> load_bg;
     std::unique_ptr<Object> sensuikan;
     std::vector<std::unique_ptr<Object>> stageicon;
+    std::vector<std::unique_ptr<Bubble>> bubble;
     
     int framecount = 0;
     int nowStage = 1;
@@ -25,5 +27,10 @@ public:
 
     void Update() override;
     void Draw() override;
+
+    void Select();
+    void Load();
+    void Move();
+    void BG_Animation();
 };
 

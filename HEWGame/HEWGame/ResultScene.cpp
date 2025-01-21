@@ -33,15 +33,15 @@ void ResultScene::Update() {
         for (int i = 0; i < 5; i++) {
             scoreNum[i]->SetUV(rand() % 10,0);
         }
-        if (count == 300) {
-            state = 1;          // スコア確定フェーズへ移行
+        if (count == 100) {
+            state = 1;          // スコア確定へ移行
             revealIndex = 0;    // 桁の表示開始位置
             count = 0;          // カウントリセット
         }
     }
     else if (state == 1) {
         // 桁を右から順に1つずつ固定
-        if (count % 30 == 0 && revealIndex < static_cast<int>(scoreNum.size())) {
+        if (count % 8 == 0 && revealIndex < static_cast<int>(scoreNum.size())) {
             int digit = tempScore % 10;  // 右端の桁を取得
             tempScore /= 10;             // 次の桁へ
             scoreNum[scoreNum.size() - 1 - revealIndex]->SetUV(digit, 0);
@@ -50,7 +50,7 @@ void ResultScene::Update() {
 
         // 確定した桁は固定し、未確定の桁は引き続きランダム表示
         for (int i = 0; i < static_cast<int>(scoreNum.size()) - revealIndex; i++) {
-            scoreNum[i]->SetUV(rand() % 10, rand() % 10);
+            scoreNum[i]->SetUV(rand() % 10,0);
         }
 
         // 全桁確定後、次の状態へ
@@ -62,13 +62,8 @@ void ResultScene::Update() {
     if (input.GetKeyTrigger(VK_1)) {
         SceneManager::ChangeScene(SceneManager::TITLE);
     }
-    if (input.GetButtonTrigger(VK_LEFT)) {
-        SceneManager::ChangeScene(SceneManager::TITLE);
-    }
     count++;
 }
-
-
 
 void ResultScene::Draw() {
 	result_bg->Draw();
