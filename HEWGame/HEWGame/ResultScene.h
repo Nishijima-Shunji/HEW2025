@@ -7,13 +7,20 @@ class ResultScene : public BaseScene
 {
 private:
     Object* result_bg;
+    std::vector<std::unique_ptr<Object>> scoreNum;
+
+    int Score;
+    int tempScore = 0;
+    int revealIndex = 0;
+    int count = 0;
+    int state = 0;
 
 public:
-    ResultScene();
+    ResultScene(int score);
     ~ResultScene();
-
 
     void Update() override;
     void Draw() override;
+
 };
 

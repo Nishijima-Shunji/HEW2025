@@ -25,6 +25,9 @@
     <Filter Include="Object">
       <UniqueIdentifier>{1a06bc00-e4a2-4205-b20e-116038450e80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\アニメーション用">
+      <UniqueIdentifier>{8b47fc5a-ab54-447f-8541-1d9b7c2d957c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Input.cpp">
@@ -81,6 +84,30 @@
     <ClCompile Include="Light.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="StageSelectScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Ankou.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Kagamidai.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Kairyu.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Mendako.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Onikinme.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Trap.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Bubble.cpp">
+      <Filter>Object\アニメーション用</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -134,21 +161,66 @@
     <ClInclude Include="Light.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="StageSelectScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Ankou.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Kagamidai.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Kairyu.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Mendako.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Onikinme.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Trap.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Bubble.h">
+      <Filter>Object\アニメーション用</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PixelShader.hlsl" />
-    <FxCompile Include="VertexShader.hlsl" />
-    <FxCompile Include="shader\ps.fx">
+    <FxCompile Include="PixelShader.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="shader\psvscommon.fx">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\vs.fx">
+    <FxCompile Include="VertexShader.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\TestData.csv" />
+    <None Include="Data\Map1.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Data\Map2.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Data\Map3.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Data\Map4.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Data\Map5.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Data\Map6.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Data\Map7.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Data\Map8.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Data\TestData.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
   </ItemGroup>
 </Project>

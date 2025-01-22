@@ -11,26 +11,28 @@ private:
 	int Width = 0;
 	int Height = 0;
 
-	std::vector<int>Lightpos_X = {};
-	std::vector<int>Lightpos_Y = {};
+	std::vector<int>Lightpos = {};
 
+	bool SetUp	 = false;
 	bool LightOn = false;
+	bool Stop	 = false;
 
-	int Old_Pos_X = 0;
-	int Old_Pos_Y = 0;
-	int Pos_X = 0;
-	int Pos_Y = 0;
-	int Count = 0;
-	int Number = 0;
+	int Direction = 0;	//ライト方向	0：上　1：下　2：右　3：左
+	int Old_Pos_X = 0;	//移動前座標：X
+	int Old_Pos_Y = 0;	//移動前座標：Y
+	int Pos_X = 0;		//移動後座標：X
+	int Pos_Y = 0;		//移動後座標：Y
+	int Number = 1;		//ライトナンバー
+	int LightMAX = 0;
 
 public:
 	//マップデータの更新
 	std::vector<std::vector<int>> MapUpdate();
 	void DebugMap();
-	
+
 	//ライトの更新
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
-	
+
 	//更新のパーツ分担
 	//ライトの変更
 	void Change();
@@ -38,9 +40,11 @@ public:
 	void Position();
 	//移動処理
 	void Move();
+	//回転処理
+	void Spin();
 	//発光処理
 	void Flash();
-	//
-
 };
+
+
 

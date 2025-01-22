@@ -22,20 +22,24 @@ private:
     int mapval = 0;
     std::vector<std::vector<std::unique_ptr<Object>>> mapdata;
     std::vector<std::unique_ptr<Object>> characterObj;
+
+    std::vector<std::unique_ptr<Object>> cylinder;
     //std::vector<std::vector<int>> maplist;
 
     int WidthMAX = 0;
     int HeightMAX = 0;
 
+    int score = 0;
+
 public:
 
-    GameScene();
+    GameScene(int stage);
     ~GameScene();
 
     void Update() override;
     void Draw() override;
 
-    void LoadMapData();
+    void LoadMapData(int stage);
     std::unique_ptr<Object> CreateObject(int objectType, TextureManager* textureManager);
     std::unique_ptr<Object> DeleteObject(int objectType, TextureManager* textureManager);
 

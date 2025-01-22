@@ -13,9 +13,21 @@ private:
     int targetX, targetY; // 移動先のマス座標
     float speed;       // 移動速度
 
-	int newX;
-	int newY;
-	float deltaTime;
+
+
+	int X;
+	int Y;
+	int Goal_X;
+	int Goal_Y;
+	float deltaTime = 0.1f;
+
+	bool Vertical;	//垂直移動
+	bool Horizontal;//水平移動
+
+	int MoveList[18][32];
+
+	int framecount;
+	int animcount;
 
 public:
 
@@ -23,7 +35,13 @@ public:
 	float numU = 0;
 	float numV = 0;
 
-	void Init();
+	//void Init();
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
-	void Uninit();
+	//void Uninit();
+
+	void SetUp();
+	void Move();
+	void Animation();
+
+	void DebugList();
 };
