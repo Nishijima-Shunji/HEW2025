@@ -2,6 +2,9 @@
 #include "BaseScene.h"
 #include <vector>
 
+#include "Cursol.h"
+#include "SoundCursol.h"
+
 class Game;
 class TitleScene : public BaseScene
 {
@@ -17,7 +20,8 @@ private:
     std::vector<std::unique_ptr<Object>> window;
     std::vector<std::unique_ptr<Object>> icon;
     std::unique_ptr<Object> setting;
-    std::unique_ptr<Object> cursol;
+    std::unique_ptr<SoundCursol> sound_cursol;
+    std::unique_ptr<Cursol> cursol;
     std::vector<Object*> title_Ob;  // タイトルオブジェクト
 
     int framecount = 0;

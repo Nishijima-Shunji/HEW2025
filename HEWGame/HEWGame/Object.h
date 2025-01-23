@@ -64,9 +64,13 @@ protected:
 
 	int direction = 0;
 
+	int PosX;
+	int PosY;
+
 protected:
 
 	std::vector<std::vector<int>> Map = {};
+	std::vector<std::pair<int, int>> findCoordinate(const std::vector<std::vector<int>>& map, int targetValue);
 
 public:
 
@@ -90,9 +94,12 @@ public:
 	void SetColor(float r, float g, float b, float a);
 	void SetUV(int u, int v);
 	void SetDirection(int);
+	void SetXY(int, int);
 
 	std::vector<std::vector<int>> GetMap(std::vector<std::vector<int>>);
 
 	void SetTexture(TextureManager* textureManager, const wchar_t* imgname);  // テクスチャ設定
+
+
 };
 

@@ -11,6 +11,7 @@
 #include "Object.h"
 #include "camera.h"
 #include <iostream>
+#include <utility>
 
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
@@ -72,43 +73,6 @@ std::vector<std::vector<int>> Object::Update(std::vector<std::vector<int>> MapDa
 
 	return Map;
 }
-
-//void Object::Draw() {
-//	UINT strides = sizeof(Vertex);
-//	UINT offsets = 0;
-//	g_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &strides, &offsets);
-//
-//	//テクスチャをピクセルシェーダーに渡す
-//	g_pDeviceContext->PSSetShaderResources(0, 1, &m_pTextureView);
-//
-//	//定数バッファを更新
-//	ConstBuffer cb;
-//
-//	//プロジェクション変換行列を作成
-//	cb.matrixProj = DirectX::XMMatrixOrthographicLH(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 3.0f);
-//	cb.matrixProj - DirectX::XMMatrixTranspose(cb.matrixProj);
-//
-//	//ワールド変換行列の作成
-//	//→オブジェクトの位置・大きさ・向きを指定
-//	cb.matrixWorld = DirectX::XMMatrixScaling(size.x, size.y, size.z);
-//	cb.matrixWorld *= DirectX::XMMatrixRotationZ(angle * 3.14f / 180);
-//	cb.matrixWorld *= DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
-//	cb.matrixWorld = DirectX::XMMatrixTranspose(cb.matrixWorld);
-//
-//	//UVアニメーションの行列作成
-//	float u = (float)numU / splitX;
-//	float v = (float)numV / splitY;
-//	cb.matrixTex = DirectX::XMMatrixTranslation(u, v, 0.0f);
-//	cb.matrixTex = DirectX::XMMatrixTranspose(cb.matrixTex);
-//
-//	//頂点カラーのデータを作成
-//	cb.color = color;
-//
-//	//行列をシェーダーに渡す
-//	g_pDeviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
-//
-//	g_pDeviceContext->Draw(4, 0); // 描画命令
-//}
 
 void Object::Draw() {
 	UINT strides = sizeof(Vertex);
@@ -221,6 +185,28 @@ void Object::SetDirection(int Direction) {
 	}
 	direction = Direction;
 }
+
+std::vector<std::pair<int, int>> Object::findCoordinate(
+	const std::vector<std::vector<int>>& map, int targetValue) {
+
+	std::vector<std::pair<int, int>> coordinates;
+
+	for (size_t y = 0; y < map.size(); ++y) {
+		for (size_t x = 0; x < map[y].size(); ++x) {
+			if (map[y][x] == targetValue) {
+				coordinates.emplace_back(x, y);  // (x, y) の順で格納
+			}
+		}
+	}
+
+	return coordinates;
+}
+
+void Object::SetXY(int setX, int setY) {
+	PosX = setX;
+	PosY = setY;
+}
+
 
 //******************************************************************************
 //	End of file.

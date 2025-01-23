@@ -1,6 +1,7 @@
-#include "GameScene.h"
+ï»¿#include "GameScene.h"
 #include "Game.h"
 #include <algorithm>
+
 
 #include "Player.h"
 #include "Enemy.h"
@@ -12,120 +13,132 @@
 #include "Onikinme.h"
 #include "Trap.h"
 
-// textureMapping‚Ì‰Šú‰»
-	//ƒ}ƒbƒv‚©‚çƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚éÛ‚ÉQÆ‚·‚éƒL[
+// ã‚¹ãƒ†ãƒ¼ã‚¸ã®çµŒéæ™‚é–“è¨ˆæ¸¬ç”¨å¤‰æ•°
+std::chrono::high_resolution_clock::time_point start;
+
+// textureMappingã®åˆæœŸåŒ–
+	//ãƒãƒƒãƒ—ã‹ã‚‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹éš›ã«å‚ç…§ã™ã‚‹ã‚­ãƒ¼
 static std::unordered_map<int, std::wstring> textureMapping = {
-	{0, L"asset/S_Water.png"},		//–³
-	{1, L"asset/S_Wall.png"},		//•Ç
-	{2, L"asset/survivor3.png"},	//ƒvƒŒƒCƒ„[
-	{3, L"asset/shake1.png"},		//“G
-	{4, L"asset/S_Goal.png"},		//ƒS[ƒ‹
-	{5, L"asset/mendako.png"},	//ƒƒ“ƒ_ƒR
-	{6, L"asset/mirror_fish.png"},	//‹¾‘â
-	{7, L"asset/mirror_fish.png"},	//‹¾‘â
-	{8, L"asset/S_trap.png"},		//ƒgƒ‰ƒbƒv
-	{9, L"asset/S_Kairyu.png"},		//ŠC—¬
-	{10, L"asset/S_Kairyu.png"},		//ŠC—¬
-	{11, L"asset/S_hasi.png"},		//ƒ}ƒbƒv’[
-	{15, L"asset/demonfish1.png"},	//ƒIƒjƒLƒ“ƒ
-	{16, L"asset/Lightfish1.png"},		//ƒAƒ“ƒRƒE
-	{19, L"asset/S_Light.png"},		//ƒ‰ƒCƒg
-	{20, L"asset/S_Lumine.png"}		//Œõƒ}ƒX
+	{0, L"asset/S_Water.png"},		//ç„¡
+	{1, L"asset/Wall.png"},		//å£
+	{2, L"asset/survivor3.png"},	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
+	{3, L"asset/shake1.png"},		//æ•µ
+	{4, L"asset/S_Goal.png"},		//ã‚´ãƒ¼ãƒ«
+	{5, L"asset/mendako.png"},	//ãƒ¡ãƒ³ãƒ€ã‚³
+	{6, L"asset/mirror_fish.png"},	//é¡é¯›
+	{7, L"asset/mirror_fish.png"},	//é¡é¯›
+	{8, L"asset/S_trap.png"},		//ãƒˆãƒ©ãƒƒãƒ—
+	{9, L"asset/S_Kairyu.png"},		//æµ·æµ
+	{10, L"asset/S_Kairyu.png"},		//æµ·æµ
+	{11, L"asset/S_hasi.png"},		//ãƒãƒƒãƒ—ç«¯
+	{15, L"asset/demonfish1.png"},	//ã‚ªãƒ‹ã‚­ãƒ³ãƒ¡
+	{16, L"asset/Lightfish1.png"},		//ã‚¢ãƒ³ã‚³ã‚¦
+	{19, L"asset/S_Light.png"},		//ãƒ©ã‚¤ãƒˆ
+	{20, L"asset/S_Lumine.png"}		//å…‰ãƒã‚¹
 };
 
 GameScene::GameScene(int stage) {
 	textureManager = new TextureManager(g_pDevice);
-	// ƒXƒe[ƒW‘I‘ğ‚Å‘I‚ñ‚¾”Ô†‚Ìƒ}ƒbƒvƒf[ƒ^‚ğƒ[ƒh
+	// ã‚¹ãƒ†ãƒ¼ã‚¸é¸æŠã§é¸ã‚“ã ç•ªå·ã®ãƒãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ­ãƒ¼ãƒ‰
 	LoadMapData(stage);
 	for (int i = 0; i < 4; i++) {
-		cylinder.emplace_back(std::make_unique<Object>());
-		cylinder[i]->Init(textureManager,L"asset/O2_1.png");
-		cylinder[i]->SetPos(500.0f, (i * 50.0f) + 300.0f,0.0f);
+		cylinder.emplace_back(std::make_unique<O2>());
+		cylinder[i]->Init(textureManager, L"asset/O2_1.png");
+		cylinder[i]->SetPos((i * 50.0f) + 500.0f, +300.0f, 0.0f);
 		cylinder[i]->SetSize(50.0f, 100.0f, 0.0f);
+
+		o2.emplace_back(std::make_unique<O2>());
+		o2[i]->Init(textureManager, L"asset/O2_2.png");
+		o2[i]->SetPos((i * 50.0f) + 500.0f, 290.0f, 0.0f);
+		o2[i]->SetSize(45.0f, 80.0f, 0.0f);
 	}
 }
 
 GameScene::~GameScene() {
-	// mapdata‚ÌƒŠƒ\[ƒX‚ğ‰ğ•ú
+	// mapdataã®ãƒªã‚½ãƒ¼ã‚¹ã‚’è§£æ”¾
 	for (auto& row : mapdata) {
 		for (auto& obj : row) {
-			obj.reset(); // unique_ptr ‚ÌƒŠƒ\[ƒX‰ğ•ú
+			obj.reset(); // unique_ptr ã®ãƒªã‚½ãƒ¼ã‚¹è§£æ”¾
 		}
 	}
-	mapdata.clear(); // –¾¦“I‚ÉƒxƒNƒgƒ‹‚ğƒNƒŠƒA
+	mapdata.clear(); // æ˜ç¤ºçš„ã«ãƒ™ã‚¯ãƒˆãƒ«ã‚’ã‚¯ãƒªã‚¢
 
-	// TextureManager‚ğ‰ğ•ú
+	// TextureManagerã‚’è§£æ”¾
 	delete textureManager;
 }
 
 void GameScene::Update() {
 	input.Update();
+	if (state == 0) {
+		// ã‚²ãƒ¼ãƒ æ™‚é–“ã®è¨ˆæ¸¬é–‹å§‹
+		start = std::chrono::high_resolution_clock::now();
+		state = 1;
+	}
+	else if (state == 1) {
+		// ç¾åœ¨ã®æ™‚é–“ã‚’å–å¾—
+		auto now = std::chrono::high_resolution_clock::now();
+		// çµŒéæ™‚é–“ã‚’è¨ˆç®—
+		auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - start);
 
-	//ŒÃ‚¢ƒ}ƒbƒvƒf[ƒ^‚Ì•Û‘¶
-	oldlist = maplist;
 
-	for (const auto& row : mapdata) {
-		for (const auto& obj : row) {
-			if (obj) {
-				maplist = obj->Update(maplist);
+		//å¤ã„ãƒãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿ã®ä¿å­˜
+		oldlist = maplist;
+
+		for (const auto& row : mapdata) {
+			for (const auto& obj : row) {
+				if (obj) {
+					maplist = obj->Update(maplist);
+				}
 			}
 		}
-	}
-	for (const auto& obj : characterObj) {
-		maplist = obj->Update(maplist);
-	}
+		for (const auto& obj : characterObj) {
+			maplist = obj->Update(maplist);
+		}
 
-	//ƒ}ƒbƒvƒf[ƒ^‚ÌXV
-	for (int i = 0; i < maplist.size(); ++i) {
-		mapdata[i].resize(maplist[i].size()); // Šes‚ğƒŠƒTƒCƒY
-		for (int j = 0; j < maplist[i].size(); ++j) {
+		//ãƒãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿ã®æ›´æ–°
+		for (int i = 0; i < maplist.size(); ++i) {
+			mapdata[i].resize(maplist[i].size()); // å„è¡Œã‚’ãƒªã‚µã‚¤ã‚º
+			for (int j = 0; j < maplist[i].size(); ++j) {
 
-			//ŒÃ‚¢ƒ}ƒbƒvƒf[ƒ^‚Æ”äŠr
-			int OldObject = oldlist[i][j];
-			int NewObject = maplist[i][j];
+				//å¤ã„ãƒãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿ã¨æ¯”è¼ƒ
+				int OldObject = oldlist[i][j];
+				int NewObject = maplist[i][j];
 
-			//ƒ}ƒbƒvƒf[ƒ^‚ª•Ï‰»‚µ‚Ä‚¢‚é‚È‚ç
-			if (NewObject != OldObject)
-			{
-				//ŒÃ‚¢ƒIƒuƒWƒFƒNƒg‚ğíœ
-				std::cout << "íœ" << std::endl;
-				mapdata[i][j] = CreateObject(NewObject, textureManager);
+				//ãƒãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿ãŒå¤‰åŒ–ã—ã¦ã„ã‚‹ãªã‚‰
+				if (NewObject != OldObject)
+				{
+					//å¤ã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‰Šé™¤
+					std::cout << "å‰Šé™¤" << std::endl;
+					mapdata[i][j] = CreateObject(NewObject, textureManager);
 
-				// «d‚©‚Á‚½Œ´ˆö«Fif•¶‚Ì’†‚É“ü‚ê‚Ä•Ï‰»‚¾‚¯‚É‚µ‚½‚ç‚¿‚å‚Á‚ÆŒy‚­‚È‚Á‚½
-				int objectType = maplist[i][j];
-				if (objectType != -1) {
-					auto obj = CreateObject(objectType, textureManager); // FactoryŠÖ”‚ÅƒIƒuƒWƒFƒNƒg¶¬
-					if (obj) {
-						float x = j * 30.0f - 500.0f;	// xÀ•W		—ñ * Object‚Ì‘å‚«‚³ * ƒIƒtƒZƒbƒg		¦ƒJƒƒ‰‚ ‚ê‚ÎƒIƒtƒZƒbƒg—v‚ç‚È‚¢‚©‚à
-						float y = i * -30.0f + 280.0f;	// yÀ•W		s * Object‚Ì‘å‚«‚³ * ƒIƒtƒZƒbƒg
+					// â†“é‡ã‹ã£ãŸåŸå› â†“ï¼šifæ–‡ã®ä¸­ã«å…¥ã‚Œã¦å¤‰åŒ–æ™‚ã ã‘ã«ã—ãŸã‚‰ã¡ã‚‡ã£ã¨è»½ããªã£ãŸ
+					int objectType = maplist[i][j];
+					if (objectType != -1 && (objectType == 20 || objectType == 11 || objectType == 19)) {
+						auto obj = CreateObject(objectType, textureManager); // é–¢æ•°ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
+						if (obj) {
+							//float x = j * 30.0f - 500.0f;	// xåº§æ¨™		åˆ— * Objectã®å¤§ãã• * ã‚ªãƒ•ã‚»ãƒƒãƒˆ		â€»ã‚«ãƒ¡ãƒ©ã‚ã‚Œã°ã‚ªãƒ•ã‚»ãƒƒãƒˆè¦ã‚‰ãªã„ã‹ã‚‚
+							float x = j * 30.0f;	// xåº§æ¨™		åˆ— * Objectã®å¤§ãã• * ã‚ªãƒ•ã‚»ãƒƒãƒˆ		â€»ã‚«ãƒ¡ãƒ©ã‚ã‚Œã°ã‚ªãƒ•ã‚»ãƒƒãƒˆè¦ã‚‰ãªã„ã‹ã‚‚
+							//float y = i * -30.0f + 280.0f;	// yåº§æ¨™		è¡Œ * Objectã®å¤§ãã• * ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+							float y = i * -30.0f;	// yåº§æ¨™		è¡Œ * Objectã®å¤§ãã• * ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
-						obj->SetPos(x, y, 0.0f);
-						obj->SetSize(30.0f, 30.0f, 0.0f);
-						obj->SetAngle(0.0f);
-						obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+							obj->SetPos(x, y, 0.0f);
+							obj->SetSize(30.0f, 30.0f, 0.0f);
+							obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+							obj->SetXY(j, i);
 
-						mapdata[i][j] = std::move(obj);
+							mapdata[i][j] = std::move(obj);
+						}
 					}
 				}
 			}
 		}
-	}
 
-	//DirectX::XMFLOAT3 pos = characterObj->Get
-	//cylinder.back()->SetPos(pos.x, pos.y, pos.z);
+		o2Gauge(elapsed);
 
-	for (const auto& obj : characterObj) {
-		Player* playerObj = dynamic_cast<Player*>(obj.get());
-		if (playerObj) {
-			DirectX::XMFLOAT3 pos = playerObj->GetPos();
-			cylinder.back()->SetPos(pos.x, pos.y, pos.z);
-			break;  // Œ©‚Â‚©‚Á‚½‚çƒ‹[ƒv‚ğ”²‚¯‚é
+		if (input.GetKeyTrigger(VK_3)) {
+			// ã‚¹ã‚³ã‚¢ã‚’ãƒªã‚¶ãƒ«ãƒˆã«æ¸¡ã—ã¦ç§»å‹•
+			SceneManager::ChangeScene(SceneManager::RESULT, score);
 		}
-	}
-
-	if (input.GetKeyTrigger(VK_3)) {
-		// ƒXƒRƒA‚ğƒŠƒUƒ‹ƒg‚É“n‚µ‚ÄˆÚ“®
-		SceneManager::ChangeScene(SceneManager::RESULT, score);
 	}
 }
 
@@ -141,6 +154,9 @@ void GameScene::Draw() {
 
 		obj->Draw();
 	}
+	for (const auto& obj : o2) {
+		obj->Draw();
+	}
 	for (const auto& obj : cylinder) {
 		obj->Draw();
 	}
@@ -149,43 +165,45 @@ void GameScene::Draw() {
 void GameScene::LoadMapData(int stage) {
 	mapdata.clear();
 
-	std::string stageStr = std::to_string(stage);  // int ‚ğ•¶š—ñ‚É•ÏŠ·
+	std::string stageStr = std::to_string(stage);  // int ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
 	std::wstring mapPath = L"Data/MAP_STAGE" + std::wstring(stageStr.begin(), stageStr.end()) + L".csv";
 	//std::wstring mapPath = L"Data/TestData.csv";
 
 	maplist = Loadmap(mapPath.c_str());
 
-	mapdata.resize(maplist.size()); // ŠO‘¤‚ÌƒxƒNƒgƒ‹‚ğƒŠƒTƒCƒY
+	mapdata.resize(maplist.size()); // å¤–å´ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ãƒªã‚µã‚¤ã‚º
 
 	for (int i = 0; i < maplist.size(); ++i) {
-		mapdata[i].resize(maplist[i].size()); // Šes‚ğƒŠƒTƒCƒY
-		//ªƒf[ƒ^“ü‚Á‚Ä‚é
+		mapdata[i].resize(maplist[i].size()); // å„è¡Œã‚’ãƒªã‚µã‚¤ã‚º
+		//â†‘ãƒ‡ãƒ¼ã‚¿å…¥ã£ã¦ã‚‹
 		for (int j = 0; j < maplist[i].size(); ++j) {
 			int objectType = maplist[i][j];
 			if (objectType != -1 && (objectType == 1 || objectType == 4 || objectType == 11 || objectType == 19 || objectType == 20)) {
-				auto obj = CreateObject(objectType, textureManager); // ƒIƒuƒWƒFƒNƒg¶¬
+				auto obj = CreateObject(objectType, textureManager); // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 				if (obj) {
-					float x = j * 30.0f - 500.0f; // xÀ•W		—ñ * Object‚Ì‘å‚«‚³ * ƒIƒtƒZƒbƒg
-					float y = i * -30.0f + 280.0f; // yÀ•W		s * Object‚Ì‘å‚«‚³ * ƒIƒtƒZƒbƒg
+					float x = j * 30.0f; // xåº§æ¨™		åˆ— * Objectã®å¤§ãã• * ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+					float y = i * -30.0f; // yåº§æ¨™		è¡Œ * Objectã®å¤§ãã• * ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
 					obj->SetPos(x, y, 0.0f);
 					obj->SetSize(30.0f, 30.0f, 0.0f);
 					obj->SetAngle(0.0f);
 					obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+					obj->SetXY(j, i);
 
 					mapdata[i][j] = std::move(obj);
 				}
 			}
 			else if (objectType != -1) {
-				auto obj = CreateObject(objectType, textureManager); // ƒIƒuƒWƒFƒNƒg¶¬
+				auto obj = CreateObject(objectType, textureManager); // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 				if (obj) {
-					float x = j * 30.0f - 500.0f; // xÀ•W		—ñ * Object‚Ì‘å‚«‚³ * ƒIƒtƒZƒbƒg
-					float y = i * -30.0f + 280.0f; // yÀ•W		s * Object‚Ì‘å‚«‚³ * ƒIƒtƒZƒbƒg
+					float x = j * 30.0f; // xåº§æ¨™		åˆ— * Objectã®å¤§ãã• * ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+					float y = i * -30.0f; // yåº§æ¨™		è¡Œ * Objectã®å¤§ãã• * ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
 					obj->SetPos(x, y, 0.0f);
 					obj->SetSize(30.0f, 30.0f, 0.0f);
 					obj->SetAngle(0.0f);
 					obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+					obj->SetXY(j, i);
 
 					characterObj.emplace_back(std::move(obj));
 					//maplist[i][j] = -1;
@@ -199,7 +217,7 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	std::unique_ptr<Object> obj;
 	int u, v;
 	int dir = 0;
-	//ƒIƒuƒWƒFƒNƒg‚ğ¶¬
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
 	switch (objectType) {
 	case 0: obj = std::make_unique<Object>(); u = 1; v = 1; break;
 	case 1: obj = std::make_unique<Wall>(); u = 1; v = 1; break;
@@ -220,7 +238,7 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	default: return nullptr;
 	}
 
-	//textureMapping‚Éİ’è‚µ‚½ƒpƒX‚ğ’T‚·
+	//textureMappingã«è¨­å®šã—ãŸãƒ‘ã‚¹ã‚’æ¢ã™
 	auto it = textureMapping.find(objectType);
 	if (it != textureMapping.end()) {
 		obj->Init(textureManager, it->second.c_str(), u, v);
@@ -233,3 +251,50 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 
 	return obj;
 }
+
+void GameScene::o2Gauge(std::chrono::milliseconds time) {
+	for (const auto& obj : o2) {
+		obj->Update();
+	}
+
+	// é­é›£è€…ã«ä»˜ã„ã¦ãã‚‹ç”¨
+	for (const auto& obj : characterObj) {
+		Player* playerObj = dynamic_cast<Player*>(obj.get());
+		if (playerObj) {
+			DirectX::XMFLOAT3 pos = playerObj->GetPos();
+			cylinder.back()->SetPos(pos.x + 20.0f, pos.y + 20.0f, pos.z);
+			cylinder.back()->SetSize(15.0f, 36.0f, 0.0f);
+			o2.back()->SetPos(pos.x + 20.0f, pos.y + 17.5f, pos.z);
+			o2.back()->SetSize(12.0f, 27.6f, 0.0f);
+			break;  // è¦‹ã¤ã‹ã£ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
+		}
+	}
+	static int lastCheckedTime = 0;
+	float remainingTime = (MAXTIME / 3) - (time.count() - lastCheckedTime);
+
+	if (remainingTime > 0.0f && o2.size() > 1) {
+		float sizeRatio = (remainingTime / (MAXTIME / 3)) * 27.6f;
+
+		// ãƒœãƒ³ãƒ™ã®åŸºæº–ä½ç½®ï¼ˆåº•ã®ä½ç½®å›ºå®šï¼‰
+		float baseY = o2.back()->GetPos().y;  // ãƒœãƒ³ãƒ™ã®åˆæœŸä½ç½®
+
+		// ç¸®å°åˆ†ã ã‘ãƒœãƒ³ãƒ™ã®ä½ç½®ã‚’ä¸Šã«ç§»å‹•ï¼ˆ0 ã€œ 27.6 ã®ç¯„å›²ï¼‰
+		float newY = baseY - (27.6f - sizeRatio) / 2.0f;
+
+		// æ–°ã—ã„ã‚µã‚¤ã‚ºã¨ä½ç½®ã‚’ã‚»ãƒƒãƒˆï¼ˆä¸Šã«å‘ã‹ã£ã¦ç¸®ã‚€ï¼‰
+		o2.back()->SetSize(12.0f, sizeRatio, 0.0f);
+		o2.back()->SetPos(o2.back()->GetPos().x, newY, 0.0f); 
+	}
+
+	// ãƒœãƒ³ãƒ™å‰Šé™¤å‡¦ç†
+	if (remainingTime <= 0.0f) {
+		if (o2.size() > 1) {
+			cylinder.erase(cylinder.end() - 1);
+			o2.erase(o2.end() - 1);
+			lastCheckedTime = time.count();  // æ–°ã—ã„ãƒœãƒ³ãƒ™ç”¨ã«æ™‚é–“ã‚’ãƒªã‚»ãƒƒãƒˆ
+		}
+	}
+
+
+}
+

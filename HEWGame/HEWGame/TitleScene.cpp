@@ -147,11 +147,16 @@ void TitleScene::InitAnimation() {
 
 	// 設定ウィンドウ
 	setting = std::make_unique<Object>();
-	setting->Init(textureManager, L"asset/setting.png");
+	setting->Init(textureManager, L"asset/sound_UI.png");
 	setting->SetPos(0.0f, 0.0f, 0.0f);
 	setting->SetSize(600.0f, 600.0f, 0.0f);
 
-	cursol = std::make_unique<Object>();
+	sound_cursol = std::make_unique<SoundCursol>();
+	sound_cursol->Init(textureManager, L"asset/sound_UI.png");
+	sound_cursol->SetPos(0.0f, 0.0f, 0.0f);
+	sound_cursol->SetSize(600.0f, 600.0f, 0.0f);
+
+	cursol = std::make_unique<Cursol>();
 	cursol->Init(textureManager, L"asset/cursol.png");
 	cursol->SetPos(0.0f, 0.0f, 0.0f);
 	cursol->SetSize(100.0f, 100.0f, 0.0f);
