@@ -10,6 +10,7 @@
 #include "Sound.h"
 #include "SceneManager.h"
 #include "mapfile.h"
+#include "Bubble.h"
 
 #include "Light.h"
 
@@ -23,7 +24,6 @@ private:
 	Input input;
 	Sound sound;
 	SceneManager sm;
-	int a = 0;
 
 	Light Light;
 	
