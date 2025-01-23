@@ -25,6 +25,9 @@
     <Filter Include="Object">
       <UniqueIdentifier>{1a06bc00-e4a2-4205-b20e-116038450e80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\UI用">
+      <UniqueIdentifier>{032a81f2-74a2-4b55-842c-a8e717694494}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Object\アニメーション用">
       <UniqueIdentifier>{8b47fc5a-ab54-447f-8541-1d9b7c2d957c}</UniqueIdentifier>
     </Filter>
@@ -108,8 +111,19 @@
     <ClCompile Include="Bubble.cpp">
       <Filter>Object\アニメーション用</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
     <ClCompile Include="camera.cpp">
       <Filter>ソース ファイル</Filter>
+=======
+    <ClCompile Include="SoundCursol.cpp">
+      <Filter>Object\UI用</Filter>
+    </ClCompile>
+    <ClCompile Include="Cursol.cpp">
+      <Filter>Object\UI用</Filter>
+    </ClCompile>
+    <ClCompile Include="o2.cpp">
+      <Filter>Object\UI用</Filter>
+>>>>>>> Stashed changes
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,11 +202,22 @@
     <ClInclude Include="Bubble.h">
       <Filter>Object\アニメーション用</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
     <ClInclude Include="camera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Random.h">
       <Filter>ヘッダー ファイル</Filter>
+=======
+    <ClInclude Include="Cursol.h">
+      <Filter>Object\UI用</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundCursol.h">
+      <Filter>Object\UI用</Filter>
+    </ClInclude>
+    <ClInclude Include="o2.h">
+      <Filter>Object\UI用</Filter>
+>>>>>>> Stashed changes
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -204,31 +229,10 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Map1.csv">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Data\Map2.csv">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Data\Map3.csv">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Data\Map4.csv">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Data\Map5.csv">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Data\Map6.csv">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Data\Map7.csv">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Data\Map8.csv">
-      <Filter>リソース ファイル</Filter>
-    </None>
     <None Include="Data\TestData.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Data\MAP_STAGE2.csv">
       <Filter>リソース ファイル</Filter>
     </None>
   </ItemGroup>
