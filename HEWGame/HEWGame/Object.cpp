@@ -9,6 +9,7 @@
 //	Include header files.
 //-----------------------------------------------------------------------------
 #include "Object.h"
+#include "camera.h"
 #include <iostream>
 
 //-----------------------------------------------------------------------------
@@ -121,13 +122,13 @@ void Object::Draw() {
 	ConstBuffer cb;
 
 	// プロジェクション変換行列を作成
-	cb.matrixProj = DirectX::XMMatrixOrthographicLH(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 3.0f);
+	cb.matrixProj = DirectX::XMMatrixOrthographicLH(SCREEN_WIDTH / Camera_Pos.z, SCREEN_HEIGHT / Camera_Pos.z, 0.0f, 3.0f);
 	cb.matrixProj = DirectX::XMMatrixTranspose(cb.matrixProj);
 
 	// ワールド変換行列の作成
 	cb.matrixWorld = DirectX::XMMatrixScaling(size.x, size.y, size.z);
 	cb.matrixWorld *= DirectX::XMMatrixRotationZ(angle * 3.14f / 180);
-	cb.matrixWorld *= DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
+	cb.matrixWorld *= DirectX::XMMatrixTranslation(pos.x - Camera_Pos.x, pos.y - Camera_Pos.y, pos.z);
 	cb.matrixWorld = DirectX::XMMatrixTranspose(cb.matrixWorld);
 
 	// UVアニメーションの行列作成（左右反転の適用）

@@ -108,6 +108,9 @@
     <ClCompile Include="Bubble.cpp">
       <Filter>Object\アニメーション用</Filter>
     </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -184,6 +187,12 @@
     </ClInclude>
     <ClInclude Include="Bubble.h">
       <Filter>Object\アニメーション用</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

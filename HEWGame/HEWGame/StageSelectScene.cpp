@@ -1,5 +1,6 @@
 #include "StageSelectScene.h"
 #include "Game.h"
+#include "camera.h"
 
 StageSelectScene::StageSelectScene() {
 	textureManager = new TextureManager(g_pDevice);
@@ -46,6 +47,10 @@ StageSelectScene::StageSelectScene() {
 	sensuikan->SetSize(200.0f, 200.0f, 0.0f);		//大きさを設定
 
 	loadstate = 0;
+
+	rg[BUBBLE_X] = std::make_unique<RandomGene>(-960, 960);
+	rg[BUBBLE_SPEED] = std::make_unique<RandomGene>(10.0f, 15.0f);
+	rg[BUBBLE_SIZE] = std::make_unique<RandomGene>(10.0f, 15.0f);
 }
 
 StageSelectScene::~StageSelectScene() {
@@ -55,9 +60,10 @@ StageSelectScene::~StageSelectScene() {
 void StageSelectScene::Update() {
 	input.Update();
 
-	Move();
-	Load();
 	Select();
+
+	Load();
+	Move();
 	BG_Animation();
 
 	framecount++;
@@ -166,56 +172,31 @@ void StageSelectScene::Load() {
 		}
 		loadstate = 2;
 	}
-	// 切り替え中
-	if (loadstate == 1) {
-		DirectX::XMFLOAT3 size = load_bg->GetSize();
-		size.x += 80.0f;
-		size.y += 80.0f;
-		load_bg->SetSize(size.x, size.y, size.z);
-		if (size.x > 2500.0f) {
-			loadstate = 3;
-		}
-	}
-	if (loadstate == 3) {
-		int count = 0;
-		for (auto& obj : stageicon) {
-			std::wstring texturePath = L"asset/stage_icon/";
-			texturePath += std::to_wstring(count + 5);
-			texturePath += L".png";
-			obj->SetTexture(textureManager, texturePath.c_str());
-			count++;
-		}
-		sensuikan->SetPos(-1000.0f, -400.0f, 0.0f);
-		loadstate = 4;
-	}
-	if (loadstate == 4) {
-		DirectX::XMFLOAT3 size = load_bg->GetSize();
-		size.x -= 80.0f;
-		size.y -= 80.0f;
-		load_bg->SetSize(size.x, size.y, size.z);
-		if (size.x < -10.0f) {
-			loadstate = 0;
-		}
-	}
 
 	//　ゲームシーンへ切り替えのアニメーション
 	if (loadstate == 5) {
+		move = false;
 		sensuikan->SetPos(sensuikan->GetPos().x, sensuikan->GetPos().y - 2.0f, 0.0f);
-		if (framecount % (rand() % 3 + 2) == 0) {
+		if (framecount % (rand() % 5 + 2) == 0) {
 			bubble.emplace_back(std::make_unique<Bubble>());
 			bubble.back()->Init(textureManager, L"asset/bubble.PNG");
-			bubble.back()->SetPos(rand() % 2000 - 500, -1000.0f, 0.0f);
-			float sizerandom = rand() % bubble.size() * 75.0f;
+			bubble.back()->SetPos(rg[BUBBLE_X]->Int_generate(), -800.0f, 0.0f);
+			float sizerandom = rg[BUBBLE_SIZE]->Float_generate() * framecount;
 			bubble.back()->SetSize(sizerandom, sizerandom, 0.0f);
-			bubble.back()->SetSpeed(static_cast<float>(rand()) / RAND_MAX * (bubble.size() * 0.8f));
+			bubble.back()->SetSpeed(rg[BUBBLE_SPEED]->Float_generate());
 		}
 		for (auto& obj : bubble) {
 			obj->Update();
 		}
-		
-		if (framecount == 300) {
-			// 現在位置の番号ステージでゲームシーン読み込み
-			SceneManager::ChangeScene(SceneManager::GAME, nowStage);
+		bubble.erase(std::remove_if(bubble.begin(), bubble.end(),
+			[](const std::unique_ptr<Bubble>& bubble) { return bubble->GetPosY() > 800.0f; }), 
+			bubble.end());
+
+		if (loadstate == 5) {
+			if (framecount == 170) {
+				// 現在位置の番号ステージでゲームシーン読み込み
+				SceneManager::ChangeScene(SceneManager::GAME, nowStage);
+			}
 		}
 	}
 }

@@ -1,6 +1,12 @@
 #pragma once
 #include "BaseScene.h"
 #include "Bubble.h"
+#include "Random.h"
+
+#define ALLRANDOM       (3)
+#define BUBBLE_X        (0)
+#define BUBBLE_SPEED    (1)
+#define BUBBLE_SIZE     (2)
 
 class StageSelectScene : public BaseScene
 {
@@ -11,6 +17,7 @@ private:
     std::unique_ptr<Object> sensuikan;
     std::vector<std::unique_ptr<Object>> stageicon;
     std::vector<std::unique_ptr<Bubble>> bubble;
+    std::unique_ptr<RandomGene> rg[ALLRANDOM];
     
     int framecount = 0;
     int nowStage = 1;

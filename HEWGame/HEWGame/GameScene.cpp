@@ -138,6 +138,7 @@ void GameScene::Draw() {
 		}
 	}
 	for (const auto& obj : characterObj) {
+
 		obj->Draw();
 	}
 	for (const auto& obj : cylinder) {

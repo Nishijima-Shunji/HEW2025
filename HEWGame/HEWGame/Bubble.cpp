@@ -7,3 +7,7 @@ void Bubble::Update() {
 void Bubble::SetSpeed(float spd) {
 	speed = spd;
 }
+
+float Bubble::GetPosY(){
+	return pos.y;
+}

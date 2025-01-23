@@ -30,15 +30,6 @@ private:
 public:
 	std::vector<std::vector<int>> DataTable;
 
-	Object title_bg;		//タイトルオブジェクト
-	//Object game_bg;			//ゲームオブジェクト
-	Object result_bg;		//リザルトオブジェクト
-
-	Object map_0;
-	Object map_1;
-	Object map_2;
-
-
 	void Init(HWND hWnd);
 	void Draw();
 	void Uninit();

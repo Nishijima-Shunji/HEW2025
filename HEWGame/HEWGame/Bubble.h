@@ -7,5 +7,6 @@ private:
 public:
 	void Update();
 	void SetSpeed(float);
+	float GetPosY();
 };
 
