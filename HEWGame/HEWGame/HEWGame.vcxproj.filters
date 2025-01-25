@@ -179,9 +179,6 @@
     <ClInclude Include="Wall.h">
       <Filter>オブジェクト\ギミック</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene.h">
-      <Filter>オブジェクト\ギミック</Filter>
-    </ClInclude>
     <ClInclude Include="WICTextureLoader.h">
       <Filter>その他</Filter>
     </ClInclude>
@@ -190,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>その他</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>シーン</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

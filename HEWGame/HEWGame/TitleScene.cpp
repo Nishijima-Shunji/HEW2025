@@ -269,12 +269,12 @@ void TitleScene::Select(Input* input) {
 		break;
 	}
 
-	// シーンの切り替えがあるから一番最後(途中にあるとシーンの知り替え後に消えた)
+	// シーンの切り替えがあるから一番最後に置く
 	if (input->GetKeyTrigger(VK_RETURN)) {
 		switch (nowButton) {
 		case 1: state = 2; break;
 		case 2: SceneManager::ChangeScene(SceneManager::SELECT); break;
-		case 3: break;
+		case 3: SendMessage(GetGameWindowHandle(), WM_CLOSE, 0, 0); break;
 		}
 	}
 }
