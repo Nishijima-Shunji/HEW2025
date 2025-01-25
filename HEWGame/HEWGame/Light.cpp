@@ -37,11 +37,11 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 	//=============================================================================================
 	//マップデータが更新されていたら
 
+	//新しいマップ情報を取得
+	Map = MapData;
+	
 	if (SetUp == false)
 	{
-		//新しいマップ情報を取得
-		Map = MapData;
-
 		Width = 0;
 		Height = 0;
 		//横幅を取得
@@ -65,6 +65,10 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 		//===============================================================================================
 		Position();
 
+		//ギミック取得
+		//===============================================================================================
+		SetGimmick();
+
 		SetUp = true;
 	}
 
@@ -81,35 +85,6 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 
 	//発光処理
 	//=============================================================================================
-	//ライトの点灯を検知
-	if (input.GetKeyTrigger(VK_SPACE))
-	{
-		if (LightOn == true)
-		{
-			LightOn = false;
-		}
-		else if (LightOn == false)
-		{
-			LightOn = true;
-		}
-
-		if (Pos_X == 0)
-		{
-			Direction = 0;
-		}
-		else if (Pos_X == Height)
-		{
-			Direction = 1;
-		}
-		else if (Pos_Y == Width)
-		{
-			Direction = 2;
-		}
-		else if (Pos_Y == 0)
-		{
-			Direction = 3;
-		}
-	}
 	Flash();
 
 	//マップデータ更新
@@ -117,6 +92,40 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 	MapUpdate();
 
 	return Map;	//MapDate = Map
+}
+void Light::SetGimmick()
+{
+	for (int i = 0; i < 18; i++) {
+		for (int j = 0; j < 32; j++) {
+			if (Map[i][j] == WALL)
+			{   //壁を登録
+
+				Gimmick[i][j] = WALL;
+			}
+			else if (Map[i][j] == MIRROR_U)
+			{   //鏡鯛（右上がり）を登録
+
+				Gimmick[i][j] = MIRROR_U;
+				Map[i][j] = NOTHING;
+			}
+			else if (Map[i][j] == MIRROR_D)
+			{   //鏡鯛（右下がり）を登録
+
+				Gimmick[i][j] = MIRROR_D;
+				Map[i][j] = NOTHING;
+			}
+			else if (Map[i][j] == MOB_2)
+			{   //チョウチンアンコウを登録
+
+				Gimmick[i][j] = MOB_2;
+				Map[i][j] = NOTHING;
+			}
+			else
+			{
+				//	Gimmick[i][j] = SPACE;
+			}
+		}
+	}
 }
 
 void Light::Change() {
@@ -386,299 +395,276 @@ void Light::Spin()
 
 void Light::Flash() 
 {
+	//ライトの点灯を検知
+	if (input.GetKeyTrigger(VK_SPACE))
+	{
+		if (LightOn == true)
+		{
+			LightOn = false;
+		}
+		else if (LightOn == false)
+		{
+			LightOn = true;
+		}
+
+		if (Pos_X == 0)
+		{
+			Direction = 0;
+		}
+		else if (Pos_X == Height)
+		{
+			Direction = 1;
+		}
+		else if (Pos_Y == Width)
+		{
+			Direction = 2;
+		}
+		else if (Pos_Y == 0)
+		{
+			Direction = 3;
+		}
+	}
+
 	//DebugMap();
 	if (LightOn == true)
 	{
 		//上
 		if (Direction == 0)
 		{
+			int i = 0;
 			//衝突判定がでるまで
-			for (int i = 1; Stop != true; i++)
+			for (; Stop != true; i++)
 			{
-				//無（-1）
-				if (Map[Pos_X + i][Pos_Y] == NOTHING)
+				Pos_X += 1;//座標を変更
+
+				//無/空間
+				if (Map[Pos_X][Pos_Y] == NOTHING || Map[Pos_X][Pos_Y] == SPACE) { Map[Pos_X][Pos_Y] = Luminous; }//発光
+				//ゴール
+				else if (Map[Pos_X][Pos_Y] == GOAL) {}
+				//サメ
+				else if (Map[Pos_X][Pos_Y] == E_SHARK) { Map[Pos_X][Pos_Y] = Luminous; }
+				//発光マス
+				else if (Map[Pos_X][Pos_Y] == Luminous)
+				{
+					//爆発
+				}
+
+				//鏡鯛（右上がり）
+				else if (Gimmick[Pos_X][Pos_Y] == MIRROR_U)
 				{
 					//発光状態（20）に変える
-					Map[Pos_X + i][Pos_Y] = Luminous;
-				}
-				//空間（0）
-				else if (Map[Pos_X + i][Pos_Y] == SPACE)
-				{
-					//発光状態（20）に変える
-					Map[Pos_X + i][Pos_Y] = Luminous;
-				}
-				//ゴール（4）
-				else if (Map[Pos_X + i][Pos_Y] == GOAL) {}
-				//鏡鯛（右上がり）（6）
-				else if (Map[Pos_X + i][Pos_Y] == MIRROR_U)
-				{
-					//座標を変更
-					Pos_X = Pos_X + i;
-					
+					Map[Pos_X][Pos_Y] = Luminous;
+
 					//反射する
 					//　↓
 					//←／
 					Direction = 2;
 					Flash();
-
-					//座標を戻す
-					Pos_X = Pos_X - i;
 				}
-				//鏡鯛（左下がり）（7）
-				else if (Map[Pos_X + i][Pos_Y] == MIRROR_D)
+				//鏡鯛（左下がり）
+				else if (Gimmick[Pos_X][Pos_Y] == MIRROR_D)
 				{
-					//座標を変更
-					Pos_X = Pos_X + i;
+					//発光状態（20）に変える
+					Map[Pos_X][Pos_Y] = Luminous;
 
 					//反射する
 					//↓
 					//＼→
 					Direction = 3;
 					Flash();
-
-					//座標を戻す
-					Pos_X = Pos_X - i;
 				}
-				//オニキンメ（15）
-				else if (Map[Pos_X + i][Pos_Y] == MOB_1)
+				//オニキンメ
+				else if (Gimmick[Pos_X][Pos_Y] == MOB_1)
 				{
 					//
 				}
-				//アンコウ（16）
-				else if (Map[Pos_X + i][Pos_Y] == MOB_2)
+				//アンコウ
+				else if (Gimmick[Pos_X][Pos_Y] == MOB_2)
 				{
 					//
 				}
-				//発光マス（20）
-				else if (Map[Pos_X + i][Pos_Y] == Luminous)
-				{
-					//爆発
-				}
-				//壁(1)/マップ端(11)/ライト(12/13/14)
-				else
-				{
-					//停止
-					Stop = true;
-				}
+				//壁/マップ端/ライト
+				else { Stop = true; }//停止
 			}
+			Pos_X = Pos_X - i;
 		}
 		//下
 		else if (Direction == 1)
 		{
+			int i = 0;
 			//衝突判定まで発光状態（５）に変える
-			for (int i = 1; Stop != true; i++)
+			for (; Stop != true; i++)
 			{
-				//無（-1）
-				if (Map[Pos_X - i][Pos_Y] == NOTHING)
+				Pos_X -= 1;
+
+				//無/空間
+				if (Map[Pos_X][Pos_Y] == NOTHING || Map[Pos_X][Pos_Y] == SPACE) { Map[Pos_X][Pos_Y] = Luminous; }//発光状態（20）に変える
+				//ゴール
+				else if (Map[Pos_X][Pos_Y] == GOAL) {}
+				//サメ
+				else if (Map[Pos_X][Pos_Y] == E_SHARK) { Map[Pos_X][Pos_Y] = Luminous; }
+				//発光マス
+				else if (Map[Pos_X][Pos_Y] == Luminous)
+				{
+					//爆発
+				}
+
+				//鏡鯛（右上がり
+				else if (Gimmick[Pos_X - i][Pos_Y] == MIRROR_U)
 				{
 					//発光状態（20）に変える
-					Map[Pos_X - i][Pos_Y] = Luminous;
-				}
-				//空間（0）
-				else if (Map[Pos_X - i][Pos_Y] == 0)
-				{
-					//発光状態（20）に変える
-					Map[Pos_X - i][Pos_Y] = Luminous;
-				}
-				//ゴール（4）
-				else if (Map[Pos_X - i][Pos_Y] == GOAL) {}
-				//鏡鯛（右上がり）（6）
-				else if (Map[Pos_X - i][Pos_Y] == MIRROR_U)
-				{
-					//座標を変更
-					Pos_X = Pos_X - i;
-					
+					Map[Pos_X][Pos_Y] = Luminous;
+
 					//反射する
 					//／→
 					//↑
 					Direction = 3;
 					Flash();
-
-					//座標を戻す
-					Pos_X = Pos_X + i;
 				}
-				//鏡鯛（左下がり）（7）
-				else if (Map[Pos_X - i][Pos_Y] == MIRROR_D)
+				//鏡鯛（左下がり
+				else if (Gimmick[Pos_X][Pos_Y] == MIRROR_D)
 				{
-					//座標を変更
-					Pos_X = Pos_X - i;
+					//発光状態（20）に変える
+					Map[Pos_X][Pos_Y] = Luminous;
 
 					//反射する
 					//←＼
 					//　↑
 					Direction = 2;
 					Flash();
-					
-					//座標を戻す
-					Pos_X = Pos_X + i;
 				}
-				//オニキンメ（15）
-				else if (Map[Pos_X - i][Pos_Y] == MOB_1)
+				//オニキンメ
+				else if (Gimmick[Pos_X][Pos_Y] == MOB_1)
 				{
 					//
 				}
-				//アンコウ（16）
-				else if (Map[Pos_X - i][Pos_Y] == MOB_2)
+				//アンコウ
+				else if (Gimmick[Pos_X][Pos_Y] == MOB_2)
 				{
 					//
 				}
-				//発光マス（20）
-				else if (Map[Pos_X - i][Pos_Y] == Luminous)
-				{
-					//爆発
-				}
-				//壁(1)/ゴール(4)/マップ端(11)/ライト(12/13/14)
-				else
-				{
-					//停止
-					Stop = true;
-				}
+				//壁/ゴール/マップ端/ライト
+				else { Stop = true; }//停止
 			}
+			Pos_X = Pos_X + i;
 		}
 		//右
 		else if (Direction == 2)
 		{
+			int i = 0;
 			//衝突判定まで発光状態（５）に変える
-			for (int i = 1; Stop != true; i++)
+			for (; Stop != true; i++)
 			{
-				//無（-1）
-				if (Map[Pos_X][Pos_Y - i] == NOTHING)
+				Pos_Y -= 1;
+				//無/空間
+				if (Map[Pos_X][Pos_Y] == NOTHING || Map[Pos_X][Pos_Y] == SPACE) { Map[Pos_X][Pos_Y] = Luminous; }//発光状態（20）に変える
+				//ゴール
+				else if (Map[Pos_X][Pos_Y] == GOAL) {}
+				//サメ
+				else if (Map[Pos_X][Pos_Y] == E_SHARK) { Map[Pos_X][Pos_Y] = Luminous; }
+				//発光マス
+				else if (Map[Pos_X][Pos_Y] == Luminous)
 				{
-					//発光状態（20）に変える
-					Map[Pos_X][Pos_Y - i]  = Luminous;
+					//爆発
 				}
-				//空間（0）
-				else if (Map[Pos_X][Pos_Y - i]  == 0)
-				{
-					//発光状態（20）に変える
-					Map[Pos_X][Pos_Y - i]  = Luminous;
-				}
-				//ゴール（4）
-				else if (Map[Pos_X][Pos_Y - i] == GOAL) {}
+
 				//鏡鯛（右上がり）（6）
-				else if (Map[Pos_X][Pos_Y - i]  == MIRROR_U)
+				else if (Gimmick[Pos_X][Pos_Y] == MIRROR_U)
 				{
-					//座標を変更
-					Pos_Y = Pos_Y - i;
+					//発光状態（20）に変える
+					Map[Pos_X][Pos_Y] = Luminous;
 
 					//反射する
 					//／←
 					//↓
 					Direction = 0;
 					Flash();
-
-					//座標を戻す
-					Pos_Y = Pos_Y + i;
 				}
 				//鏡鯛（左下がり）（7）
-				else if (Map[Pos_X][Pos_Y - i]  == MIRROR_D)
+				else if (Gimmick[Pos_X][Pos_Y] == MIRROR_D)
 				{
-					//座標を変更
-					Pos_Y = Pos_Y - i;
+					//発光状態（20）に変える
+					Map[Pos_X][Pos_Y] = Luminous;
 
 					//反射する
 					//↑
 					//＼←
 					Direction = 1;
 					Flash();
-					//座標を戻す
-					Pos_Y = Pos_Y + i;
 				}
-				//オニキンメ（15）
-				else if (Map[Pos_X][Pos_Y - i]  == MOB_1)
+				//オニキンメ
+				else if (Gimmick[Pos_X][Pos_Y] == MOB_1)
 				{
 					//
 				}
-				//アンコウ（16）
-				else if (Map[Pos_X][Pos_Y - i]  == MOB_2)
+				//アンコウ
+				else if (Gimmick[Pos_X][Pos_Y] == MOB_2)
 				{
 					//
 				}
-				//発光マス（20）
-				else if (Map[Pos_X][Pos_Y - i]  == Luminous)
-				{
-					//爆発
-				}
-				//壁(1)/ゴール(4)/マップ端(11)/ライト(12/13/14)
-				else
-				{
-					//停止
-					Stop = true;
-				}
+				//壁/ゴール/マップ端/ライト
+				else { Stop = true; }//停止
 			}
+			Pos_Y = Pos_Y + i;
 		}
 		//左
 		else if (Direction == 3)
 		{
+			int i = 0;
 			//衝突判定まで発光状態（５）に変える
-			for (int i = 1; Stop != true; i++)
+			for (; Stop != true; i++)
 			{
-				//無（-1）
-				if (Map[Pos_X][Pos_Y + i]  == NOTHING)
+				Pos_Y += 1;
+				//無/空間
+				if (Map[Pos_X][Pos_Y] == NOTHING || Map[Pos_X][Pos_Y] == SPACE) { Map[Pos_X][Pos_Y] = Luminous; }//発光状態（20）に変える
+				//ゴール
+				else if (Map[Pos_X][Pos_Y] == GOAL) {}
+				//サメ
+				else if (Map[Pos_X][Pos_Y] == E_SHARK) { Map[Pos_X][Pos_Y] = Luminous; }
+				//発光マス
+				else if (Map[Pos_X][Pos_Y] == Luminous)
 				{
-					//発光状態（20）に変える
-					Map[Pos_X][Pos_Y + i]  = Luminous;
+					//爆発
 				}
-				//空間（0）
-				else if (Map[Pos_X][Pos_Y + i]  == 0)
-				{
-					//発光状態（20）に変える
-					Map[Pos_X][Pos_Y + i]  = Luminous;
-				}
-				//ゴール（4）
-				else if (Map[Pos_X][Pos_Y + i] == GOAL) {}
-				//鏡鯛（右上がり）（6）
-				else if (Map[Pos_X][Pos_Y + i]  == MIRROR_U)
-				{
-					//座標を変更
-					Pos_Y = Pos_Y + i;
 
+				//鏡鯛（右上がり）（6）
+				else if (Gimmick[Pos_X][Pos_Y] == MIRROR_U)
+				{
+					//発光状態（20）に変える
+					Map[Pos_X][Pos_Y] = Luminous;
 					//反射する
 					//　↑
 					//→／
 					Direction = 1;
 					Flash();
-
-					//座標を戻す
-					Pos_Y = Pos_Y - i;
 				}
 				//鏡鯛（左下がり）（7）
-				else if (Map[Pos_X][Pos_Y + i]  == MIRROR_D)
+				else if (Gimmick[Pos_X][Pos_Y] == MIRROR_D)
 				{
-					//座標を変更
-					Pos_Y = Pos_Y + i;
+					//発光状態（20）に変える
+					Map[Pos_X][Pos_Y] = Luminous;
 
 					//反射する
 					//→＼
 					//　↓
 					Direction = 0;
 					Flash();
-
-					//座標を戻す
-					Pos_Y = Pos_Y - i;
 				}
-				//オニキンメ（15）
-				else if (Map[Pos_X][Pos_Y + i]  == MOB_1)
+				//オニキンメ
+				else if (Gimmick[Pos_X][Pos_Y] == MOB_1)
 				{
 					//
 				}
-				//アンコウ（16）
-				else if (Map[Pos_X][Pos_Y + i]  == MOB_2)
+				//アンコウ
+				else if (Gimmick[Pos_X][Pos_Y] == MOB_2)
 				{
 					//
 				}
-				//発光マス（20）
-				else if (Map[Pos_X][Pos_Y + i]  == Luminous)
-				{
-					//爆発
-				}
-				//壁(1)/ゴール(4)/マップ端(11)/ライト(12/13/14)
-				else
-				{
-					//停止
-					Stop = true;
-				}
+				//壁/ゴール/マップ端/ライト
+				else { Stop = true; }//停止
 			}
+
+			Pos_Y = Pos_Y - i;
 		}
 	}
 	else if (LightOn == false)
@@ -688,111 +674,103 @@ void Light::Flash()
 		//上
 		if (Direction == 0)
 		{
-			//衝突判定までに無（0）変える
-			for (int i = 1; Stop != true; i++)
+			int i = 0;
+			//衝突判定がでるまで
+			for (; Stop != true; i++)
 			{
-				//無（-1）
-				if (Map[Old_Pos_X + i][Old_Pos_Y] == NOTHING)
+				Old_Pos_X += 1;//座標を変更
+
+				//無
+				if (Map[Old_Pos_X][Old_Pos_Y] == NOTHING)
 				{
 					std::cout << "エラー" << std::endl;
 					//停止
 					Stop = true;
 				}
-				//空間（0）
-				if (Map[Old_Pos_X + i][Old_Pos_Y] == SPACE) {}
-				//鏡鯛（右上がり）（6）
-				else if (Map[Old_Pos_X + i][Old_Pos_Y] == MIRROR_U)
+				//空間
+				if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
+				//ゴール
+				if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				//サメ
+				if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
+				//発光マス
+				else if (Map[Old_Pos_X][Old_Pos_Y] == Luminous)
 				{
-					//座標を変更
-					Old_Pos_X = Old_Pos_X + i;
-
+					//空間に変える
+					Map[Old_Pos_X][Old_Pos_Y] = SPACE;
+				}
+				//鏡鯛（右上がり）
+				else if (Gimmick[Old_Pos_X][Old_Pos_Y] == MIRROR_U)
+				{
 					//反射する
 					//　↓
 					//←／
 					Direction = 2;
 					Flash();
-
-					//座標を戻す
-					Old_Pos_X = Old_Pos_X - i;
 				}
-				//鏡鯛（左下がり）（7）
-				else if (Map[Old_Pos_X + i][Old_Pos_Y] == MIRROR_D)
+				//鏡鯛（左下がり）
+				else if (Gimmick[Old_Pos_X][Old_Pos_Y] == MIRROR_D)
 				{
-					//座標を変更
-					Old_Pos_X = Old_Pos_X + i;
-
 					//反射する
 					//↓
 					//＼→
 					Direction = 3;
 					Flash();
-
-					//座標を戻す
-					Old_Pos_X = Old_Pos_X - i;
-				}
-				//発光マス（20）
-				else if (Map[Old_Pos_X + i][Old_Pos_Y] == Luminous)
-				{
-					//空間（0）に変える
-					Map[Old_Pos_X + i][Old_Pos_Y] = SPACE;
 				}
 				else
 				{
 					//停止
 					Stop = true;
 				}
+
 			}
+			Old_Pos_X = Old_Pos_X - i;
 		}
 		//下
 		else if (Direction == 1)
 		{
-			//衝突判定まで無（0）に変える
-			for (int i = 1; Stop != true; i++)
+			int i = 0;
+			//衝突判定がでるまで
+			for (; Stop != true; i++)
 			{
-				//無（-1）
-				if (Map[Old_Pos_X - i][Old_Pos_Y]== NOTHING)
+				Old_Pos_X -= 1;//座標を変更
+
+				//無
+				if (Map[Old_Pos_X][Old_Pos_Y] == NOTHING)
 				{
 					std::cout << "エラー" << std::endl;
 					//停止
 					Stop = true;
 				}
-				//空間（0）
-				if (Map[Old_Pos_X - i][Old_Pos_Y] == SPACE) {}
-				//鏡鯛（右上がり）（6）
-				else if (Map[Old_Pos_X - i][Old_Pos_Y]== MIRROR_U)
+				//空間
+				if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
+				//ゴール
+				if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				//サメ
+				if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
+				//発光マス
+				else if (Map[Old_Pos_X][Old_Pos_Y] == Luminous)
 				{
-					//座標を変更
-					Old_Pos_X = Old_Pos_X - i;
-
+					//空間に変える
+					Map[Old_Pos_X][Old_Pos_Y] = SPACE;
+				}
+				//鏡鯛（右上がり）
+				else if (Gimmick[Old_Pos_X][Old_Pos_Y] == MIRROR_U)
+				{
 					//反射する
-					//／→
-					//↑
+					//　↓
+					//←／
 					Direction = 3;
 					Flash();
-
-					//座標を戻す
-					Old_Pos_X = Old_Pos_X + i;
 				}
-				//鏡鯛（左下がり）（7）
-				else if (Map[Old_Pos_X - i][Old_Pos_Y]== MIRROR_D)
+				//鏡鯛（左下がり）
+				else if (Gimmick[Old_Pos_X][Old_Pos_Y] == MIRROR_D)
 				{
-					//座標を変更
-					Old_Pos_X = Old_Pos_X - i;
-
 					//反射する
-					//←＼
-					//　↑
+					//↓
+					//＼→
 					Direction = 2;
 					Flash();
-
-					//座標を戻す
-					Old_Pos_X = Old_Pos_X + i;
-				}
-				//発光マス（20）
-				else if (Map[Old_Pos_X - i][Old_Pos_Y]== Luminous)
-				{
-					//空間（0）に変える
-					Map[Old_Pos_X - i][Old_Pos_Y]= SPACE;
 				}
 				else
 				{
@@ -800,56 +778,53 @@ void Light::Flash()
 					Stop = true;
 				}
 			}
+			Old_Pos_X = Old_Pos_X + i;
 		}
 		//右
 		else if (Direction == 2)
 		{
-			//衝突判定まで無（0）に変える
-			for (int i = 1; Stop != true; i++)
+			int i = 0;
+			//衝突判定がでるまで
+			for (; Stop != true; i++)
 			{
-				//無（-1）
-				if (Map[Old_Pos_X][Old_Pos_Y - i] == NOTHING)
+				Old_Pos_Y -= 1;//座標を変更
+
+				//無
+				if (Map[Old_Pos_X][Old_Pos_Y] == NOTHING)
 				{
 					std::cout << "エラー" << std::endl;
 					//停止
 					Stop = true;
 				}
-				//空間（0）
-				if (Map[Old_Pos_X][Old_Pos_Y - i] == SPACE) {}
-				//鏡鯛（右上がり）（6）
-				else if (Map[Old_Pos_X][Old_Pos_Y - i] == MIRROR_U)
+				//空間
+				if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
+				//ゴール
+				if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				//サメ
+				if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
+				//発光マス
+				else if (Map[Old_Pos_X][Old_Pos_Y] == Luminous)
 				{
-					//座標を変更
-					Old_Pos_Y = Old_Pos_Y - i;
-
+					//空間に変える
+					Map[Old_Pos_X][Old_Pos_Y] = SPACE;
+				}
+				//鏡鯛（右上がり）
+				else if (Gimmick[Old_Pos_X][Old_Pos_Y] == MIRROR_U)
+				{
 					//反射する
-					//／←
-					//↓
+					//　↓
+					//←／
 					Direction = 0;
 					Flash();
-
-					//座標を戻す
-					Old_Pos_Y = Old_Pos_Y + i;
 				}
-				//鏡鯛（左下がり）（7）
-				else if (Map[Old_Pos_X][Old_Pos_Y - i] == MIRROR_D)
+				//鏡鯛（左下がり）
+				else if (Gimmick[Old_Pos_X][Old_Pos_Y] == MIRROR_D)
 				{
-					//座標を変更
-					Old_Pos_Y = Old_Pos_Y - i;
-
 					//反射する
-					//↑
-					//＼←
+					//↓
+					//＼→
 					Direction = 1;
 					Flash();
-					//座標を戻す
-					Old_Pos_Y = Old_Pos_Y + i;
-				}
-				//発光マス（20）
-				else if (Map[Old_Pos_X][Old_Pos_Y - i] == Luminous)
-				{
-					//空間（0）に変える
-					Map[Old_Pos_X][Old_Pos_Y - i] = SPACE;
 				}
 				else
 				{
@@ -857,57 +832,53 @@ void Light::Flash()
 					Stop = true;
 				}
 			}
+			Old_Pos_Y = Old_Pos_Y + i;
 		}
 		//左
 		else if (Direction == 3)
 		{
-			//衝突判定まで無（0）に変える
-			for (int i = 1; Stop != true; i++)
+			int i = 0;
+			//衝突判定がでるまで
+			for (; Stop != true; i++)
 			{
-				//無（-1）
-				if (Map[Old_Pos_X][Old_Pos_Y + i] == NOTHING)
+				Old_Pos_Y += 1;//座標を変更
+
+				//無
+				if (Map[Old_Pos_X][Old_Pos_Y] == NOTHING)
 				{
 					std::cout << "エラー" << std::endl;
 					//停止
 					Stop = true;
 				}
-				//空間（0）
-				if (Map[Old_Pos_X][Old_Pos_Y + i] == SPACE) {}
-				//鏡鯛（右上がり）（6）
-				else if (Map[Old_Pos_X][Old_Pos_Y + i] == MIRROR_U)
+				//空間
+				if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
+				//ゴール
+				if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				//サメ
+				if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
+				//発光マス
+				else if (Map[Old_Pos_X][Old_Pos_Y] == Luminous)
 				{
-					//座標を変更
-					Old_Pos_Y = Old_Pos_Y + i;
-
+					//空間に変える
+					Map[Old_Pos_X][Old_Pos_Y] = SPACE;
+				}
+				//鏡鯛（右上がり）
+				else if (Gimmick[Old_Pos_X][Old_Pos_Y] == MIRROR_U)
+				{
 					//反射する
-					//　↑
-					//→／
+					//　↓
+					//←／
 					Direction = 1;
 					Flash();
-
-					//座標を戻す
-					Old_Pos_Y = Old_Pos_Y - i;
 				}
-				//鏡鯛（左下がり）（7）
-				else if (Map[Old_Pos_X][Old_Pos_Y + i] == MIRROR_D)
+				//鏡鯛（左下がり）
+				else if (Gimmick[Old_Pos_X][Old_Pos_Y] == MIRROR_D)
 				{
-					//座標を変更
-					Old_Pos_Y = Old_Pos_Y + i;
-
 					//反射する
-					//→＼
-					//　↓
+					//↓
+					//＼→
 					Direction = 0;
 					Flash();
-
-					//座標を戻す
-					Old_Pos_Y = Old_Pos_Y - i;
-				}
-				//発光マス（20）
-				else if (Map[Old_Pos_X][Old_Pos_Y + i] == Luminous)
-				{
-					//空間（0）に変える
-					Map[Old_Pos_X][Old_Pos_Y + i] = SPACE;
 				}
 				else
 				{
@@ -915,6 +886,8 @@ void Light::Flash()
 					Stop = true;
 				}
 			}
+			Old_Pos_Y = Old_Pos_Y - i;
+
 		}
 		Stop = false;
 	}

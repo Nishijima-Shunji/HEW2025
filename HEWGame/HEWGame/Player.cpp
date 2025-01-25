@@ -54,54 +54,60 @@ void Player::SetUp()//ステージ更新ごとに行う
 {
     for (int i = 0; i < 18; i++) {
         for (int j = 0; j < 32; j++) {
-            if (Map[i][j] == 2)
+            if (Map[i][j] == P_DIVER)
             {   //プレイヤーを登録
 
-                MoveList[i][j] = P_DIVER;//2
+                MoveList[i][j] = P_DIVER;
                 Map[i][j] = NOTHING;
 
                 X = i;
                 Y = j;
             }
-            else if (Map[i][j] == 4)
+            else if (Map[i][j] == GOAL)
             {   //ゴールを登録
 
                 MoveList[i][j] = GOAL;
                 Goal_X = i;
                 Goal_Y = j;
             }
-            else if (Map[i][j] == 5)
+            else if (Map[i][j] == MENDAKO)
             {   //メンダコを登録
 
-             //   MoveList[i][j] = MENDAKO;
+                MoveList[i][j] = MENDAKO;
+                Map[i][j] = NOTHING;
             }
-            else if (Map[i][j] == 6)
+            else if (Map[i][j] == TRAP)
             {   //トラップを登録
 
-             //   MoveList[i][j] = TRAP;
+                MoveList[i][j] = TRAP;
+                Map[i][j] = NOTHING;
             }
-            else if (Map[i][j] == 9)
+            else if (Map[i][j] == STREAM_R)
             {   //海流(右)を登録
 
-            //    MoveList[i][j] = STREAM_R;
+                MoveList[i][j] = STREAM_R;
+                Map[i][j] = NOTHING;
             }
-            else if (Map[i][j] == 10)
+            else if (Map[i][j] == STREAM_L)
             {   //海流(左)を登録
 
-             //   MoveList[i][j] = STREAM_L;
+                MoveList[i][j] = STREAM_L;
+                Map[i][j] = NOTHING;
             }
-            else if (Map[i][j] == 15)
+            else if (Map[i][j] == MOB_1)
             {   //オニキンメを登録
 
-             //   MoveList[i][j] = MOB_1;
+                MoveList[i][j] = MOB_1;
+                Map[i][j] = NOTHING;
             }
             else
             {
-             //   MoveList[i][j] = SPACE;
+                //   MoveList[i][j] = SPACE;
             }
         }
     }
 }
+
 
 void Player::Move()
 {

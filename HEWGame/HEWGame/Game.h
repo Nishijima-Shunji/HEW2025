@@ -17,6 +17,8 @@
 #define XON			(0)
 #define YON			(1)
 
+HWND GetGameWindowHandle();
+
 
 class Game
 {
@@ -26,6 +28,7 @@ private:
 
 	Light Light;
 	
+	static HWND test;
 public:
 	std::vector<std::vector<int>> DataTable;
 
@@ -34,6 +37,7 @@ public:
 	void Uninit();
 	void Update();
 
+	static HWND GetHANDLE() { return test; };
 };
 
 extern Game* _pGame;
