@@ -1,239 +1,235 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{518814e7-f616-43a2-8feb-4d1784746008}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene\BaseScene">
-      <UniqueIdentifier>{93abcd77-c035-47b5-b667-80042d057b76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="DirectX">
-      <UniqueIdentifier>{65d31c61-0003-4056-be34-bbdf7a1adc55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object">
-      <UniqueIdentifier>{1a06bc00-e4a2-4205-b20e-116038450e80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\UI用">
-      <UniqueIdentifier>{032a81f2-74a2-4b55-842c-a8e717694494}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object\アニメーション用">
-      <UniqueIdentifier>{8b47fc5a-ab54-447f-8541-1d9b7c2d957c}</UniqueIdentifier>
-    </Filter>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>リソース</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader.hlsl">
+      <Filter>リソース</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="camera.cpp">
+      <Filter>その他</Filter>
+    </ClCompile>
     <ClCompile Include="Input.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>その他</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>その他</Filter>
     </ClCompile>
     <ClCompile Include="direct3d.cpp">
-      <Filter>DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="WICTextureLoader.cpp">
-      <Filter>DirectX</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="sound.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseScene.cpp">
-      <Filter>Scene\BaseScene</Filter>
+      <Filter>描画</Filter>
     </ClCompile>
     <ClCompile Include="mapfile.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>描画\ロード</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseScene.cpp">
+      <Filter>基礎</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
-      <Filter>Object</Filter>
+      <Filter>基礎</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="StageSelectScene.cpp">
-      <Filter>Scene</Filter>
+      <Filter>オブジェクト</Filter>
     </ClCompile>
     <ClCompile Include="Ankou.cpp">
-      <Filter>Object</Filter>
+      <Filter>オブジェクト\魚</Filter>
     </ClCompile>
     <ClCompile Include="Kagamidai.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Kairyu.cpp">
-      <Filter>Object</Filter>
+      <Filter>オブジェクト\魚</Filter>
     </ClCompile>
     <ClCompile Include="Mendako.cpp">
-      <Filter>Object</Filter>
+      <Filter>オブジェクト\魚</Filter>
     </ClCompile>
     <ClCompile Include="Onikinme.cpp">
-      <Filter>Object</Filter>
+      <Filter>オブジェクト\魚</Filter>
     </ClCompile>
-    <ClCompile Include="Trap.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Bubble.cpp">
-      <Filter>Object\アニメーション用</Filter>
-    </ClCompile>
-<<<<<<< Updated upstream
-    <ClCompile Include="camera.cpp">
-      <Filter>ソース ファイル</Filter>
-=======
-    <ClCompile Include="SoundCursol.cpp">
-      <Filter>Object\UI用</Filter>
-    </ClCompile>
-    <ClCompile Include="Cursol.cpp">
-      <Filter>Object\UI用</Filter>
+    <ClCompile Include="Light.cpp">
+      <Filter>オブジェクト\ギミック</Filter>
     </ClCompile>
     <ClCompile Include="o2.cpp">
-      <Filter>Object\UI用</Filter>
->>>>>>> Stashed changes
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClCompile>
+    <ClCompile Include="Cursol.cpp">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClCompile>
+    <ClCompile Include="Bubble.cpp">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClCompile>
+    <ClCompile Include="Kairyu.cpp">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>オブジェクト\魚</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScene.cpp">
+      <Filter>シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>基礎</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundCursol.cpp">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelectScene.cpp">
+      <Filter>シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>描画\ロード</Filter>
+    </ClCompile>
+    <ClCompile Include="Trap.cpp">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>シーン</Filter>
+    </ClCompile>
+    <ClCompile Include="WICTextureLoader.cpp">
+      <Filter>その他</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>その他</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>その他</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h">
+      <Filter>その他</Filter>
+    </ClInclude>
     <ClInclude Include="Input.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="ResultScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleScene.h">
-      <Filter>Scene</Filter>
+      <Filter>その他</Filter>
     </ClInclude>
     <ClInclude Include="direct3d.h">
-      <Filter>DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="WICTextureLoader.h">
-      <Filter>DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="sound.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseScene.h">
-      <Filter>Scene\BaseScene</Filter>
+      <Filter>描画</Filter>
     </ClInclude>
     <ClInclude Include="mapfile.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>描画\ロード</Filter>
     </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameScene.h">
+      <Filter>シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseScene.h">
+      <Filter>基礎</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
-      <Filter>Object</Filter>
+      <Filter>基礎</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Wall.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="StageSelectScene.h">
-      <Filter>Scene</Filter>
+      <Filter>オブジェクト</Filter>
     </ClInclude>
     <ClInclude Include="Ankou.h">
-      <Filter>Object</Filter>
+      <Filter>オブジェクト\魚</Filter>
     </ClInclude>
     <ClInclude Include="Kagamidai.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Kairyu.h">
-      <Filter>Object</Filter>
+      <Filter>オブジェクト\魚</Filter>
     </ClInclude>
     <ClInclude Include="Mendako.h">
-      <Filter>Object</Filter>
+      <Filter>オブジェクト\魚</Filter>
     </ClInclude>
     <ClInclude Include="Onikinme.h">
-      <Filter>Object</Filter>
+      <Filter>オブジェクト\魚</Filter>
     </ClInclude>
-    <ClInclude Include="Trap.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Bubble.h">
-      <Filter>Object\アニメーション用</Filter>
-    </ClInclude>
-<<<<<<< Updated upstream
-    <ClInclude Include="camera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Random.h">
-      <Filter>ヘッダー ファイル</Filter>
-=======
-    <ClInclude Include="Cursol.h">
-      <Filter>Object\UI用</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundCursol.h">
-      <Filter>Object\UI用</Filter>
+    <ClInclude Include="Light.h">
+      <Filter>オブジェクト\ギミック</Filter>
     </ClInclude>
     <ClInclude Include="o2.h">
-      <Filter>Object\UI用</Filter>
->>>>>>> Stashed changes
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClInclude>
+    <ClInclude Include="Cursol.h">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClInclude>
+    <ClInclude Include="Bubble.h">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClInclude>
+    <ClInclude Include="Kairyu.h">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>オブジェクト\魚</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>その他</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScene.h">
+      <Filter>シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>基礎</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundCursol.h">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSelectScene.h">
+      <Filter>シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>描画\ロード</Filter>
+    </ClInclude>
+    <ClInclude Include="Trap.h">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClInclude>
+    <ClInclude Include="WICTextureLoader.h">
+      <Filter>その他</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>その他</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>その他</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PixelShader.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="VertexShader.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
+    <None Include="Data\MAP_STAGE2.csv">
+      <Filter>リソース\マップ</Filter>
+    </None>
+    <None Include="Data\TestData.csv">
+      <Filter>リソース\マップ</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\TestData.csv">
-      <Filter>リソース ファイル</Filter>
-    </None>
-    <None Include="Data\MAP_STAGE2.csv">
-      <Filter>リソース ファイル</Filter>
-    </None>
+    <Filter Include="オブジェクト">
+      <UniqueIdentifier>{12a51c6e-b889-43f8-a1b7-3e1467ba8956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シーン">
+      <UniqueIdentifier>{5e4c7b65-8eb5-4be8-b155-3f6fed569783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="その他">
+      <UniqueIdentifier>{3b513f20-5aa9-4ffe-a19c-04227cf7432a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース">
+      <UniqueIdentifier>{126dca85-be77-405b-9289-b676d60a121b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース\マップ">
+      <UniqueIdentifier>{dc2e5fb7-8731-4fb5-b21a-44b5ab7b7d3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="描画">
+      <UniqueIdentifier>{5d325fb0-02c4-4cff-bb16-de169d8c7e0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="描画\ロード">
+      <UniqueIdentifier>{ce771093-d630-460f-929b-bd8270c34ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="基礎">
+      <UniqueIdentifier>{4ee3ebb2-831e-48c8-abce-b4306f0ac00d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="オブジェクト\魚">
+      <UniqueIdentifier>{871ed5ca-8b64-4f4c-aeca-82efbbb40cfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="オブジェクト\ギミック">
+      <UniqueIdentifier>{061091ae-3fbc-42f4-b955-9edc348df240}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
