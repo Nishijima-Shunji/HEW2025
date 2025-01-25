@@ -37,11 +37,4 @@ public:
 
 	void Init();
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
-	void Uninit();
-
-	void SetUp();
-	void Move();
-	void Animation();
-
-	void DebugList();
 };

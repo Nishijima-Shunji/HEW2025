@@ -25,6 +25,9 @@
 // グローバル変数
 //-----------------------------------------------------------------------------
 
+// 静的メンバ変数の定義
+HWND Game::test = nullptr;
+
 //==============================================================================
 //!	@fn		
 //!	@brief	
@@ -39,6 +42,7 @@ void Game::Init(HWND hWnd) {
 
 	D3D_Create(hWnd);
 
+	test = hWnd;
 	//============================
 	//デバッグ
 	
@@ -49,7 +53,6 @@ void Game::Init(HWND hWnd) {
 	//sm.ChangeScene(sm.SELECT);
 	sm.ChangeScene(sm.GAME,2);
 	//sm.ChangeScene(sm.RESULT);
-
 
 
 	//マップデータを読み込み
@@ -116,6 +119,11 @@ void Game::Update() {
 
 	sm.Update();	//現在シーンのアップデートを実行
 }
+
+HWND GetGameWindowHandle() {
+	return Game::GetHANDLE();
+}
+
 
 //******************************************************************************
 //	End of file.
