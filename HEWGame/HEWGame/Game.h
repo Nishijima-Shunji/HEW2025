@@ -22,7 +22,6 @@ class Game
 {
 private:
 	Input input;
-	Sound sound;
 	SceneManager sm;
 
 	Light Light;
