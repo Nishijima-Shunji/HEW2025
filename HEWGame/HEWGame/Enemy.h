@@ -8,6 +8,7 @@ private:
 	int targetY;
 
 	int move;
+	bool movingToTarget = false;
 	bool moveX;
 	bool moveY;
 	bool lightX;

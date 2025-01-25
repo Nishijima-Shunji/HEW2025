@@ -109,11 +109,13 @@ void GameScene::Update() {
 				{
 					//古いオブジェクトを削除
 					std::cout << "削除" << std::endl;
-					mapdata[i][j] = CreateObject(NewObject, textureManager);
+					if (NewObject == 0) {
+						mapdata[i][j] = CreateObject(NewObject, textureManager);
+					}
 
 					// ↓重かった原因↓：if文の中に入れて変化時だけにしたらちょっと軽くなった
 					int objectType = maplist[i][j];
-					if (objectType != -1 && (objectType == 20 || objectType == 11 || objectType == 19)) {
+					if (objectType != -1 && (objectType == 20 || objectType == 11 || objectType == 19 || objectType == 0)) {
 						auto obj = CreateObject(objectType, textureManager); // 関数でオブジェクト生成
 						if (obj) {
 							//float x = j * 30.0f - 500.0f;	// x座標		列 * Objectの大きさ * オフセット		※カメラあればオフセット要らないかも
@@ -283,7 +285,7 @@ void GameScene::o2Gauge(std::chrono::milliseconds time) {
 
 		// 新しいサイズと位置をセット（上に向かって縮む）
 		o2.back()->SetSize(12.0f, sizeRatio, 0.0f);
-		o2.back()->SetPos(o2.back()->GetPos().x, newY, 0.0f); 
+		o2.back()->SetPos(o2.back()->GetPos().x, newY, 0.0f);
 	}
 
 	// ボンベ削除処理

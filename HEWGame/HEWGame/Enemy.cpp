@@ -42,44 +42,52 @@ void Enemy::FindEnemyPos() {
 }
 
 void Enemy::FindLight() {
+	static bool foundLight = false; // ライトを一度見つけたら記憶する
 	lightX = false;
 	lightY = false;
+
 	if (targetX != PosX) {
-		// 左方向にライトがあるか
 		for (int tempX = PosX; tempX > 0; tempX--) {
 			if (Map[PosY][tempX] == 20) {
 				targetX = tempX;
 				lightX = true;
 				moveX = true;
+				foundLight = true; // ライト発見を記録
 			}
 		}
-		// 右方向にライトがあるか
 		for (int tempX = PosX; tempX < 32; tempX++) {
 			if (Map[PosY][tempX] == 20) {
 				targetX = tempX;
 				lightX = true;
 				moveX = true;
+				foundLight = true; // ライト発見を記録
 			}
 		}
 	}
 
 	if (targetY != PosY) {
-		// 上方向にライトがあるか
 		for (int tempY = PosY; tempY > 0; tempY--) {
 			if (Map[tempY][PosX] == 20) {
 				targetY = tempY;
 				lightY = true;
 				moveY = true;
+				foundLight = true;
 			}
 		}
-		// 下方向にライトがあるか
 		for (int tempY = PosY; tempY < 18; tempY++) {
 			if (Map[tempY][PosX] == 20) {
 				targetY = tempY;
 				lightY = true;
 				moveY = true;
+				foundLight = true;
 			}
 		}
+	}
+
+	// ライトが見つからなくても、以前のターゲットに向かう
+	if (!lightX && !lightY && foundLight) {
+		moveX = (PosX != targetX);
+		moveY = (PosY != targetY);
 	}
 }
 
@@ -97,14 +105,19 @@ void Enemy::Move() {
 				pos.x += 1.0f;
 			}
 		}
+
+		// 目標地点に到達したら停止
 		if (pos.x == nextPosX * 30.0f) {
 			PosX = nextPosX;
-			Map[PosY][PosX + 1] = 0;
-			Map[PosY][PosX] = 3;
+			Map[PosY][PosX + 1] = 0;  // 元の位置をクリア
+			Map[PosY][PosX] = 3;       // 新しい位置を更新
 			move = false;
+			movingToTarget = false;    // 目標に到達したので移動フラグをリセット
 		}
 	}
 	else if (moveY) {
-
+		// Y方向の移動処理（同様に適用）
 	}
+
+	std::cout << moveX << std::endl;
 }
