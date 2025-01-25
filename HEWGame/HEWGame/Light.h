@@ -12,6 +12,7 @@ private:
 	int Height = 0;
 
 	std::vector<int>Lightpos = {};
+	int Gimmick[18][32];
 
 	bool SetUp	 = false;
 	bool LightOn = false;
@@ -34,6 +35,8 @@ public:
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
 
 	//更新のパーツ分担
+	// 
+	void SetGimmick();
 	//ライトの変更
 	void Change();
 	//ライト座標の取得

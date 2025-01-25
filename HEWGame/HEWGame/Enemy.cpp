@@ -102,7 +102,6 @@ void Enemy::Move() {
 			Map[PosY][PosX + 1] = 0;
 			Map[PosY][PosX] = 3;
 			move = false;
-			moveX = false;
 		}
 	}
 	else if (moveY) {
