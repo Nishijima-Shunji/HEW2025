@@ -1,5 +1,7 @@
 #pragma once
 #include "Object.h"
+#include "TextureManager.h"
+
 class Bubble : public Object
 {
 private:
@@ -7,5 +9,6 @@ private:
 public:
 	void Update();
 	void SetSpeed(float);
+	float GetPosY();
 };
 

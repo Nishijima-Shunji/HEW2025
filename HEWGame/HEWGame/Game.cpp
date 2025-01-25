@@ -39,15 +39,6 @@ void Game::Init(HWND hWnd) {
 
 	D3D_Create(hWnd);
 
-	//sound.Init();	//サウンドを初期化
-	//sound.Play(SOUND_LABEL_BGM000);	//BGMを再生
-
-	//result_bg.Init(L"asset/Result_test.png", 8, 4);
-	//result_bg.SetPos(0.0f, 0.0f, 0.0f);	//位置を設定
-	//result_bg.SetSize(300.0f, 300.0f, 0.0f);	//大きさを設定
-	//result_bg.SetAngle(0.0f);	//角度を設定
-	//result_bg.SetColor(1.0f, 1.0f, 1.0f, 1.0f);	//色を設定
-
 	//============================
 	//デバッグ
 	
@@ -55,7 +46,8 @@ void Game::Init(HWND hWnd) {
 
 	//初期シーンをタイトルにする
 	//sm.ChangeScene(sm.TITLE);
-	sm.ChangeScene(sm.SELECT);
+	//sm.ChangeScene(sm.SELECT);
+	sm.ChangeScene(sm.GAME,2);
 	//sm.ChangeScene(sm.RESULT);
 
 
@@ -102,8 +94,6 @@ void Game::Draw() {
 //!	@retval 
 //==============================================================================
 void Game::Uninit() {
-	title_bg.Uninit();			//タイトルを終了
-	result_bg.Uninit();			//タイトルを終了
 
 	//sound.Uninit();			//サウンドを終了
 
@@ -121,8 +111,10 @@ void Game::Uninit() {
 //==============================================================================
 void Game::Update() {
 
-	sm.Update();	//現在シーンのアップデートを実行
+	//シーンセット
+	sm.SetScene();
 
+	sm.Update();	//現在シーンのアップデートを実行
 }
 
 //******************************************************************************

@@ -131,6 +131,7 @@
     <ClCompile Include="Ankou.cpp" />
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="Bubble.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="direct3d.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -141,12 +142,15 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mapfile.cpp" />
     <ClCompile Include="Mendako.cpp" />
+    <ClCompile Include="o2.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Onikinme.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="SoundCursol.cpp" />
+    <ClCompile Include="Cursol.cpp" />
     <ClCompile Include="StageSelectScene.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -161,6 +165,7 @@
     <ClInclude Include="Ankou.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Bubble.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="direct3d.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
@@ -170,11 +175,15 @@
     <ClInclude Include="Kairyu.h" />
     <ClInclude Include="mapfile.h" />
     <ClInclude Include="Mendako.h" />
+    <ClInclude Include="o2.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Onikinme.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="SoundCursol.h" />
+    <ClInclude Include="Cursol.h" />
     <ClInclude Include="StageSelectScene.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TitleScene.h" />
@@ -197,14 +206,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Map1.csv" />
-    <None Include="Data\Map2.csv" />
-    <None Include="Data\Map3.csv" />
-    <None Include="Data\Map4.csv" />
-    <None Include="Data\Map5.csv" />
-    <None Include="Data\Map6.csv" />
-    <None Include="Data\Map7.csv" />
-    <None Include="Data\Map8.csv" />
+    <None Include="Data\MAP_STAGE2.csv" />
     <None Include="Data\TestData.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

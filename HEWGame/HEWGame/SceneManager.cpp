@@ -24,7 +24,8 @@
 // グローバル変数
 //-----------------------------------------------------------------------------
 
-BaseScene* SceneManager::m_pScene = nullptr; // nullptr で初期化
+BaseScene* SceneManager::m_pNowScene = nullptr; // nullptr で初期化
+BaseScene* SceneManager::m_pNextScene = nullptr;
 
 //==============================================================================
 //!	@fn		
@@ -36,37 +37,41 @@ BaseScene* SceneManager::m_pScene = nullptr; // nullptr で初期化
 //!	@retval 
 //==============================================================================
 void SceneManager::ChangeScene(SCENE scene,int num) {
-    if (m_pScene != nullptr) {
-        delete m_pScene;
-    }
-
     switch (scene) {
     case SCENE::TITLE:
-        m_pScene = new TitleScene(); // タイトルシーンを設定
+        m_pNextScene = new TitleScene(); // タイトルシーンを設定
         break;
     case SCENE::GAME:
-        m_pScene = new GameScene(num);  // ゲームシーンを設定
+        m_pNextScene = new GameScene(num);  // ゲームシーンを設定
         break;
     case SCENE::RESULT:
-        m_pScene = new ResultScene(num); // リザルトシーンを設定
+        m_pNextScene = new ResultScene(num); // リザルトシーンを設定
         break;
     case SCENE::SELECT:
-        m_pScene = new StageSelectScene(); // リザルトシーンを設定
+        m_pNextScene = new StageSelectScene(); // セレクトシーンを設定
         break;
     default:
         break;
     }
 }
 
+void SceneManager::SetScene()
+{
+    if (m_pNowScene != m_pNextScene) {
+        delete m_pNowScene;
+        m_pNowScene = m_pNextScene;
+    }
+}
+
 void SceneManager::Update() {
-    if (m_pScene) {
-        m_pScene->Update(); // 現在のシーンの更新
+    if (m_pNowScene) {
+        m_pNowScene->Update(); // 現在のシーンの更新
     }
 }
 
 void SceneManager::Render() {
-    if (m_pScene) {
-        m_pScene->Draw(); // 現在のシーンの描画
+    if (m_pNowScene) {
+        m_pNowScene->Draw(); // 現在のシーンの描画
     }
 }
 

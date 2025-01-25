@@ -2,9 +2,12 @@
 #include "BaseScene.h"
 #include <unordered_map>
 #include <memory>
-
+#include <chrono>
 
 #include "Light.h"
+#include "O2.h"
+#define MAXTIME (600000)
+//#define MAXTIME (10000)
 
 const int MAP_HEIGHT = 18;
 const int MAP_WIDTH = 32;
@@ -23,12 +26,15 @@ private:
     std::vector<std::vector<std::unique_ptr<Object>>> mapdata;
     std::vector<std::unique_ptr<Object>> characterObj;
 
-    std::vector<std::unique_ptr<Object>> cylinder;
+    std::vector<std::unique_ptr<O2>> cylinder;
+    std::vector<std::unique_ptr<O2>> o2;
+
     //std::vector<std::vector<int>> maplist;
 
     int WidthMAX = 0;
     int HeightMAX = 0;
 
+    int state = 0;
     int score = 0;
 
 public:
@@ -44,5 +50,7 @@ public:
     std::unique_ptr<Object> DeleteObject(int objectType, TextureManager* textureManager);
 
     void GetMapSize();
+
+    void o2Gauge(std::chrono::milliseconds time);
 };
 
