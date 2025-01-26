@@ -20,19 +20,19 @@ std::chrono::high_resolution_clock::time_point start;
 	//マップからオブジェクトを生成する際に参照するキー
 static std::unordered_map<int, std::wstring> textureMapping = {
 	{0, L"asset/S_Water.png"},		//無
-	{1, L"asset/Wall.png"},		//壁
+	{1, L"asset/Wall.png"},			//壁
 	{2, L"asset/survivor3.png"},	//プレイヤー
 	{3, L"asset/shake1.png"},		//敵
 	{4, L"asset/S_Goal.png"},		//ゴール
-	{5, L"asset/mendako.png"},	//メンダコ
+	{5, L"asset/mendako.png"},		//メンダコ
 	{6, L"asset/mirror_fish.png"},	//鏡鯛
 	{7, L"asset/mirror_fish.png"},	//鏡鯛
 	{8, L"asset/S_trap.png"},		//トラップ
 	{9, L"asset/S_Kairyu.png"},		//海流
-	{10, L"asset/S_Kairyu.png"},		//海流
-	{11, L"asset/S_hasi.png"},		//マップ端
+	{10, L"asset/S_Kairyu.png"},	//海流
+	{11, L"asset/Wall2.png"},		//マップ端
 	{15, L"asset/demonfish1.png"},	//オニキンメ
-	{16, L"asset/Lightfish1.png"},		//アンコウ
+	{16, L"asset/Lightfish1.png"},	//アンコウ
 	{19, L"asset/S_Light.png"},		//ライト
 	{20, L"asset/S_Lumine.png"}		//光マス
 };
@@ -41,14 +41,25 @@ GameScene::GameScene(int stage) {
 	textureManager = new TextureManager(g_pDevice);
 	// ステージ選択で選んだ番号のマップデータをロード
 	LoadMapData(stage);
+
+	game_bg = std::make_unique<Object>();
+	if (stage <= 4) {
+		game_bg->Init(textureManager, L"asset/BackGround1.png");
+		
+	}else if(stage >= 5){
+		game_bg->Init(textureManager, L"asset/BackGround2.png");
+	}
+	game_bg->SetPos(0.0f, 0.0f, 0.0f);
+	game_bg->SetSize(1920.0f, 1080.0f, 0.0f);
+
 	for (int i = 0; i < 4; i++) {
 		cylinder.emplace_back(std::make_unique<O2>());
-		cylinder[i]->Init(textureManager, L"asset/O2_1.png");
+		cylinder[i]->Init(textureManager, L"asset/UI/O2_1.png");
 		cylinder[i]->SetPos((i * 50.0f) + 500.0f, +300.0f, 0.0f);
 		cylinder[i]->SetSize(50.0f, 100.0f, 0.0f);
 
 		o2.emplace_back(std::make_unique<O2>());
-		o2[i]->Init(textureManager, L"asset/O2_2.png");
+		o2[i]->Init(textureManager, L"asset/UI/O2_2.png");
 		o2[i]->SetPos((i * 50.0f) + 500.0f, 290.0f, 0.0f);
 		o2[i]->SetSize(45.0f, 80.0f, 0.0f);
 	}
@@ -137,7 +148,19 @@ void GameScene::Update() {
 
 		o2Gauge(elapsed);
 
-		if (input.GetKeyTrigger(VK_3)) {
+		for (auto& obj : characterObj) {
+			Enemy* enemy = dynamic_cast<Enemy*>(obj.get());
+			if (enemy) {  // dynamic_castが成功した場合のみ処理
+				deadFlg = enemy->GetState();
+				if (deadFlg) {
+					break;
+				}
+			}
+		}
+
+
+
+		if (deadFlg || input.GetKeyTrigger(VK_3)) {
 			// スコアをリザルトに渡して移動
 			SceneManager::ChangeScene(SceneManager::RESULT, score);
 		}
@@ -145,6 +168,7 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
+	game_bg->Draw();
 	for (const auto& row : mapdata) {
 		for (const auto& obj : row) {
 			if (obj) {

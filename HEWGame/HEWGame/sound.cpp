@@ -175,6 +175,8 @@ HRESULT Sound::RoadBGM(SOUND_LABEL_BGM label)
 
 	m_pXAudio2->CreateSourceVoice(&m_pSourceVoice_BGM, &(m_wfx_BGM.Format));
 
+	pSV_BGM = m_pSourceVoice_BGM;
+
 	return hr;
 }
 
@@ -245,7 +247,7 @@ void Sound::PlaySE(SOUND_LABEL_SE label)
 
 void Sound::PlayBGM()
 {
-	pSV_BGM = m_pSourceVoice_BGM;
+	//pSV_BGM = m_pSourceVoice_BGM;
 
 	if (pSV_BGM != nullptr)
 	{
