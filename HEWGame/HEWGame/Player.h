@@ -23,6 +23,7 @@ private:
 
 	bool Vertical;	//‚’¼ˆÚ“®
 	bool Horizontal;//…•½ˆÚ“®
+	bool Reverse;	//”½“]
 
 	int MoveList[18][32];
 

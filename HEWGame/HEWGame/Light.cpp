@@ -683,16 +683,16 @@ void Light::Flash()
 				//無
 				if (Map[Old_Pos_X][Old_Pos_Y] == NOTHING)
 				{
-					std::cout << "エラー" << std::endl;
+//					std::cout << "エラー:Light" << std::endl;
 					//停止
 					Stop = true;
 				}
 				//空間
-				if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
+				else if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
 				//ゴール
-				if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				else if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
 				//サメ
-				if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
+				else if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//発光マス
 				else if (Map[Old_Pos_X][Old_Pos_Y] == Luminous)
 				{
@@ -738,16 +738,16 @@ void Light::Flash()
 				//無
 				if (Map[Old_Pos_X][Old_Pos_Y] == NOTHING)
 				{
-					std::cout << "エラー" << std::endl;
+//					std::cout << "エラー:Light" << std::endl;
 					//停止
 					Stop = true;
 				}
 				//空間
-				if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
+				else if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
 				//ゴール
-				if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				else if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
 				//サメ
-				if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
+				else if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//発光マス
 				else if (Map[Old_Pos_X][Old_Pos_Y] == Luminous)
 				{
@@ -792,16 +792,16 @@ void Light::Flash()
 				//無
 				if (Map[Old_Pos_X][Old_Pos_Y] == NOTHING)
 				{
-					std::cout << "エラー" << std::endl;
+//					std::cout << "エラー:Light" << std::endl;
 					//停止
 					Stop = true;
 				}
 				//空間
-				if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
+				else if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
 				//ゴール
-				if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				else if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
 				//サメ
-				if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
+				else if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//発光マス
 				else if (Map[Old_Pos_X][Old_Pos_Y] == Luminous)
 				{
@@ -846,16 +846,16 @@ void Light::Flash()
 				//無
 				if (Map[Old_Pos_X][Old_Pos_Y] == NOTHING)
 				{
-					std::cout << "エラー" << std::endl;
+//					std::cout << "エラー:Light" << std::endl;
 					//停止
 					Stop = true;
 				}
 				//空間
-				if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
+				else if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
 				//ゴール
-				if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				else if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
 				//サメ
-				if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
+				else if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//発光マス
 				else if (Map[Old_Pos_X][Old_Pos_Y] == Luminous)
 				{
@@ -918,7 +918,7 @@ std::vector<std::vector<int>> Light::MapUpdate()
 
 void Light::DebugMap()
 {
-	std::cout << "マップ更新" << std::endl;
+	std::cout << "マップ更新:Light" << std::endl;
 	//デバッグ	マップ数値表示
 	for (int i = 0; i < 18; i++) {
 		for (int j = 0; j < 32; j++) {
