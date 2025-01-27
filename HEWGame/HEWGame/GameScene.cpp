@@ -45,7 +45,6 @@ GameScene::GameScene(int stage) {
 	game_bg = std::make_unique<Object>();
 	if (stage <= 4) {
 		game_bg->Init(textureManager, L"asset/BackGround1.png");
-
 	}
 	else if (stage >= 5) {
 		game_bg->Init(textureManager, L"asset/BackGround2.png");
@@ -65,6 +64,7 @@ GameScene::GameScene(int stage) {
 		o2[i]->SetSize(22.5f, 40.0f, 0.0f);
 	}
 
+	// ステージに合わせてズーム(今はステージ2に合わせてるだけ)
 	g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
 }
 
@@ -129,12 +129,10 @@ void GameScene::Update() {
 
 					// ↓重かった原因↓：if文の中に入れて変化時だけにしたらちょっと軽くなった
 					int objectType = maplist[i][j];
-					if (objectType != -1 && (objectType == 20 || objectType == 11 || objectType == 19 || objectType == 0)) {
+					if (objectType != -1 && (objectType == 20 || objectType == 11 || objectType == 12 || objectType == 0)) {
 						auto obj = CreateObject(objectType, textureManager); // 関数でオブジェクト生成
 						if (obj) {
-							//float x = j * 30.0f - 500.0f;	// x座標		列 * Objectの大きさ * オフセット		※カメラあればオフセット要らないかも
-							float x = j * 30.0f;	// x座標		列 * Objectの大きさ * オフセット		※カメラあればオフセット要らないかも
-							//float y = i * -30.0f + 280.0f;	// y座標		行 * Objectの大きさ * オフセット
+							float x = j * 30.0f;	// x座標		列 * Objectの大きさ * オフセット	
 							float y = i * -30.0f;	// y座標		行 * Objectの大きさ * オフセット
 
 							obj->SetPos(x, y, 0.0f);
@@ -259,9 +257,9 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	case 9: obj = std::make_unique<Kairyu>(); u = 1; v = 1; break;
 	case 10: obj = std::make_unique<Kairyu>(); u = 1; v = 1; dir = 1; break;
 	case 11: obj = std::make_unique<Object>(); u = 1; v = 1; break;
+	case 12: obj = std::make_unique<Light>(); u = 1; v = 1; break;
 	case 15: obj = std::make_unique<Onikinme>(); u = 4; v = 1; break;
 	case 16: obj = std::make_unique<Ankou>(); u = 4; v = 2; break;
-	case 12: obj = std::make_unique<Light>(); u = 1; v = 1; break;
 	case 20: obj = std::make_unique<Object>(); u = 1; v = 1; break;
 	default: return nullptr;
 	}

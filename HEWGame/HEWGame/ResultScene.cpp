@@ -40,13 +40,15 @@ ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setsc
 		scoreNum.back()->SetPos((i * 60.0f) + 380.0f, -250.0f, 0.0f);
 		scoreNum.back()->SetSize(60.0f, 60.0f, 0.0f);
 		scoreNum.back()->SetUV(0, 0);
-
+		
 		timeNum.emplace_back(std::make_unique<Object>());
 		timeNum.back()->Init(textureManager, L"asset/UI/num.png", 10, 1);	// 仮の画像を使用
 		timeNum.back()->SetPos((i * 60.0f) + 380.0f, 60.0f, 0.0f);
 		timeNum.back()->SetSize(60.0f, 60.0f, 0.0f);
 		timeNum.back()->SetUV(0, 0);
 	}
+	timeNum[2]->SetTexture(textureManager,L"asset/UI/:.png");
+
 	// 事前に読み込み
 	for (int i = 0; i < 300; i++) {
 		if (i % 5 == 0) {
@@ -58,8 +60,9 @@ ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setsc
 			result_bg->SetTexture(textureManager, texturePath.c_str());
 		}
 	}
-	Mscore = 2;
-	Score = 53492;
+	Mscore = 3;
+	Score = 0;
+	// スコアをコピー
 	tempScore = Score;
 }
 
@@ -83,7 +86,7 @@ void ResultScene::Update() {
 	}
 	else if (state == 1) {
 		// 桁を右から順に1つずつ固定
-		if ( scoreFixCounter > 75 + (Mscore * 50)) {
+		if ( scoreFixCounter > 0 + (Mscore * 50)) {
 			if (scoreFixCounter % 8 == 0 && revealIndex < static_cast<int>(scoreNum.size())) {
 				int digit = tempScore % 10;  // 右端の桁を取得
 				tempScore /= 10;             // 次の桁へ
@@ -98,39 +101,16 @@ void ResultScene::Update() {
 		}
 
 		DirectX::XMFLOAT3 offsetSize = { 2000.0f, 2000.0f, 0.0f };
-		if (mendakoSet == 0) {
-			mendako[0]->SetSize(offsetSize.x - animtime * 30, offsetSize.y - animtime * 30, offsetSize.z);
-			if (mendako[0]->GetSize().x < 175.0f) {
-				mendako[0]->SetSize(175.0f, 175.0f, 0.0f);
-				mendakoSet = 1;
-				animtime = 0;
-			}
-		}
-		else if (mendakoSet == 1) {
-			mendako[1]->SetSize(offsetSize.x - animtime * 30, offsetSize.y - animtime * 30, offsetSize.z);
-			if (mendako[1]->GetSize().x < 175.0f) {
-				mendako[1]->SetSize(175.0f, 175.0f, 0.0f);
-				mendakoSet = 2;
-				animtime = 0;
-			}
-		}
-		else if (mendakoSet == 2) {
-			mendako[2]->SetSize(offsetSize.x - animtime * 30, offsetSize.y - animtime * 30, offsetSize.z);
-			if (mendako[2]->GetSize().x < 175.0f) {
-				mendako[2]->SetSize(175.0f, 175.0f, 0.0f);
-				mendakoSet = 3;
+
+		if (mendakoSet < mendako.size()) {
+			mendako[mendakoSet]->SetSize(offsetSize.x - animtime * 100, offsetSize.y - animtime * 100, offsetSize.z);
+			if (mendako[mendakoSet]->GetSize().x < 175.0f) {
+				mendako[mendakoSet]->SetSize(175.0f, 175.0f, 0.0f);
+				mendakoSet++;
 				animtime = 0;
 			}
 		}
 		animtime++;
-
-		/*if (mendakoSet < mendako.size()) {
-			mendako[mendakoSet]->SetSize(offsetSize.x - animtime, offsetSize.y - animtime, offsetSize.z);
-			if (mendako[mendakoSet]->GetSize().x < 175.0f) {
-				mendakoSet++;
-				animtime = 0;
-			}
-		}*/
 
 		// 全桁確定後、次の状態へ
 		if (revealIndex >= static_cast<int>(scoreNum.size()) && mendakoSet == 3) {

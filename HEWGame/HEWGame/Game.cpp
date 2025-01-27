@@ -2,9 +2,9 @@
 
 //*****************************************************************************
 //!	@file	ファイル名
-//!	@brief	簡単な説明
-//!	@note	メモ
-//!	@author	製作者
+//!	@brief	ゲームの基礎
+//!	@note	制作中
+//!	@author	西嶋
 //*****************************************************************************
 
 //-----------------------------------------------------------------------------
@@ -43,22 +43,15 @@ void Game::Init(HWND hWnd) {
 	D3D_Create(hWnd);
 
 	test = hWnd;
-	//============================
-	//デバッグ
-	
-	//============================
 
 	//初期シーンをタイトルにする
-	sm.ChangeScene(sm.TITLE);
+	//sm.ChangeScene(sm.TITLE);
 	//sm.ChangeScene(sm.SELECT);
-	//sm.ChangeScene(sm.GAME,2);
+	sm.ChangeScene(sm.GAME,2);
 	//sm.ChangeScene(sm.RESULT);
-	//sm.ChangeScene(sm.RESULT);
-
 
 
 	//マップデータを読み込み
-	//std::wstring mapPath = L"asset/Data/TestData.csv";
 	std::wstring mapPath = L"C:/GitLocal/HEWGame/HEW2025/HEWGame/HEWGame/Data/TestData.csv";
 	DataTable = Loadmap(mapPath.c_str());
 }
@@ -75,18 +68,6 @@ void Game::Draw() {
 	// ゲーム処理実行
 	D3D_StartRender();
 	sm.Render();
-	//======================
-	//デバッグ	マップ数値表示
-	//if (a == 0) {
-	//	for (int i = 0; i < 18; i++) {
-	//		for (int j = 0; j < 32; j++) {
-	//			std::cout << DataTable[i][j] << ",";
-	//		}
-	//		std::cout << std::endl;
-	//	}
-	//	a++;
-	//}
-	//======================
 	D3D_FinishRender();
 }
 //==============================================================================
@@ -99,9 +80,6 @@ void Game::Draw() {
 //!	@retval 
 //==============================================================================
 void Game::Uninit() {
-
-	//sound.Uninit();			//サウンドを終了
-
 	// DirectXの解放処理
 	D3D_Release();
 }
@@ -115,10 +93,8 @@ void Game::Uninit() {
 //!	@retval 
 //==============================================================================
 void Game::Update() {
-
 	//シーンセット
 	sm.SetScene();
-
 	sm.Update();	//現在シーンのアップデートを実行
 }
 
