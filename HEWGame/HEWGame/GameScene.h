@@ -6,8 +6,8 @@
 
 #include "Light.h"
 #include "O2.h"
-#define MAXTIME (600000)
-//#define MAXTIME (10000)
+//#define MAXTIME (600000)  //1•ª
+#define MAXTIME (10000)     //10•b
 
 const int MAP_HEIGHT = 18;
 const int MAP_WIDTH = 32;

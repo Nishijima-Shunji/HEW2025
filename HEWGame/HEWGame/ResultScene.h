@@ -23,11 +23,16 @@ private:
     int framecount = 0;
     int scoreFixCounter = 0;
     int state = 0;
+    int mendakoSet = 0;
+    int animtime = 0;
 
     // —h‚ê‚Ìİ’è
-    float amplitude = 20.0f;  // —h‚ê‚Ì‘å‚«‚³
-    float frequency = 0.005f;  // —h‚ê‚Ì‘¬‚³iHzj
+    float amplitude = 30.0f;  // —h‚ê‚Ì‘å‚«‚³
+    float frequency = 0.01f;  // —h‚ê‚Ì‘¬‚³iHzj
     float noise = (rand() % 100 - 50) * 0.001f;  // -0.05f ` 0.05f ‚Ìƒ‰ƒ“ƒ_ƒ€’l
+
+    float velocityY = 0.0f;
+    const float acceleration = 0.5f;  // ‰Á‘¬“x
 
 public:
     ResultScene(int scorem, int Mscore, int time);

@@ -7,12 +7,12 @@ private:
 	int targetX;
 	int targetY;
 
-	int move;
+	int move = 0;
 	bool movingToTarget = false;
 	bool moveX;
 	bool moveY;
-	bool lightX;
-	bool lightY;
+	bool lightX = false;
+	bool lightY = false;
 	int nextPosX;
 	int nextPosY;
 	bool hasFoundLightBefore = false;  // ˆê“x‚Å‚àƒ‰ƒCƒg‚ðŒ©‚Â‚¯‚½‚©

@@ -41,11 +41,11 @@ HRESULT Sound::Init()
 	DWORD  filetype;
 
 	// COMの初期化
-	hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	if (FAILED(hr)) {
-		CoUninitialize();
-		return -1;
-	}
+	//hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	//if (FAILED(hr)) {
+	//	CoUninitialize();
+	//	return -1;
+	//}
 
 	/**** Create XAudio2 ****/
 	hr = XAudio2Create(&m_pXAudio2, 0);		// 第二引数は､動作フラグ デバッグモードの指定(現在は未使用なので0にする)
@@ -116,11 +116,11 @@ HRESULT Sound::RoadBGM(SOUND_LABEL_BGM label)
 	DWORD  filetype;
 
 	// COMの初期化
-	hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	if (FAILED(hr)) {
-		CoUninitialize();
-		return -1;
-	}
+	//hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	//if (FAILED(hr)) {
+	//	CoUninitialize();
+	//	return -1;
+	//}
 
 	/**** Create XAudio2 ****/
 	hr = XAudio2Create(&m_pXAudio2, 0);		// 第二引数は､動作フラグ デバッグモードの指定(現在は未使用なので0にする)

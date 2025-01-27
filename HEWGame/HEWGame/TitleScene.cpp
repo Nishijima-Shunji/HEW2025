@@ -13,11 +13,6 @@ TitleScene::TitleScene() {
 	logo->SetPos(0.0f, 0.0f, 0.0f);
 	logo->SetSize(800.0f, 800.0f, 0.0f);
 	logo->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-	
-
-	// タイトルオブジェクト=============
-	//InitTitleObjects(10);  // ランダムな位置に10個のオブジェクトを初期化
 }
 
 TitleScene::~TitleScene() {
@@ -28,6 +23,7 @@ TitleScene::~TitleScene() {
 		delete obj;
 	}
 	g_Sound.ReleaseBGM();
+	g_Sound.ReleaseSE();
 }
 
 void TitleScene::InitTitleObjects(int count) {
@@ -164,7 +160,7 @@ void TitleScene::InitAnimation() {
 	cursol = std::make_unique<Cursol>();
 	cursol->Init(textureManager, L"asset/UI/cursol.png");
 	cursol->SetPos(-200.0f, 0.0f, 0.0f);
-	cursol->SetSize(100.0f, 100.0f, 0.0f);
+	cursol->SetSize(150.0f, 150.0f, 0.0f);
 
 	close = std::make_unique<Object>();
 	close->Init(textureManager, L"asset/UI/batten2.png");
@@ -309,7 +305,7 @@ void TitleScene::OptionSelect(Input* input) {
 	}
 	switch (select) {
 	case 0:
-		cursol->SetPos(220.0f, 230.0f, 0.0f);
+		cursol->SetPos(210.0f, 230.0f, 0.0f);
 		close->SetColor(1.0f, 0.0f, 0.0f,1.0f);
 		if (input->GetKeyTrigger(VK_RETURN))
 		{
