@@ -6,8 +6,8 @@
 
 #include "Light.h"
 #include "O2.h"
-#define MAXTIME (600000)
-//#define MAXTIME (10000)
+//#define MAXTIME (600000)  //1分
+#define MAXTIME (10000)     //10秒
 
 const int MAP_HEIGHT = 18;
 const int MAP_WIDTH = 32;
@@ -15,11 +15,9 @@ class Game;
 class GameScene : public BaseScene
 {
 private:
-    //Light* light;
-
-    Object* game_bg;
-
     TextureManager* textureManager;
+
+    std::unique_ptr<Object> game_bg;
     std::vector<Object*> game_bg_list;  // オブジェクトのリスト
 
     int mapval = 0;
@@ -36,6 +34,7 @@ private:
 
     int state = 0;
     int score = 0;
+    bool deadFlg = false;
 
 public:
 

@@ -12,10 +12,10 @@ StageSelectScene::StageSelectScene() {
 	select_bg->SetAngle(0.0f);						//角度を設定
 	select_bg->SetColor(1.0f, 1.0f, 1.0f, 1.0f);	//色を設定
 
-	load_bg = std::make_unique<Object>();
-	load_bg->Init(textureManager, L"asset/loadbg.png", 1, 1);
-	load_bg->SetPos(0.0f, 0.0f, 0.0f);			//位置を設定
-	load_bg->SetSize(0.0f, 0.0f, 0.0f);			//大きさを設定
+	//load_bg = std::make_unique<Object>();
+	//load_bg->Init(textureManager, L"asset/loadbg.png", 1, 1);
+	//load_bg->SetPos(0.0f, 0.0f, 0.0f);			//位置を設定
+	//load_bg->SetSize(0.0f, 0.0f, 0.0f);			//大きさを設定
 
 	// 事前に読み込み
 	for (int i = 0; i < 300; i++) {

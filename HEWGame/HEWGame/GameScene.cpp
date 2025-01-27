@@ -2,7 +2,7 @@
 #include "Game.h"
 #include <algorithm>
 
-
+#include "camera.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Wall.h"
@@ -20,20 +20,20 @@ std::chrono::high_resolution_clock::time_point start;
 	//マップからオブジェクトを生成する際に参照するキー
 static std::unordered_map<int, std::wstring> textureMapping = {
 	{0, L"asset/S_Water.png"},		//無
-	{1, L"asset/Wall.png"},		//壁
+	{1, L"asset/Wall.png"},			//壁
 	{2, L"asset/survivor3.png"},	//プレイヤー
 	{3, L"asset/shake1.png"},		//敵
 	{4, L"asset/S_Goal.png"},		//ゴール
-	{5, L"asset/mendako.png"},	//メンダコ
+	{5, L"asset/mendako.png"},		//メンダコ
 	{6, L"asset/mirror_fish.png"},	//鏡鯛
 	{7, L"asset/mirror_fish.png"},	//鏡鯛
 	{8, L"asset/S_trap.png"},		//トラップ
 	{9, L"asset/S_Kairyu.png"},		//海流
-	{10, L"asset/S_Kairyu.png"},		//海流
-	{11, L"asset/S_hasi.png"},		//マップ端
+	{10, L"asset/S_Kairyu.png"},	//海流
+	{12, L"asset/S_Light.png"},		//ライト
+	{11, L"asset/Wall2.png"},		//マップ端
 	{15, L"asset/demonfish1.png"},	//オニキンメ
-	{16, L"asset/Lightfish1.png"},		//アンコウ
-	{19, L"asset/S_Light.png"},		//ライト
+	{16, L"asset/Lightfish1.png"},	//アンコウ
 	{20, L"asset/S_Lumine.png"}		//光マス
 };
 
@@ -41,17 +41,31 @@ GameScene::GameScene(int stage) {
 	textureManager = new TextureManager(g_pDevice);
 	// ステージ選択で選んだ番号のマップデータをロード
 	LoadMapData(stage);
+
+	game_bg = std::make_unique<Object>();
+	if (stage <= 4) {
+		game_bg->Init(textureManager, L"asset/BackGround1.png");
+
+	}
+	else if (stage >= 5) {
+		game_bg->Init(textureManager, L"asset/BackGround2.png");
+	}
+	game_bg->SetPos(0.0f, 0.0f, 0.0f);
+	game_bg->SetSize(1920.0f, 1080.0f, 0.0f);
+
 	for (int i = 0; i < 4; i++) {
 		cylinder.emplace_back(std::make_unique<O2>());
-		cylinder[i]->Init(textureManager, L"asset/O2_1.png");
-		cylinder[i]->SetPos((i * 50.0f) + 500.0f, +300.0f, 0.0f);
-		cylinder[i]->SetSize(50.0f, 100.0f, 0.0f);
+		cylinder[i]->Init(textureManager, L"asset/UI/O2_1.png");
+		cylinder[i]->SetPos((i * 30.0f) + 530.0f, 0.0f, 0.0f);
+		cylinder[i]->SetSize(25.0f, 50.0f, 0.0f);
 
 		o2.emplace_back(std::make_unique<O2>());
-		o2[i]->Init(textureManager, L"asset/O2_2.png");
-		o2[i]->SetPos((i * 50.0f) + 500.0f, 290.0f, 0.0f);
-		o2[i]->SetSize(45.0f, 80.0f, 0.0f);
+		o2[i]->Init(textureManager, L"asset/UI/O2_2.png");
+		o2[i]->SetPos((i * 30.0f) + 530.0f, -3.5f, 0.0f);
+		o2[i]->SetSize(22.5f, 40.0f, 0.0f);
 	}
+
+	g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
 }
 
 GameScene::~GameScene() {
@@ -109,11 +123,13 @@ void GameScene::Update() {
 				{
 					//古いオブジェクトを削除
 					std::cout << "削除" << std::endl;
-					mapdata[i][j] = CreateObject(NewObject, textureManager);
+					if (NewObject == 0) {
+						mapdata[i][j] = CreateObject(NewObject, textureManager);
+					}
 
 					// ↓重かった原因↓：if文の中に入れて変化時だけにしたらちょっと軽くなった
 					int objectType = maplist[i][j];
-					if (objectType != -1 && (objectType == 20 || objectType == 11 || objectType == 19)) {
+					if (objectType != -1 && (objectType == 20 || objectType == 11 || objectType == 19 || objectType == 0)) {
 						auto obj = CreateObject(objectType, textureManager); // 関数でオブジェクト生成
 						if (obj) {
 							//float x = j * 30.0f - 500.0f;	// x座標		列 * Objectの大きさ * オフセット		※カメラあればオフセット要らないかも
@@ -135,7 +151,18 @@ void GameScene::Update() {
 
 		o2Gauge(elapsed);
 
-		if (input.GetKeyTrigger(VK_3)) {
+		// 死亡判定取得
+		for (auto& obj : characterObj) {
+			Enemy* enemy = dynamic_cast<Enemy*>(obj.get());
+			if (enemy) {  // dynamic_castが成功した場合のみ処理
+				deadFlg = enemy->GetState();
+				if (deadFlg) {
+					break;
+				}
+			}
+		}
+
+		if (deadFlg || input.GetKeyTrigger(VK_3)) {
 			// スコアをリザルトに渡して移動
 			SceneManager::ChangeScene(SceneManager::RESULT, score);
 		}
@@ -143,6 +170,7 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
+	game_bg->Draw();
 	for (const auto& row : mapdata) {
 		for (const auto& obj : row) {
 			if (obj) {
@@ -233,7 +261,7 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	case 11: obj = std::make_unique<Object>(); u = 1; v = 1; break;
 	case 15: obj = std::make_unique<Onikinme>(); u = 4; v = 1; break;
 	case 16: obj = std::make_unique<Ankou>(); u = 4; v = 2; break;
-	case 19: obj = std::make_unique<Light>(); u = 1; v = 1; break;
+	case 12: obj = std::make_unique<Light>(); u = 1; v = 1; break;
 	case 20: obj = std::make_unique<Object>(); u = 1; v = 1; break;
 	default: return nullptr;
 	}
@@ -256,24 +284,36 @@ void GameScene::o2Gauge(std::chrono::milliseconds time) {
 	for (const auto& obj : o2) {
 		obj->Update();
 	}
-
-	// 遭難者に付いてくる用
-	for (const auto& obj : characterObj) {
-		Player* playerObj = dynamic_cast<Player*>(obj.get());
-		if (playerObj) {
-			DirectX::XMFLOAT3 pos = playerObj->GetPos();
-			cylinder.back()->SetPos(pos.x + 20.0f, pos.y + 20.0f, pos.z);
-			cylinder.back()->SetSize(15.0f, 36.0f, 0.0f);
-			o2.back()->SetPos(pos.x + 20.0f, pos.y + 17.5f, pos.z);
-			o2.back()->SetSize(12.0f, 27.6f, 0.0f);
-			break;  // 見つかったらループを抜ける
-		}
+	for (const auto& obj : cylinder) {
+		obj->Update();
 	}
+
 	static int lastCheckedTime = 0;
 	float remainingTime = (MAXTIME / 3) - (time.count() - lastCheckedTime);
 
-	if (remainingTime > 0.0f && o2.size() > 1) {
+	if (o2.size() == 1) {
+		lastCheckedTime = time.count();  // 新しいボンベ用に時間をリセット
+	}
+
+	if (remainingTime > 0.0f) {
+
+		// 遭難者に付いてくる用
+		for (const auto& obj : characterObj) {
+			Player* playerObj = dynamic_cast<Player*>(obj.get());
+			if (playerObj) {
+				DirectX::XMFLOAT3 pos = playerObj->GetPos();
+				cylinder.back()->SetPos(pos.x + 20.0f, pos.y + 20.0f, pos.z);
+				cylinder.back()->SetSize(15.0f, 36.0f, 0.0f);
+				o2.back()->SetPos(pos.x + 20.0f, pos.y + 17.5f, pos.z);
+				o2.back()->SetSize(12.0f, 27.6f, 0.0f);
+				break;  // 見つかったらループを抜ける
+			}
+		}
+
 		float sizeRatio = (remainingTime / (MAXTIME / 3)) * 27.6f;
+		if (sizeRatio <= 0.0f) {
+			sizeRatio = 0.0f;
+		}
 
 		// ボンベの基準位置（底の位置固定）
 		float baseY = o2.back()->GetPos().y;  // ボンベの初期位置
@@ -283,15 +323,19 @@ void GameScene::o2Gauge(std::chrono::milliseconds time) {
 
 		// 新しいサイズと位置をセット（上に向かって縮む）
 		o2.back()->SetSize(12.0f, sizeRatio, 0.0f);
-		o2.back()->SetPos(o2.back()->GetPos().x, newY, 0.0f); 
+		o2.back()->SetPos(o2.back()->GetPos().x, newY, 0.0f);
 	}
 
 	// ボンベ削除処理
 	if (remainingTime <= 0.0f) {
-		if (o2.size() > 1) {
-			cylinder.erase(cylinder.end() - 1);
-			o2.erase(o2.end() - 1);
-			lastCheckedTime = time.count();  // 新しいボンベ用に時間をリセット
+		if (cylinder.size() > 1) {
+			o2.back()->SetState(2);
+			cylinder.back()->SetState(2);
+			if (cylinder.back()->GetPos().y < -500.0f) {
+				cylinder.erase(cylinder.end() - 1);
+				o2.erase(o2.end() - 1);
+				lastCheckedTime = time.count();  // 新しいボンベ用に時間をリセット
+			}
 		}
 	}
 

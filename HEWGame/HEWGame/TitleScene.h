@@ -20,8 +20,9 @@ private:
     std::vector<std::unique_ptr<Object>> window;
     std::vector<std::unique_ptr<Object>> icon;
     std::unique_ptr<Object> setting;
-    std::unique_ptr<SoundCursol> sound_cursol;
+    std::vector<std::unique_ptr<SoundCursol>> sound_cursol;
     std::unique_ptr<Cursol> cursol;
+    std::unique_ptr<Object> close;
     std::vector<Object*> title_Ob;  // タイトルオブジェクト
 
     int framecount = 0;
