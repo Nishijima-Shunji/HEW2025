@@ -222,6 +222,24 @@ void Sound::ReleaseBGM()
 	}
 }
 
+void Sound::ReleaseSE()
+{
+	for (int i = 0; i < SOUND_LABEL_SE_MAX; i++)
+	{
+		if (m_pSourceVoice[i])
+		{
+			m_pSourceVoice[i]->Stop(0);
+			m_pSourceVoice[i]->FlushSourceBuffers();
+			m_pSourceVoice[i]->DestroyVoice();			// オーディオグラフからソースボイスを削除
+			delete[]  m_DataBuffer[i];
+		}
+	}
+
+	m_pMasteringVoice->DestroyVoice();
+
+	if (m_pXAudio2) m_pXAudio2->Release();
+}
+
 //=============================================================================
 // 再生
 //=============================================================================

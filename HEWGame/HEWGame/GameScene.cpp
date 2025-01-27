@@ -64,7 +64,7 @@ GameScene::GameScene(int stage) {
 		o2[i]->SetSize(45.0f, 80.0f, 0.0f);
 	}
 
-	SetCamera(250.0f, -130.0f, 2.5f);
+	g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
 }
 
 GameScene::~GameScene() {

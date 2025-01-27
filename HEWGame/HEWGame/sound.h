@@ -94,6 +94,7 @@ public:
 
 	//BGM‚Ìíœ
 	void ReleaseBGM();
+	void ReleaseSE();
 
 	//ƒ{ƒŠƒ…[ƒ€‚Ì’²®
 	void SetVolSE(const float _vol);
