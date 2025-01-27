@@ -699,6 +699,8 @@ void Light::Flash()
 				else if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
 				//ゴール
 				else if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				//プレイヤー
+				else if (Map[Old_Pos_X][Old_Pos_Y] == P_DIVER) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//サメ
 				else if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//発光マス
@@ -754,6 +756,8 @@ void Light::Flash()
 				else if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
 				//ゴール
 				else if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				//プレイヤー
+				else if (Map[Old_Pos_X][Old_Pos_Y] == P_DIVER) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//サメ
 				else if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//発光マス
@@ -808,6 +812,8 @@ void Light::Flash()
 				else if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
 				//ゴール
 				else if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				//プレイヤー
+				else if (Map[Old_Pos_X][Old_Pos_Y] == P_DIVER) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//サメ
 				else if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//発光マス
@@ -862,6 +868,8 @@ void Light::Flash()
 				else if (Map[Old_Pos_X][Old_Pos_Y] == SPACE) {}
 				//ゴール
 				else if (Map[Old_Pos_X][Old_Pos_Y] == GOAL) {}
+				//プレイヤー
+				else if (Map[Old_Pos_X][Old_Pos_Y] == P_DIVER) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//サメ
 				else if (Map[Old_Pos_X][Old_Pos_Y] == E_SHARK) { Map[Old_Pos_X][Old_Pos_Y] = SPACE; }
 				//発光マス
