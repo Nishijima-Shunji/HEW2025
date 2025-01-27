@@ -2,7 +2,7 @@
 #include "Game.h"
 #include <algorithm>
 
-
+#include "camera.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Wall.h"
@@ -63,6 +63,8 @@ GameScene::GameScene(int stage) {
 		o2[i]->SetPos((i * 50.0f) + 500.0f, 290.0f, 0.0f);
 		o2[i]->SetSize(45.0f, 80.0f, 0.0f);
 	}
+
+	SetCamera(250.0f, -130.0f, 2.5f);
 }
 
 GameScene::~GameScene() {
