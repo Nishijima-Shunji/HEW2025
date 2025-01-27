@@ -2,7 +2,6 @@
 #include "Game.h"
 #include <cstdlib>  // rand()‚Æsrand()‚Ì‚½‚ß
 #include <ctime>    // time()‚Ì‚½‚ß
-#include "sound.h"
 
 TitleScene::TitleScene() {
 	textureManager = new TextureManager(g_pDevice);
@@ -303,20 +302,21 @@ void TitleScene::OptionSelect(Input* input) {
 			select = 0;
 		}
 	}
+	float cursol_move = sin(framecount / 180.0f * 3.14) * 15.0f;
 	switch (select) {
 	case 0:
-		cursol->SetPos(210.0f, 230.0f, 0.0f);
+		cursol->SetPos(220.0f, 230.0f + cursol_move, 0.0f);
 		close->SetColor(1.0f, 0.0f, 0.0f,1.0f);
 		if (input->GetKeyTrigger(VK_RETURN))
 		{
 			state = 1;
 		}
 		break;
-	case 1: cursol->SetPos(-300.0f, 50.0f, 0.0f);
+	case 1: cursol->SetPos(-300.0f, 50.0f + cursol_move, 0.0f);
 			close->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 			g_Sound.SetVolBGM(sound_cursol[0]->Update(input));
 			break;
-	case 2: cursol->SetPos(-300.0f, -200.0f, 0.0f);
+	case 2: cursol->SetPos(-300.0f, -200.0f + cursol_move, 0.0f);
 			close->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 			g_Sound.SetVolSE(sound_cursol[1]->Update(input));
 			break;

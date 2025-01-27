@@ -49,10 +49,12 @@ void Game::Init(HWND hWnd) {
 	//============================
 
 	//初期シーンをタイトルにする
-	//sm.ChangeScene(sm.TITLE);
+	sm.ChangeScene(sm.TITLE);
 	//sm.ChangeScene(sm.SELECT);
 	//sm.ChangeScene(sm.GAME,2);
-	sm.ChangeScene(sm.RESULT);
+	//sm.ChangeScene(sm.RESULT);
+	//sm.ChangeScene(sm.RESULT);
+
 
 
 	//マップデータを読み込み
