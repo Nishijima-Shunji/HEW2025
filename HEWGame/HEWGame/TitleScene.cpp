@@ -2,6 +2,7 @@
 #include "Game.h"
 #include <cstdlib>  // rand()とsrand()のため
 #include <ctime>    // time()のため
+#include "sound.h"
 
 TitleScene::TitleScene() {
 	textureManager = new TextureManager(g_pDevice);
@@ -12,6 +13,8 @@ TitleScene::TitleScene() {
 	logo->SetPos(0.0f, 0.0f, 0.0f);
 	logo->SetSize(800.0f, 800.0f, 0.0f);
 	logo->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+	
 
 	// タイトルオブジェクト=============
 	//InitTitleObjects(10);  // ランダムな位置に10個のオブジェクトを初期化
@@ -24,6 +27,7 @@ TitleScene::~TitleScene() {
 	for (auto obj : title_Ob) {
 		delete obj;
 	}
+	g_Sound.ReleaseBGM();
 }
 
 void TitleScene::InitTitleObjects(int count) {
@@ -37,12 +41,12 @@ void TitleScene::InitTitleObjects(int count) {
 		float y = static_cast<float>((rand() % 500) - 400);   // ランダムなy位置
 		// yの値が小さいほど大きくする
 		float sizeFactor_Bg = 1.0f + (25.0f - y) / 25.0f;  // yが小さいほどsizeFactorが大きくなる
-		float width_konbu = 10.0f * sizeFactor_Bg;//昆布の幅
-		float height_konbu = 10.0f * sizeFactor_Bg;//高さ
-		obj->SetPos(x, y, 1.0f);  // 位置を設定
+		float width_konbu = 10.0f * sizeFactor_Bg;		// 昆布の幅
+		float height_konbu = 10.0f * sizeFactor_Bg;		// 高さ
+		obj->SetPos(x, y, 1.0f);						// 位置を設定
 		obj->SetSize(width_konbu, height_konbu, 0.0f);  // 大きさを設定
-		obj->SetAngle(0.0f);  // 角度を設定
-		obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);  // 色を設定
+		obj->SetAngle(0.0f);							// 角度を設定
+		obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);			// 色を設定
 		title_Ob.push_back(obj);
 	}
 }
@@ -56,7 +60,6 @@ void TitleScene::Update() {
 	}
 	// =====タイトル画面=====
 	else if (state == 1) {
-
 		// タイトルの操作
 		Select(&input);
 	}
@@ -79,10 +82,6 @@ void TitleScene::Draw() {
 	else if (state >= 1) {
 		title_bg->Draw();
 		title_name->Draw();
-		// 昆布
-		/*	for (auto obj : title_Ob) {
-				obj->Draw();
-			}*/
 		for (auto& obj : window) {
 			obj->Draw();
 		}
@@ -96,6 +95,10 @@ void TitleScene::Draw() {
 		if (state == 2) {
 			setting->Draw();
 			cursol->Draw();
+			close->Draw();
+			for (auto& obj : sound_cursol) {
+				obj->Draw();
+			}
 		}
 	}
 }
@@ -123,7 +126,7 @@ void TitleScene::InitAnimation() {
 		button[i]->SetSize(324.0f, 384.0f, 0.0f);
 
 		window.emplace_back(std::make_unique<Object>());
-		window[i]->Init(textureManager, L"asset/window.png");
+		window[i]->Init(textureManager, L"asset/UI/window.png");
 		window[i]->SetPos((i * 375.0f) - 375.0f, -145.0f, 0.0f);
 		window[i]->SetSize(200.0f, 200.0f, 0.0f);
 
@@ -131,35 +134,42 @@ void TitleScene::InitAnimation() {
 		icon[i]->SetPos((i * 375.0f) - 375.0f, -145.0f, 0.0f);
 		icon[i]->SetSize(150.0f, 150.0f, 0.0f);
 	}
-	button[0]->Init(textureManager, L"asset/OPTION.png");
-	button[1]->Init(textureManager, L"asset/START.png");
-	button[2]->Init(textureManager, L"asset/EXIT.png");
-	icon[0]->Init(textureManager, L"asset/haguruma.png");
-	icon[1]->Init(textureManager, L"asset/mendako_icon.png");
-	icon[2]->Init(textureManager, L"asset/batten.png");
+	button[0]->Init(textureManager, L"asset/UI/OPTION.png");
+	button[1]->Init(textureManager, L"asset/UI/START.png");
+	button[2]->Init(textureManager, L"asset/UI/EXIT.png");
+	icon[0]->Init(textureManager, L"asset/UI/haguruma.png");
+	icon[1]->Init(textureManager, L"asset/UI/mendako_icon.png");
+	icon[2]->Init(textureManager, L"asset/UI/batten.png");
 
 	// light表示
 	light = std::make_unique<Object>();
-	light->Init(textureManager, L"asset/FrashLight.png");
+	light->Init(textureManager, L"asset/UI/FrashLight.png");
 	light->SetPos(-375.0f, -350.0f, 0.0f);
 	light->SetSize(500.0f, 500.0f, 0.0f);
 	light->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// 設定ウィンドウ
 	setting = std::make_unique<Object>();
-	setting->Init(textureManager, L"asset/sound_UI.png");
+	setting->Init(textureManager, L"asset/UI/sound_UI.png");
 	setting->SetPos(0.0f, 0.0f, 0.0f);
-	setting->SetSize(600.0f, 600.0f, 0.0f);
+	setting->SetSize(900.0f, 600.0f, 0.0f);
 
-	sound_cursol = std::make_unique<SoundCursol>();
-	sound_cursol->Init(textureManager, L"asset/sound_UI.png");
-	sound_cursol->SetPos(0.0f, 0.0f, 0.0f);
-	sound_cursol->SetSize(600.0f, 600.0f, 0.0f);
+	for (int i = 0; i < 2; i++) {
+		sound_cursol.emplace_back(std::make_unique<SoundCursol>());
+		sound_cursol[i]->Init(textureManager, L"asset/UI/sound.png");
+		sound_cursol[i]->SetPos(-140.0f, (i * -255.0f) + 50.0f, 0.0f);
+		sound_cursol[i]->SetSize(100.0f, 100.0f, 0.0f);
+	}
 
 	cursol = std::make_unique<Cursol>();
-	cursol->Init(textureManager, L"asset/cursol.png");
-	cursol->SetPos(0.0f, 0.0f, 0.0f);
+	cursol->Init(textureManager, L"asset/UI/cursol.png");
+	cursol->SetPos(-200.0f, 0.0f, 0.0f);
 	cursol->SetSize(100.0f, 100.0f, 0.0f);
+
+	close = std::make_unique<Object>();
+	close->Init(textureManager, L"asset/UI/batten2.png");
+	close->SetPos(300.0f, 230.0f, 0.0f);
+	close->SetSize(75.0f, 75.0f, 0.0f);
 
 	if (framecount == 1) {
 		// 事前に読み込み
@@ -180,6 +190,10 @@ void TitleScene::InitAnimation() {
 	logo->SetColor(1.0f, 1.0f, 1.0f, logo->GetColor().w - 0.01f);
 	if (logo->GetColor().w <= 0) {
 		state = 1;
+		// BGM再生
+		g_Sound.RoadBGM(BGM01);
+		g_Sound.SetVolBGM(0.05f);
+		g_Sound.PlayBGM();
 	}
 }
 
@@ -295,13 +309,20 @@ void TitleScene::OptionSelect(Input* input) {
 	}
 	switch (select) {
 	case 0:
-		cursol->SetPos(100.0f, 100.0f, 0.0f);
+		cursol->SetPos(220.0f, 230.0f, 0.0f);
+		close->SetColor(1.0f, 0.0f, 0.0f,1.0f);
 		if (input->GetKeyTrigger(VK_RETURN))
 		{
 			state = 1;
 		}
 		break;
-	case 1: cursol->SetPos(-100.0f, 0.0f, 0.0f); break;
-	case 2: cursol->SetPos(-100.0f, -100.0f, 0.0f); break;
+	case 1: cursol->SetPos(-300.0f, 50.0f, 0.0f);
+			close->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+			g_Sound.SetVolBGM(sound_cursol[0]->Update(input));
+			break;
+	case 2: cursol->SetPos(-300.0f, -200.0f, 0.0f);
+			close->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+			g_Sound.SetVolSE(sound_cursol[1]->Update(input));
+			break;
 	}
 }

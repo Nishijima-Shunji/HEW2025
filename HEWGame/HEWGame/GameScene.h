@@ -15,11 +15,9 @@ class Game;
 class GameScene : public BaseScene
 {
 private:
-    //Light* light;
-
-    Object* game_bg;
-
     TextureManager* textureManager;
+
+    std::unique_ptr<Object> game_bg;
     std::vector<Object*> game_bg_list;  // オブジェクトのリスト
 
     int mapval = 0;
@@ -36,6 +34,7 @@ private:
 
     int state = 0;
     int score = 0;
+    bool deadFlg = false;
 
 public:
 
