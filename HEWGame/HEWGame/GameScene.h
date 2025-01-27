@@ -6,8 +6,8 @@
 
 #include "Light.h"
 #include "O2.h"
-//#define MAXTIME (600000)  //1分
-#define MAXTIME (10000)     //10秒
+#define MAXTIME (600000)  //1分
+//#define MAXTIME (10000)     //10秒
 
 const int MAP_HEIGHT = 18;
 const int MAP_WIDTH = 32;
@@ -17,6 +17,7 @@ class GameScene : public BaseScene
 private:
     TextureManager* textureManager;
 
+    std::unique_ptr<Object> road_bg;
     std::unique_ptr<Object> game_bg;
     std::vector<Object*> game_bg_list;  // オブジェクトのリスト
 
