@@ -194,7 +194,7 @@ void Light::Move()
 				//左に１マスずれる
 				Pos_Y -= 1;
 				//90度回転
-				angle -= 90;
+				angle += 90;
 				SetAngle(angle);
 			}
 			//それ以外なら
@@ -217,7 +217,7 @@ void Light::Move()
 				//右に１マスずれる
 				Pos_Y += 1;
 				//90度回転
-				angle += 90;
+				angle -= 90;
 				SetAngle(angle);
 			}
 			//それ以外なら
@@ -298,7 +298,7 @@ void Light::Move()
 				//１マス下がる
 				Pos_X += 1;
 				//90度回転
-				angle += 90;
+				angle -= 90;
 				SetAngle(angle);
 			}
 			//それ以外なら
@@ -350,7 +350,7 @@ void Light::Move()
 				//１マス下がる
 				Pos_X += 1;
 				//90度回転
-				angle -= 90;
+				angle += 90;
 				SetAngle(angle);
 			}
 			//それ以外なら
@@ -441,6 +441,8 @@ void Light::Flash()
 				if (Map[Pos_X][Pos_Y] == NOTHING || Map[Pos_X][Pos_Y] == SPACE) { Map[Pos_X][Pos_Y] = Luminous; }//発光
 				//ゴール
 				else if (Map[Pos_X][Pos_Y] == GOAL) {}
+				//プレイヤー
+				else if (Map[Pos_X][Pos_Y] == P_DIVER) { Map[Pos_X][Pos_Y] = Luminous; }
 				//サメ
 				else if (Map[Pos_X][Pos_Y] == E_SHARK) { Map[Pos_X][Pos_Y] = Luminous; }
 				//発光マス
@@ -501,6 +503,8 @@ void Light::Flash()
 				if (Map[Pos_X][Pos_Y] == NOTHING || Map[Pos_X][Pos_Y] == SPACE) { Map[Pos_X][Pos_Y] = Luminous; }//発光状態（20）に変える
 				//ゴール
 				else if (Map[Pos_X][Pos_Y] == GOAL) {}
+				//プレイヤー
+				else if (Map[Pos_X][Pos_Y] == P_DIVER) { Map[Pos_X][Pos_Y] = Luminous; }
 				//サメ
 				else if (Map[Pos_X][Pos_Y] == E_SHARK) { Map[Pos_X][Pos_Y] = Luminous; }
 				//発光マス

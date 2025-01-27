@@ -46,6 +46,8 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
 
     framecount++;
 
+    Map[X][Y] = P_DIVER;
+
     return Map;
     //原因↑返し値が代入されていない
 }
@@ -58,7 +60,7 @@ void Player::SetUp()//ステージ更新ごとに行う
             {   //プレイヤーを登録
 
                 MoveList[i][j] = P_DIVER;
-                Map[i][j] = NOTHING;
+                //Map[i][j] = NOTHING;
 
                 X = i;
                 Y = j;
