@@ -27,7 +27,6 @@ Sound::Sound()
 
 Sound::~Sound()
 {
-	ReleaseBGM();
 	Uninit();
 }
 
@@ -39,13 +38,6 @@ HRESULT Sound::Init()
 	DWORD  dwChunkSize;
 	DWORD  dwChunkPosition;
 	DWORD  filetype;
-
-	// COMの初期化
-	hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	if (FAILED(hr)) {
-		CoUninitialize();
-		return -1;
-	}
 
 	/**** Create XAudio2 ****/
 	hr = XAudio2Create(&m_pXAudio2, 0);		// 第二引数は､動作フラグ デバッグモードの指定(現在は未使用なので0にする)
@@ -114,13 +106,6 @@ HRESULT Sound::RoadBGM(SOUND_LABEL_BGM label)
 	DWORD  dwChunkSize;
 	DWORD  dwChunkPosition;
 	DWORD  filetype;
-
-	// COMの初期化
-	hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	if (FAILED(hr)) {
-		CoUninitialize();
-		return -1;
-	}
 
 	/**** Create XAudio2 ****/
 	hr = XAudio2Create(&m_pXAudio2, 0);		// 第二引数は､動作フラグ デバッグモードの指定(現在は未使用なので0にする)
@@ -199,9 +184,6 @@ void Sound::Uninit(void)
 	m_pMasteringVoice->DestroyVoice();
 
 	if (m_pXAudio2) m_pXAudio2->Release();
-
-	// COMの破棄
-	CoUninitialize();
 }
 
 void Sound::ReleaseBGM()
@@ -265,8 +247,6 @@ void Sound::PlaySE(SOUND_LABEL_SE label)
 
 void Sound::PlayBGM()
 {
-	//pSV_BGM = m_pSourceVoice_BGM;
-
 	if (pSV_BGM != nullptr)
 	{
 		pSV_BGM->DestroyVoice();
@@ -288,7 +268,7 @@ void Sound::PlayBGM()
 //=============================================================================
 void Sound::StopBGM()
 {
-	if (m_pSourceVoice_BGM == NULL) return;
+	if (m_pSourceVoice_BGM == nullptr) return;
 
 	XAUDIO2_VOICE_STATE xa2state;
 	m_pSourceVoice_BGM->GetState(&xa2state);
