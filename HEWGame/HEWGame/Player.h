@@ -25,6 +25,8 @@ private:
 	bool Horizontal;//…•½ˆÚ“®
 	bool Reverse;	//”½“]
 
+	bool aaa = true;
+
 	int MoveList[18][32];
 
 	int framecount;
