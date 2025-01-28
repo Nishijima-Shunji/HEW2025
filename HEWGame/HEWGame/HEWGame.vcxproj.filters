@@ -99,8 +99,13 @@
     <ClCompile Include="Camera.cpp">
       <Filter>その他</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
     <ClCompile Include="File.cpp">
       <Filter>その他</Filter>
+=======
+    <ClCompile Include="pauseButton.cpp">
+      <Filter>オブジェクト\ギミック</Filter>
+>>>>>>> Stashed changes
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,8 +199,13 @@
     <ClInclude Include="Camera.h">
       <Filter>その他</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
     <ClInclude Include="File.h">
       <Filter>その他</Filter>
+=======
+    <ClInclude Include="pauseButton.h">
+      <Filter>オブジェクト\ギミック</Filter>
+>>>>>>> Stashed changes
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
