@@ -88,7 +88,7 @@ GameScene::GameScene(int stage) {
 	setting = std::make_unique<Object>();
 	setting->Init(textureManager, L"asset/UI/sound_UI.png");
 	setting->SetPos(0.0f, 0.0f, 0.0f);
-	setting->SetSize(900.0f, 600.0f, 0.0f);
+	setting->SetSize(450.0f, 300.0f, 0.0f);
 
 	for (int i = 0; i < 2; i++) {
 		sound_cursol.emplace_back(std::make_unique<SoundCursol>());
