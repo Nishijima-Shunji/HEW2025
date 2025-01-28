@@ -9,25 +9,15 @@
 class Mendako : public Object
 {
 private:
-    float x, y;        // 実数座標（アニメーション用）
-    int targetX, targetY; // 移動先のマス座標
-    float speed;       // 移動速度
-
-
-
-	int X = 3;
-	int Y = 4;
-	int Goal_X = 5;
-	int Goal_Y = 8;
-	float deltaTime = 0.1f;
-
-	bool Vertical;	//垂直移動
-	bool Horizontal;//水平移動
-
-	int MoveList[18][32];
-
 	int framecount;
 	int animcount;
+	int state = 0;
+	int animTimer = 0;
+
+	enum AnimationState {
+		WAITING,       // 通常待機アニメーション
+		ANIM   // 特定のアニメーション
+	};
 
 public:
 

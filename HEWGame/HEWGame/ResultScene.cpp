@@ -40,13 +40,15 @@ ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setsc
 		scoreNum.back()->SetPos((i * 60.0f) + 380.0f, -250.0f, 0.0f);
 		scoreNum.back()->SetSize(60.0f, 60.0f, 0.0f);
 		scoreNum.back()->SetUV(0, 0);
-
+		
 		timeNum.emplace_back(std::make_unique<Object>());
 		timeNum.back()->Init(textureManager, L"asset/UI/num.png", 10, 1);	// 仮の画像を使用
 		timeNum.back()->SetPos((i * 60.0f) + 380.0f, 60.0f, 0.0f);
 		timeNum.back()->SetSize(60.0f, 60.0f, 0.0f);
 		timeNum.back()->SetUV(0, 0);
 	}
+	timeNum[2]->SetTexture(textureManager,L"asset/UI/:.png");
+
 	// 事前に読み込み
 	for (int i = 0; i < 300; i++) {
 		if (i % 5 == 0) {
@@ -59,6 +61,8 @@ ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setsc
 		}
 	}
 	Mscore = 3;
+	Score = 0;
+	// スコアをコピー
 	tempScore = Score;
 }
 
@@ -82,11 +86,13 @@ void ResultScene::Update() {
 	}
 	else if (state == 1) {
 		// 桁を右から順に1つずつ固定
-		if (scoreFixCounter % 8 == 0 && revealIndex < static_cast<int>(scoreNum.size())) {
-			int digit = tempScore % 10;  // 右端の桁を取得
-			tempScore /= 10;             // 次の桁へ
-			scoreNum[scoreNum.size() - 1 - revealIndex]->SetUV(digit, 0);
-			revealIndex++;
+		if ( scoreFixCounter > 0 + (Mscore * 50)) {
+			if (scoreFixCounter % 8 == 0 && revealIndex < static_cast<int>(scoreNum.size())) {
+				int digit = tempScore % 10;  // 右端の桁を取得
+				tempScore /= 10;             // 次の桁へ
+				scoreNum[scoreNum.size() - 1 - revealIndex]->SetUV(digit, 0);
+				revealIndex++;
+			}
 		}
 
 		// 確定した桁は固定し、未確定の桁は引き続きランダム表示
@@ -94,22 +100,65 @@ void ResultScene::Update() {
 			scoreNum[i]->SetUV(rand() % 10, 0);
 		}
 
+		DirectX::XMFLOAT3 offsetSize = { 2000.0f, 2000.0f, 0.0f };
+
+		if (mendakoSet < mendako.size()) {
+			mendako[mendakoSet]->SetSize(offsetSize.x - animtime * 100, offsetSize.y - animtime * 100, offsetSize.z);
+			if (mendako[mendakoSet]->GetSize().x < 175.0f) {
+				mendako[mendakoSet]->SetSize(175.0f, 175.0f, 0.0f);
+				mendakoSet++;
+				animtime = 0;
+			}
+		}
+		animtime++;
+
 		// 全桁確定後、次の状態へ
-		if (revealIndex >= static_cast<int>(scoreNum.size())) {
+		if (revealIndex >= static_cast<int>(scoreNum.size()) && mendakoSet == 3) {
 			state = 2;
 		}
 
 		scoreFixCounter++;  // 確定処理のカウントを進める
 	}
+	else if (state == 2) {
+		if (input.GetKeyTrigger(VK_SPACE) || input.GetButtonTrigger(VK_A)) {
+			state = 3;
+		}
+	}
+	else if (state == 3) {
+		float speed = 80.0f;
+		board->SetPos(board->GetPos().x + speed, board->GetPos().y, board->GetPos().z);
+		button->SetPos(button->GetPos().x + speed, button->GetPos().y, button->GetPos().z);
+		for (int i = 0; i < mendako.size(); i++) {
+			mendako[i]->SetPos(mendako[i]->GetPos().x + speed, mendako[i]->GetPos().y, mendako[i]->GetPos().z);
+		}
+		for (int i = 0; i < scoreNum.size(); i++) {
+			timeNum[i]->SetPos(timeNum[i]->GetPos().x + speed, timeNum[i]->GetPos().y, timeNum[i]->GetPos().z);
+			scoreNum[i]->SetPos(scoreNum[i]->GetPos().x + speed, scoreNum[i]->GetPos().y, scoreNum[i]->GetPos().z);
+		}
+		// 現在位置を取得
+		DirectX::XMFLOAT3 tmpPos = sensuikan->GetPos();
+
+		// 加速度を適用して速度を増加
+		velocityY += acceleration;
+
+		// 速度を適用して位置を更新
+		sensuikan->SetPos(tmpPos.x, tmpPos.y + velocityY, tmpPos.z);
+
+		// 上限チェック
+		if (sensuikan->GetPos().y > 1000.0f) {
+			SceneManager::ChangeScene(SceneManager::SELECT);
+			velocityY = 0.0f;  // シーン変更時に速度をリセット
+		}
+	}
 
 
 	// アニメーション
 	BgAnimation();
-	SensuikanAnimation();
-
-	if (input.GetKeyTrigger(VK_1) || input.GetButtonTrigger(VK_A)) {
-		SceneManager::ChangeScene(SceneManager::SELECT);
+	if (state < 3) {
+		SensuikanAnimation();
 	}
+
+
 	framecount++;
 	framecount = (framecount + 1) % 3600;
 }
@@ -119,14 +168,16 @@ void ResultScene::Draw() {
 	board->Draw();
 	sensuikan->Draw();
 	button->Draw();
-	for (int i = 0; i < Mscore; i++) {
-		mendako[i]->Draw();
-	}
 	for (auto& obj : scoreNum) {
 		obj->Draw();
 	}
 	for (auto& obj : timeNum) {
 		obj->Draw();
+	}
+	for (int i = 0; i < Mscore; i++) {
+		if (mendakoSet >= i && state > 0) {
+			mendako[i]->Draw();
+		}
 	}
 }
 

@@ -43,7 +43,7 @@ std::vector<std::vector<int>> Mendako::Update(std::vector<std::vector<int>> MapD
     Map = MapDate;
 
     // 待機アニメーション
-   // SetUV(animcount % 4 , (animcount / 4) % 2);
+    SetUV(animcount % 4 , (animcount / 4) % 2);
     if (framecount % 5 == 0) {
         animcount++;
     }

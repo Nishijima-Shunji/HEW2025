@@ -9,9 +9,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="camera.cpp">
-      <Filter>その他</Filter>
-    </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>その他</Filter>
     </ClCompile>
@@ -99,11 +96,11 @@
     <ClCompile Include="Game.cpp">
       <Filter>その他</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>その他</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="camera.h">
-      <Filter>その他</Filter>
-    </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>その他</Filter>
     </ClInclude>
@@ -190,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>シーン</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>その他</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

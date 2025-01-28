@@ -46,6 +46,8 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
 
     framecount++;
 
+    Map[X][Y] = P_DIVER;
+
     return Map;
     //原因↑返し値が代入されていない
 }
@@ -58,10 +60,12 @@ void Player::SetUp()//ステージ更新ごとに行う
             {   //プレイヤーを登録
 
                 MoveList[i][j] = P_DIVER;
-                Map[i][j] = NOTHING;
+                //Map[i][j] = NOTHING;
 
                 X = i;
                 Y = j;
+                targetX = pos.x;
+                targetY = pos.y;
             }
             else if (Map[i][j] == GOAL)
             {   //ゴールを登録
@@ -113,95 +117,121 @@ void Player::Move()
 {
     DirectX::XMFLOAT3 pos = GetPos();
 
-    //プレイヤーのマップ上の座標を計算
-    targetX = pos.x;
-    targetY = pos.y;
-    //ライトとの接触確認
-    //照射中
-    if (Map[X][Y] == Luminous)
+    if (targetX == pos.x && targetY == pos.y)//移動が完了した
     {
-        //ライト方向を確認
-        if (Map[X - 1][Y] == Luminous)
+        //ライトとの接触確認
+        //照射中
+        if (Map[X][Y] == Luminous)
         {
+            //上下マスの発光を確認
+            if (Map[X - 1][Y] == Luminous || Map[X + 1][Y] == Luminous)
+            {
+                Vertical = true;
+            }
+            else
+            {
+                Vertical = false;
+            }
+            //左右マスの発光を確認
+            if (Map[X][Y - 1] == Luminous || Map[X][Y + 1] == Luminous)
+            {
+                Horizontal = true;
+            }
+            else
+            {
+                Horizontal = false;
+            }
+
             //上下移動
-            Vertical = true;
-            Horizontal = false;
+            if (Vertical == true)
+            {
+                if (Map[X - 1][Y] != Luminous)      //上のマスが発光していない
+                {
+                    Reverse = false;
+                }
+                else if (Map[X + 1][Y] != Luminous) //下のマスが発光していない
+                {
+                    Reverse = true;
+                }
+
+                if (Reverse == false)
+                {
+                    targetY -= 30.0f;
+                    X += 1;
+                }
+                else if (Reverse == true)
+                {
+                    targetY += 30.0f;
+                    X -= 1;
+                }
+            }
+
+            //左右移動
+            if (Horizontal == true)
+            {
+                if (Map[X][Y - 1] != Luminous)      //左のマスが発光していない
+                {
+                    Reverse = false;
+                }
+                else if (Map[X][Y + 1] != Luminous) //右のマスが発光していない
+                {
+                    Reverse = true;
+                }
+                if (Reverse == false)
+                {
+                    targetX += 30.0f;
+                    Y += 1;
+                }
+                else if (Reverse == true)
+                {
+                    targetX -= 30.0f;
+                    Y -= 1;
+                }
+            }
+
         }
-        else if (Map[X + 1][Y] == Luminous)
-        {
-            //上下移動（上は壁）
-            Vertical = true;
-            Horizontal = false;
-        }
+        //非照射
         else
         {
-            //左右移動
             Vertical = false;
-            Horizontal = true;
-        }
-
-        //ゴールに近い方向へ移動
-        if (Vertical == true)
-        {
-            if (Goal_X > X) //ゴールより上にある
-            {
-                targetY -= 30.0f;
-                X += 1;
-            }
-            else if (Goal_X < X)//ゴールより下にある
-            {
-                targetY += 30.0f;
-                X -= 1;
-            }
-            else// ゴールと同じ高さ
-            {
-
-            }
-        }
-        else if (Horizontal == true)
-        {
-            if (Goal_Y > Y) //ゴールより左にある
-            {
-                targetX += 30.0f;
-                Y += 1;
-            }
-            else if (Goal_Y < Y)//ゴールより右にある
-            {
-                targetX -= 30.0f;
-                Y -= 1;
-            }
-            else// ゴールと同じ高さ
-            {
-
-            }
+            Horizontal = false;
+            Reverse = false;
         }
     }
-    //非照射
-    else
+    else//移動中
     {
-        Vertical = false;
-        Horizontal = false;
+        // 滑らかに目標座標へ移動
+        //目標座標より上に存在
+        if (pos.x < targetX)
+        {
+            pos.x += 1.0f;
+        }
+        //目標座標より下に存在
+        else if (pos.x > targetX)
+        {
+            pos.x -= 1.0f;
+        }
+        //目標座標より右に存在
+        else if (pos.y > targetY)
+        {
+            pos.y -= 1.0f;
+        }
+        //目標座標より左に存在
+        else if (pos.y < targetY)
+        {
+            pos.y += 1.0f;
+        }
+
+        SetPos(pos.x, pos.y, pos.z);
     }
 
-    Animation();
-}
 
-void Player::Animation()
-{
-    /*アニメーション*/
-     // 滑らかに目標座標へ移動
-    if (std::abs(pos.x - targetX) > 0.01f)
-        pos.x += (targetX - pos.x) * speed * deltaTime;
-    if (std::abs(pos.y - targetY) > 0.01f)
-        pos.y += (targetY - pos.y) * speed * deltaTime;
 
-    //SetPos(pos.x, pos.y, pos.z);
-    SetPos(targetX, targetY, pos.z);
 }
 
 void Player::DebugList()
 {
-    std::cout << "マップ更新" << std::endl;
+    std::cout << "マップ更新:Player" << std::endl;
     //デバッグ	マップ数値表示
     for (int i = 0; i < 18; i++) {
         for (int j = 0; j < 32; j++) {

@@ -1,69 +1,57 @@
-#include "camera.h"
+#include "Camera.h"
+#include <cmath>
 
-//カメラのポジション
-DirectX::XMFLOAT3 Camera_Pos = { 0.0f, 0.0f, 1.0f };
+Camera::Camera()
+{
+}
 
-//位置固定
-void SetCamera(float x, float y, float z)
+Camera::~Camera()
+{
+}
+
+void Camera::Update()
+{
+	if (count < move_count) {
+		Camera_Pos.x += Camera_Speed.x;
+		Camera_Pos.y += Camera_Speed.y;
+		Camera_Pos.z += Camera_Speed.z;
+	}
+
+	count++;
+}
+
+void Camera::SetCamera(float x, float y, float z)
 {
 	Camera_Pos.x = x;
 	Camera_Pos.y = y;
 	Camera_Pos.z = z;
 }
 
-//動かす
-void MoveCamera(int direction, float speed, float max)
+void Camera::MoveCamera(float x, float y, float z, int _count)
 {
-	switch (direction)
-	{
-	case C_UP:
-		if (Camera_Pos.y < max) {
-			Camera_Pos.y += speed;
-		}
-		else {
-			Camera_Pos.y = max;
-		}
-		break;
+	count = 0;
+	move_count = _count;
 
-	case C_DOWN:
-		if (Camera_Pos.y > max) {
-			Camera_Pos.y -= speed;
-		}
-		else {
-			Camera_Pos.y = max;
-		}
-		break;
+	float de;
 
-	case C_RIGHT:
-		if (Camera_Pos.x < max) {
-			Camera_Pos.x += speed;
-		}
-		else {
-			Camera_Pos.x = max;
-		}
-		break;
-
-	case C_LEFT:
-		if (Camera_Pos.x > max) {
-			Camera_Pos.x -= speed;
-		}
-		else {
-			Camera_Pos.x = max;
-		}
-		break;
+	if (x > Camera_Pos.x) {
+		Camera_Speed.x = abs(x - Camera_Pos.x) / _count;
 	}
-}
-
-//ズーム関連
-void ZoomUp(float speed)
-{
-	Camera_Pos.z += speed / 100.0f;
-	if (Camera_Pos.z < 0.1) {
-		Camera_Pos.z = 0.1;
+	else {
+		Camera_Speed.x = -abs(x - Camera_Pos.x) / _count;
 	}
-}
 
-void ZoomOut(float speed)
-{
-	Camera_Pos.z -= speed / 100.0f;
+	if (y > Camera_Pos.y) {
+		Camera_Speed.y = abs(y - Camera_Pos.y) / _count;
+	}
+	else {
+		Camera_Speed.y = -abs(y - Camera_Pos.y) / _count;
+	}
+
+	if (z > Camera_Pos.z) {
+		Camera_Speed.z = abs(z - Camera_Pos.z) / _count;
+	}
+	else {
+		Camera_Speed.z = -abs(z - Camera_Pos.z) / _count;
+	}
 }
