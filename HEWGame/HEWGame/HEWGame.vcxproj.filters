@@ -99,6 +99,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>その他</Filter>
     </ClCompile>
+    <ClCompile Include="File.cpp">
+      <Filter>その他</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -189,6 +192,9 @@
       <Filter>シーン</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>その他</Filter>
+    </ClInclude>
+    <ClInclude Include="File.h">
       <Filter>その他</Filter>
     </ClInclude>
   </ItemGroup>
