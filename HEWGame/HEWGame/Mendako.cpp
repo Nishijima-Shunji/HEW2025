@@ -9,11 +9,11 @@
 //	Include header files.
 //-----------------------------------------------------------------------------
 #include "Mendako.h"
-
+#include "Input.h"
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
 //-----------------------------------------------------------------------------
-
+extern Input input;
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -35,22 +35,74 @@
 
 void Mendako::Init()
 {
-
+    menAlive = true;
 }
 
 std::vector<std::vector<int>> Mendako::Update(std::vector<std::vector<int>> MapDate)
 {
-    Map = MapDate;
 
+    Map = MapDate;
+    if (input.GetKeyTrigger(VK_B))
+    {
+        Map[1][1] = P_DIVER;
+    }
+    if (Map[PosY][PosX] == P_DIVER)
+    {
+        Men_hit = true;
+       
+    }
+    if (Men_hit)
+    {
+        Catch();
+    }
     // 待機アニメーション
-    SetUV(animcount % 4 , (animcount / 4) % 2);
+
+    SetUV(animcount % 4, (animcount / 4) % 2);
     if (framecount % 5 == 0) {
         animcount++;
     }
 
     framecount++;
-
     return Map;
+}
+
+
+void Mendako::Catch()
+{
+    if (frameCounter % 2 == 0) 
+    {
+        if (size.x > 0)
+        {
+            
+            angle += 10.0f;
+            size.x -= 1.0f;
+            size.y -= 1.0f;
+        }
+        else
+        {
+            menAlive = false;
+           
+
+        }
+    }
+    frameCounter++;
+
+    if (!menAlive) {
+        Mendako_C++;
+        menAlive = true;
+        Men_hit = false;
+    }
+   
+}
+
+
+
+
+
+
+void Mendako::Uninit()
+{
+
 }
 
 //******************************************************************************
