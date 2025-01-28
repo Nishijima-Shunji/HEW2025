@@ -24,6 +24,7 @@ private:
     int nextStage = 1;
 
     int loadstate = 0;
+    int state = 0;
 
     bool move = false;
 

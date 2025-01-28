@@ -6,6 +6,9 @@
 
 #include "Light.h"
 #include "O2.h"
+#include "Cursol.h"
+#include "SoundCursol.h"
+
 #define MAXTIME (600000)  //1分
 //#define MAXTIME (10000)     //10秒
 
@@ -17,7 +20,6 @@ class GameScene : public BaseScene
 private:
     TextureManager* textureManager;
 
-    std::unique_ptr<Object> road_bg;
     std::unique_ptr<Object> game_bg;
     std::vector<Object*> game_bg_list;  // オブジェクトのリスト
 
@@ -27,8 +29,12 @@ private:
 
     std::vector<std::unique_ptr<O2>> cylinder;
     std::vector<std::unique_ptr<O2>> o2;
-
-    //std::vector<std::vector<int>> maplist;
+    std::unique_ptr<Object> pause;
+    std::vector<std::unique_ptr<Object>> button;
+    std::unique_ptr<Object> setting;
+    std::vector<std::unique_ptr<SoundCursol>> sound_cursol;
+    std::unique_ptr<Cursol> cursol;
+    std::unique_ptr<Object> close;
 
     int WidthMAX = 0;
     int HeightMAX = 0;
@@ -36,6 +42,17 @@ private:
     int state = 0;
     int score = 0;
     bool deadFlg = false;
+    int framecount = 0;
+
+    struct ButtonParams {
+        float amplitude;  // 揺れの大きさ
+        float frequency;  // 揺れの速さ
+        float phase;      // ランダムな位相
+    };
+    // ボタンごとの揺れパラメータを格納する配列
+    ButtonParams buttonParams[3];
+
+    DirectX::XMFLOAT3 c_pos;
 
 public:
 
@@ -49,8 +66,12 @@ public:
     std::unique_ptr<Object> CreateObject(int objectType, TextureManager* textureManager);
     std::unique_ptr<Object> DeleteObject(int objectType, TextureManager* textureManager);
 
-    void GetMapSize();
+    void MapUpdate();
+    void PauseSelect(Input* input);
+    void PauseAnimation();
 
     void o2Gauge(std::chrono::milliseconds time);
+
+    void OptionSelect(Input*);
 };
 

@@ -12,10 +12,8 @@ StageSelectScene::StageSelectScene() {
 	select_bg->SetAngle(0.0f);						//角度を設定
 	select_bg->SetColor(1.0f, 1.0f, 1.0f, 1.0f);	//色を設定
 
-	//load_bg = std::make_unique<Object>();
-	//load_bg->Init(textureManager, L"asset/loadbg.png", 1, 1);
-	//load_bg->SetPos(0.0f, 0.0f, 0.0f);			//位置を設定
-	//load_bg->SetSize(0.0f, 0.0f, 0.0f);			//大きさを設定
+	load_bg = std::make_unique<Object>();
+	load_bg->Init(textureManager, L"asset/loadbg.png");
 
 	// 事前に読み込み
 	for (int i = 0; i < 300; i++) {
@@ -27,6 +25,16 @@ StageSelectScene::StageSelectScene() {
 			texturePath += L".png";
 			select_bg->SetTexture(textureManager, texturePath.c_str());
 		}
+	}
+	for (int i = 0; i < 60; i++) {
+		//std::wstring texturePath = L"asset/stage_night_6fps/stage_hight_re_";
+		std::wstring texturePath = L"asset/コンポ 1/コンポ 1_";
+		std::wstring pathindex = L"000" + std::to_wstring(i);	// 3桁に調整   
+		pathindex = pathindex.substr(pathindex.size() - 3);  // 最後の3桁のみを使用
+		texturePath += pathindex;
+		//texturePath += L".png";
+		texturePath += L".jpg";
+		select_bg->SetTexture(textureManager, texturePath.c_str());
 	}
 	// ステージのアイコン画像を生成
 	for (int i = 0; i < 4; i++) {
@@ -166,9 +174,11 @@ void StageSelectScene::Load() {
 		}
 		if (nextStage == 5) {
 			sensuikan->SetPos(-1200.0f, -400.0f, 0.0f);
+			state = 1;
 		}
 		else if (nextStage == 4) {
 			sensuikan->SetPos(1200.0f, -400.0f, 0.0f);
+			state = 0;
 		}
 		loadstate = 2;
 	}
@@ -189,11 +199,11 @@ void StageSelectScene::Load() {
 			obj->Update();
 		}
 		bubble.erase(std::remove_if(bubble.begin(), bubble.end(),
-			[](const std::unique_ptr<Bubble>& bubble) { return bubble->GetPosY() > 800.0f; }), 
+			[](const std::unique_ptr<Bubble>& bubble) { return bubble->GetPosY() > 800.0f; }),
 			bubble.end());
 
 		if (loadstate == 5) {
-			if (framecount == 170) {
+			if (framecount == 250) {
 				// 現在位置の番号ステージでゲームシーン読み込み
 				SceneManager::ChangeScene(SceneManager::GAME, nowStage);
 			}
@@ -221,16 +231,34 @@ void StageSelectScene::Select() {
 
 void StageSelectScene::BG_Animation() {
 	// 一応アニメーションなるけど重すぎるため5フレームごとに
-	if (framecount % 1 == 0) {
-		int textureIndex = (framecount / 1) % 300;  // 0 から 299 の範囲にリマップ
-		// 仮で5フレーム毎のアニメーションに
-		if (textureIndex % 5 == 0) {
-			// 現在のアニメーションに対応するパスに組み合わせる
-			std::wstring texturePath = L"asset/stage_select2/stage_select 2_";
+	if (state == 0) {
+
+		if (framecount % 1 == 0) {
+			int textureIndex = (framecount / 1) % 300;  // 0 から 299 の範囲にリマップ
+			// 仮で5フレーム毎のアニメーションに
+			if (textureIndex % 5 == 0) {
+				// 現在のアニメーションに対応するパスに組み合わせる
+				std::wstring texturePath = L"asset/stage_select2/stage_select 2_";
+				std::wstring pathindex = L"000" + std::to_wstring(textureIndex);	// 3桁に調整   
+				pathindex = pathindex.substr(pathindex.size() - 3);  // 最後の3桁のみを使用
+				texturePath += pathindex;
+				texturePath += L".png";
+				select_bg->SetTexture(textureManager, texturePath.c_str());
+			}
+		}
+	}
+	if (state == 1) {
+		if (framecount % 5 == 0) {
+			int textureIndex = (framecount / 5) % (60);  // 0 から 299 の範囲にリマップ
+			// 仮で5フレーム毎のアニメーションに
+				// 現在のアニメーションに対応するパスに組み合わせる
+			//std::wstring texturePath = L"asset/stage_night_6fps/stage_hight_re_";
+			std::wstring texturePath = L"asset/コンポ 1/コンポ 1_";
 			std::wstring pathindex = L"000" + std::to_wstring(textureIndex);	// 3桁に調整   
 			pathindex = pathindex.substr(pathindex.size() - 3);  // 最後の3桁のみを使用
 			texturePath += pathindex;
-			texturePath += L".png";
+			//texturePath += L".png";
+			texturePath += L".jpg";
 			select_bg->SetTexture(textureManager, texturePath.c_str());
 		}
 	}
