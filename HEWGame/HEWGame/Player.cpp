@@ -51,8 +51,6 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
 
     framecount++;
 
-    Map[X][Y] = P_DIVER;
-
     return Map;
 }
 
@@ -64,7 +62,7 @@ void Player::SetUp()//ステージ更新ごとに行う
             {   //プレイヤーを登録
 
                 MoveList[i][j] = P_DIVER;
-                //Map[i][j] = NOTHING;
+                Map[i][j] = NOTHING;
 
                 X = i;
                 Y = j;
@@ -121,6 +119,11 @@ void Player::Move()
 {
     DirectX::XMFLOAT3 pos = GetPos();
 
+    if (Map[X][Y] == GOAL)
+    {
+
+    }
+    
     if (targetX == pos.x && targetY == pos.y)//移動が完了した
     {
         //ライトとの接触確認
@@ -149,11 +152,11 @@ void Player::Move()
             //上下移動
             if (Vertical == true)
             {
-                if (Map[X - 1][Y] != Luminous)      //上のマスが発光していない
+                if (Map[X - 1][Y] != Luminous && Map[X - 1][Y] != GOAL)      //上のマスが発光していない
                 {
                     Reverse = false;
                 }
-                else if (Map[X + 1][Y] != Luminous) //下のマスが発光していない
+                else if (Map[X + 1][Y] != Luminous && Map[X + 1][Y] != GOAL) //下のマスが発光していない
                 {
                     Reverse = true;
                 }
@@ -173,11 +176,11 @@ void Player::Move()
             //左右移動
             if (Horizontal == true)
             {
-                if (Map[X][Y - 1] != Luminous)      //左のマスが発光していない
+                if (Map[X][Y - 1] != Luminous && Map[X][Y - 1] != GOAL)      //左のマスが発光していない
                 {
                     Reverse = false;
                 }
-                else if (Map[X][Y + 1] != Luminous) //右のマスが発光していない
+                else if (Map[X][Y + 1] != Luminous && Map[X][Y + 1] != GOAL) //右のマスが発光していない
                 {
                     Reverse = true;
                 }
@@ -229,9 +232,6 @@ void Player::Move()
 
         SetPos(pos.x, pos.y, pos.z);
     }
-
-
-
 }
 
 void Player::DebugList()
