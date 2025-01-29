@@ -69,7 +69,7 @@ void Player::SetUp()//ステージ更新ごとに行う
                 X = i;
                 Y = j;
                 targetX = pos.x;
-                targetY = pos.y;    //更新前のデータが戻ってる
+                targetY = pos.y;
             }
             else if (Map[i][j] == GOAL)
             {   //ゴールを登録
@@ -201,6 +201,7 @@ void Player::Move()
             Horizontal = false;
             Reverse = false;
         }
+
     }
     else//移動中
     {

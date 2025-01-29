@@ -428,6 +428,7 @@ void Light::Flash()
 	//DebugMap();
 	if (LightOn == true)
 	{
+		Stop = false;
 		//è„
 		if (Direction == 0)
 		{
