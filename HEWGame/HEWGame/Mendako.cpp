@@ -49,7 +49,6 @@ std::vector<std::vector<int>> Mendako::Update(std::vector<std::vector<int>> MapD
     if (Map[PosY][PosX] == P_DIVER)
     {
         Men_hit = true;
-       
     }
     if (Men_hit)
     {

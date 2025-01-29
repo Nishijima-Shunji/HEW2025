@@ -11,19 +11,13 @@ private:
 	bool movingToTarget = false;
 	bool moveX;
 	bool moveY;
-	bool lightX = false;
-	bool lightY = false;
+	bool prevlight = false;
 	int nextPosX;
 	int nextPosY;
+	int direction = 0;
+	bool inLight = false;
 	bool hasFoundLightBefore = false;  // 一度でもライトを見つけたか
 	bool hasReachedTarget = false;		// 到着フラグ
-	bool movingUp = true;
-	int prevObj = 0;
-	bool hasStoredPrevTile;
-	bool moveRight = false;
-	bool moveLeft = false;
-	bool moveUp = false;
-	bool moveDown = false;
 	int framecount;
 	int animcount;
 

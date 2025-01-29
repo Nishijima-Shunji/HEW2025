@@ -20,7 +20,7 @@ std::chrono::high_resolution_clock::time_point start;
 // textureMappingの初期化
 	//マップからオブジェクトを生成する際に参照するキー
 static std::unordered_map<int, std::wstring> textureMapping = {
-	{0, L"asset/S_Water.png"},		//無
+	{0, L"asset/Water.png"},		//無
 	{1, L"asset/Wall.png"},			//壁
 	{2, L"asset/survivor3.png"},	//プレイヤー
 	{3, L"asset/shake1.png"},		//敵
@@ -148,6 +148,7 @@ void GameScene::Update() {
 		start = std::chrono::high_resolution_clock::now();
 		g_Sound.RoadBGM(BGM01);
 		g_Sound.PlayBGM();
+		g_Sound.SetVolBGM(0.0f);
 		state = 1;
 	}
 	else if (state == 1) {
@@ -301,13 +302,13 @@ void GameScene::LoadMapData(int stage) {
 				}
 			}
 			// 最初に見えるオブジェクトの上以外に暗闇を配置
-			if (maplist[i][j] != 2 && maplist[i][j] != 3 && maplist[i][j] != 4 && maplist[i][j] != 5 && maplist[i][j] != 11 && maplist[i][j] != 12 && maplist[i][j] != -9) {
+			/*if (maplist[i][j] != 2 && maplist[i][j] != 3 && maplist[i][j] != 4 && maplist[i][j] != 5 && maplist[i][j] != 11 && maplist[i][j] != 12 && maplist[i][j] != -9) {
 				darknessObj.emplace_back(std::make_unique<Darkness>());
 				darknessObj.back()->Init(textureManager, L"asset/S_Darkness.png");
 				darknessObj.back()->SetPos(j * 30.0f, i * -30.0f, 0.0f);
 				darknessObj.back()->SetSize(30.0f, 30.0f, 0.0f);
 				darknessObj.back()->SetXY(j, i);
-			}
+			}*/
 		}
 	}
 }
