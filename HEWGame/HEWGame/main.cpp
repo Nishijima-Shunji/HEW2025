@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------------
 #include <Windows.h>
 #include "Game.h"
-#include <fstream>
+#include "File.h"
 
 //-----------------------------------------------------------------------------
 // マクロの定義
@@ -176,8 +176,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 	}
 	//ゲーム終了
 	_pGame->Uninit();
-
-
+	ResetFile();
 
 	UnregisterClass(CLASS_NAME, hInstance);
 

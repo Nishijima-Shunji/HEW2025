@@ -35,6 +35,8 @@ private:
 
     int state = 0;
     int score = 0;
+    int stage = 0;
+    int mendako = 0;
     bool deadFlg = false;
 
 public:
@@ -45,7 +47,7 @@ public:
     void Update() override;
     void Draw() override;
 
-    void LoadMapData(int stage);
+    void LoadMapData(const int _stage);
     std::unique_ptr<Object> CreateObject(int objectType, TextureManager* textureManager);
     std::unique_ptr<Object> DeleteObject(int objectType, TextureManager* textureManager);
 

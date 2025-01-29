@@ -12,6 +12,7 @@
 #include "Mendako.h"
 #include "Onikinme.h"
 #include "Trap.h"
+#include "File.h"
 
 // ステージの経過時間計測用変数
 std::chrono::high_resolution_clock::time_point start;
@@ -37,7 +38,10 @@ static std::unordered_map<int, std::wstring> textureMapping = {
 	{20, L"asset/S_Lumine.png"}		//光マス
 };
 
-GameScene::GameScene(int stage) {
+GameScene::GameScene(const int _stage) {
+	//ステージ番号を保存
+	stage = _stage;
+
 	textureManager = new TextureManager(g_pDevice);
 	// ステージ選択で選んだ番号のマップデータをロード
 	LoadMapData(stage);
@@ -69,6 +73,9 @@ GameScene::GameScene(int stage) {
 }
 
 GameScene::~GameScene() {
+	//データの保存
+	SaveFile(stage, mendako);
+
 	// mapdataのリソースを解放
 	for (auto& row : mapdata) {
 		for (auto& obj : row) {
