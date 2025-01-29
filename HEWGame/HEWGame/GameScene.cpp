@@ -48,6 +48,9 @@ GameScene::GameScene(const int _stage) {
 	// ステージに合わせてズーム(今はステージ2に合わせてるだけ)
 	g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
 
+	Mendako_e = std::make_unique<Object>();
+	Mendako_e->Init(textureManager, L"asset/mendako2.png",6,1);
+
 	game_bg = std::make_unique<Object>();
 	if (stage <= 4) {
 		game_bg->Init(textureManager, L"asset/BackGround1.png");
@@ -189,6 +192,45 @@ void GameScene::Update() {
 				}
 			}
 		}
+		// メンダコアニメーションの処理
+		if (!mendakoAnime_g && menGk) { // アニメーションが進行中でなく、menGk が true の場合に実行
+			for (auto& obj : characterObj) {
+				Mendako* mendako = dynamic_cast<Mendako*>(obj.get()); // characterObj の要素を Mendako 型にキャスト
+				if (mendako) {  // dynamic_cast が成功した場合のみ処理
+					menFg = mendako->GetFg_men(); // Mendako のフラグを取得
+
+					if (menFg) { // menFg が true の場合、アニメーションを開始しない
+						menGk = true;
+						break;
+					}
+
+					if (menFg != true) { // menFg が false の場合、アニメーションを開始
+						e_pos = mendako->GetPos(); // Mendako の位置を取得
+						mendakoAnime_g = true; // アニメーションを開始
+
+						// Mendako_e のサイズと色を設定
+						Mendako_e->SetSize(80.0f, 80.0f, 0.0f);
+						Mendako_e->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+						menGk = false; // アニメーション開始後、menGk を false にする
+						break;
+					}
+				}
+			}
+		}
+		// メンダコアニメーション実行処理
+		if (mendakoAnime_g) { // アニメーションが進行中の場合
+			Mendako_e->SetPos(e_pos.x, e_pos.y, 0.0f); // 位置を設定
+			if (men_Ac % 3 == 0) { // フレームごとに UV 座標を変更
+				Mendako_e->SetUV(men_Ac / 3 - 1, 0);
+			}
+			if (men_Ac > 19) { // アニメーションが19フレームを超えたら終了
+				men_Ac = 0;
+				mendakoAnime_g = false;
+			}
+			men_Ac++; // フレームカウントを増加
+		}
+
 
 		// ポーズ(仮キー)
 		if (input.GetKeyTrigger(VK_P)) {
@@ -214,6 +256,8 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	// 背景
 	game_bg->Draw();
+	
+
 	for (const auto& row : mapdata) {
 		for (const auto& obj : row) {
 			if (obj) {
@@ -221,6 +265,7 @@ void GameScene::Draw() {
 			}
 		}
 	}
+	
 	for (const auto& obj : characterObj) {
 
 		obj->Draw();
@@ -236,6 +281,9 @@ void GameScene::Draw() {
 	}
 	for (const auto& obj : cylinder) {
 		obj->Draw();
+	}
+	if (mendakoAnime_g) {
+		Mendako_e->Draw();
 	}
 
 	if (state >= 2) {
