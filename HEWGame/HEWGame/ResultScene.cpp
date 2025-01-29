@@ -1,5 +1,6 @@
 #include "ResultScene.h"
 #include "Game.h"
+#include "camera.h"
 
 ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setscore), Mscore(setMscore), timescore(settime) {
 	textureManager = new TextureManager(g_pDevice);
@@ -26,12 +27,11 @@ ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setsc
 
 	for (int i = 0; i < 3; i++) {
 		mendako.emplace_back(std::make_unique<Object>());
-		mendako[i]->Init(textureManager, L"asset/UI/mendako2.png");
-		mendako[i]->SetPos((i * 185.0f) + 215.0f, -98.5f, 0.0f);         // 位置を設定
+		mendako[i]->Init(textureManager, L"asset/UI/mendako2-02.png");
+		mendako[i]->SetPos((i * 185.0f) + 215.0f, -97.0f, 0.0f);         // 位置を設定
 		mendako[i]->SetSize(175.0f, 175.0f, 0.0f);  // 大きさを設定
 	}
-	mendako[1]->SetPos(402.0f, -98.5f, 0.0f);
-
+	mendako[1]->SetPos(402.0f, -97.0f, 0.0f);
 
 	for (int i = 0; i < 5; i++) {
 		// UIの生成
@@ -40,14 +40,14 @@ ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setsc
 		scoreNum.back()->SetPos((i * 60.0f) + 380.0f, -250.0f, 0.0f);
 		scoreNum.back()->SetSize(60.0f, 60.0f, 0.0f);
 		scoreNum.back()->SetUV(0, 0);
-		
+
 		timeNum.emplace_back(std::make_unique<Object>());
 		timeNum.back()->Init(textureManager, L"asset/UI/num.png", 10, 1);	// 仮の画像を使用
 		timeNum.back()->SetPos((i * 60.0f) + 380.0f, 60.0f, 0.0f);
 		timeNum.back()->SetSize(60.0f, 60.0f, 0.0f);
 		timeNum.back()->SetUV(0, 0);
 	}
-	timeNum[2]->SetTexture(textureManager,L"asset/UI/:.png");
+	//timeNum[2]->SetTexture(textureManager,L"asset/UI/:.png");
 
 	// 事前に読み込み
 	for (int i = 0; i < 300; i++) {
@@ -60,10 +60,12 @@ ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setsc
 			result_bg->SetTexture(textureManager, texturePath.c_str());
 		}
 	}
-	Mscore = 3;
-	Score = 0;
+	Mscore = 2;
+	Score = 5290;
 	// スコアをコピー
 	tempScore = Score;
+
+	g_Camera.SetCamera(0.0f, 0.0f, 1.0f);
 }
 
 ResultScene::~ResultScene() {
@@ -73,86 +75,36 @@ ResultScene::~ResultScene() {
 void ResultScene::Update() {
 	input.Update();
 
+	// =====数字をランダムに変える=====
 	if (state == 0) {
-		// 数字を高速で回す
-		for (int i = 0; i < 5; i++) {
-			scoreNum[i]->SetUV(rand() % 10, 0);
-		}
-		if (framecount == 100) {
-			state = 1;          // スコア確定へ移行
-			revealIndex = 0;    // 桁の表示開始位置
-			scoreFixCounter = 0; // スコア確定用の新しいカウンター
-		}
+		// スコアの未確定アニメーション
+		randomNum();
 	}
+	// =====数字をランダムに変える=====
 	else if (state == 1) {
-		// 桁を右から順に1つずつ固定
-		if ( scoreFixCounter > 0 + (Mscore * 50)) {
-			if (scoreFixCounter % 8 == 0 && revealIndex < static_cast<int>(scoreNum.size())) {
-				int digit = tempScore % 10;  // 右端の桁を取得
-				tempScore /= 10;             // 次の桁へ
-				scoreNum[scoreNum.size() - 1 - revealIndex]->SetUV(digit, 0);
-				revealIndex++;
-			}
-		}
-
-		// 確定した桁は固定し、未確定の桁は引き続きランダム表示
-		for (int i = 0; i < static_cast<int>(scoreNum.size()) - revealIndex; i++) {
-			scoreNum[i]->SetUV(rand() % 10, 0);
-		}
-
-		DirectX::XMFLOAT3 offsetSize = { 2000.0f, 2000.0f, 0.0f };
-
-		if (mendakoSet < mendako.size()) {
-			mendako[mendakoSet]->SetSize(offsetSize.x - animtime * 100, offsetSize.y - animtime * 100, offsetSize.z);
-			if (mendako[mendakoSet]->GetSize().x < 175.0f) {
-				mendako[mendakoSet]->SetSize(175.0f, 175.0f, 0.0f);
-				mendakoSet++;
-				animtime = 0;
-			}
-		}
+		// メンダコの取得数表示
+		MendakoConfirmed();
+		// スコアの固定
+		NumConfirmed();
+		
+		// メンダコのアニメーション用
 		animtime++;
-
-		// 全桁確定後、次の状態へ
-		if (revealIndex >= static_cast<int>(scoreNum.size()) && mendakoSet == 3) {
-			state = 2;
-		}
-
-		scoreFixCounter++;  // 確定処理のカウントを進める
+		// 確定処理のカウントを進める
+		scoreFixCounter++;  
 	}
+	// =====ボタン入力受付=====
 	else if (state == 2) {
 		if (input.GetKeyTrigger(VK_SPACE) || input.GetButtonTrigger(VK_A)) {
 			state = 3;
 		}
 	}
+	// =====ボタン押された後のアニメーション=====
 	else if (state == 3) {
-		float speed = 80.0f;
-		board->SetPos(board->GetPos().x + speed, board->GetPos().y, board->GetPos().z);
-		button->SetPos(button->GetPos().x + speed, button->GetPos().y, button->GetPos().z);
-		for (int i = 0; i < mendako.size(); i++) {
-			mendako[i]->SetPos(mendako[i]->GetPos().x + speed, mendako[i]->GetPos().y, mendako[i]->GetPos().z);
-		}
-		for (int i = 0; i < scoreNum.size(); i++) {
-			timeNum[i]->SetPos(timeNum[i]->GetPos().x + speed, timeNum[i]->GetPos().y, timeNum[i]->GetPos().z);
-			scoreNum[i]->SetPos(scoreNum[i]->GetPos().x + speed, scoreNum[i]->GetPos().y, scoreNum[i]->GetPos().z);
-		}
-		// 現在位置を取得
-		DirectX::XMFLOAT3 tmpPos = sensuikan->GetPos();
-
-		// 加速度を適用して速度を増加
-		velocityY += acceleration;
-
-		// 速度を適用して位置を更新
-		sensuikan->SetPos(tmpPos.x, tmpPos.y + velocityY, tmpPos.z);
-
-		// 上限チェック
-		if (sensuikan->GetPos().y > 1000.0f) {
-			SceneManager::ChangeScene(SceneManager::SELECT);
-			velocityY = 0.0f;  // シーン変更時に速度をリセット
-		}
+		// シーン切り替え前のアニメーション
+		SensuikanExit();
 	}
 
-
-	// アニメーション
+	// 背景アニメーション
 	BgAnimation();
 	if (state < 3) {
 		SensuikanAnimation();
@@ -167,7 +119,9 @@ void ResultScene::Draw() {
 	result_bg->Draw();
 	board->Draw();
 	sensuikan->Draw();
-	button->Draw();
+	if (mendakoSet > 0) {
+		button->Draw();
+	}
 	for (auto& obj : scoreNum) {
 		obj->Draw();
 	}
@@ -178,6 +132,81 @@ void ResultScene::Draw() {
 		if (mendakoSet >= i && state > 0) {
 			mendako[i]->Draw();
 		}
+	}
+}
+
+void ResultScene::randomNum() {
+	// 数字を高速で回す
+	for (int i = 0; i < 5; i++) {
+		scoreNum[i]->SetUV(rand() % 10, 0);
+	}
+	if (framecount == 100) {
+		state = 1;          // スコア確定へ移行
+		revealIndex = 0;    // 桁の表示開始位置
+		scoreFixCounter = 0; // スコア確定用の新しいカウンター
+	}
+}
+
+void ResultScene::NumConfirmed() {
+	// 桁を右から順に1つずつ固定
+	if (scoreFixCounter > 0 + (Mscore * 50)) {
+		if (scoreFixCounter % 8 == 0 && revealIndex < static_cast<int>(scoreNum.size())) {
+			int digit = tempScore % 10;  // 右端の桁を取得
+			tempScore /= 10;             // 次の桁へ
+			scoreNum[scoreNum.size() - 1 - revealIndex]->SetUV(digit, 0);
+			revealIndex++;
+		}
+	}
+
+	// 確定した桁は固定し、未確定の桁は引き続きランダム表示
+	for (int i = 0; i < static_cast<int>(scoreNum.size()) - revealIndex; i++) {
+		scoreNum[i]->SetUV(rand() % 10, 0);
+	}
+}
+
+void ResultScene::MendakoConfirmed() {
+	DirectX::XMFLOAT3 offsetSize = { 2000.0f, 2000.0f, 0.0f };
+	if (mendakoSet < mendako.size()) {
+		mendako[mendakoSet]->SetSize(offsetSize.x - animtime * 100, offsetSize.y - animtime * 100, offsetSize.z);
+		if (mendako[mendakoSet]->GetSize().x < 175.0f) {
+			mendako[mendakoSet]->SetSize(175.0f, 175.0f, 0.0f);
+			mendakoSet++;
+			animtime = 0;
+		}
+	}
+	// 全桁確定後、次の状態へ
+	if (revealIndex >= static_cast<int>(scoreNum.size()) && mendakoSet == 3) {
+		state = 2;
+	}
+}
+
+void ResultScene::SensuikanExit() {
+	// 潜水艦以外を右へ送る
+	float speed = 80.0f;
+	board->SetPos(board->GetPos().x + speed, board->GetPos().y, board->GetPos().z);
+	button->SetPos(button->GetPos().x + speed, button->GetPos().y, button->GetPos().z);
+	for (int i = 0; i < mendako.size(); i++) {
+		mendako[i]->SetPos(mendako[i]->GetPos().x + speed, mendako[i]->GetPos().y, mendako[i]->GetPos().z);
+	}
+	for (int i = 0; i < scoreNum.size(); i++) {
+		timeNum[i]->SetPos(timeNum[i]->GetPos().x + speed, timeNum[i]->GetPos().y, timeNum[i]->GetPos().z);
+		scoreNum[i]->SetPos(scoreNum[i]->GetPos().x + speed, scoreNum[i]->GetPos().y, scoreNum[i]->GetPos().z);
+	}
+
+	// 潜水艦を浮上させる
+	// 現在位置を取得
+	DirectX::XMFLOAT3 tmpPos = sensuikan->GetPos();
+
+	// 加速度を適用して速度を増加
+	velocityY += acceleration;
+
+	// 位置を更新
+	sensuikan->SetPos(tmpPos.x, tmpPos.y + velocityY, tmpPos.z);
+
+	// 画面外チェック
+	if (sensuikan->GetPos().y > 1000.0f) {
+		SceneManager::ChangeScene(SceneManager::SELECT);
+		velocityY = 0.0f;  // シーン変更時に速度をリセット
 	}
 }
 

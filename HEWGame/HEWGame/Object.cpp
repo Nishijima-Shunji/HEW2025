@@ -105,6 +105,8 @@ void Object::Draw() {
 	// 頂点カラーのデータを作成
 	cb.color = color;
 
+	cb.applyBlur = shouldApplyBlur; // shouldApplyBlur はObjectの状態に基づくフラグ
+
 	// シェーダーに定数バッファを送信
 	g_pDeviceContext->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb, 0, 0);
 

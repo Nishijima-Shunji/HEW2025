@@ -56,7 +56,9 @@ protected:
 	ID3D11Buffer* m_pVertexBuffer = nullptr;
 
 	ID3D11ShaderResourceView* m_pTextureView = nullptr;
-	
+
+	// 他のメンバー変数
+	bool shouldApplyBlur;  // ぼやけ効果を適用するかどうかを決めるフラグ
 
 	//テクスチャが縦横に何分割されているか
 	int splitX = 1;
@@ -97,6 +99,7 @@ public:
 	void SetUV(int u, int v);
 	void SetDirection(int);
 	void SetXY(int, int);
+	void SetShouldApplyBlur(bool set) { shouldApplyBlur = set; };
 
 	std::vector<std::vector<int>> GetMap(std::vector<std::vector<int>>);
 

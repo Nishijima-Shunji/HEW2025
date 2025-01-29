@@ -34,7 +34,12 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
 {
     Map = MapData;
 
-    SetUp();
+    if (aaa == true)
+    {
+        SetUp();
+        aaa = false;
+    }
+
 
     Move();
 
@@ -49,7 +54,6 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
     Map[X][Y] = P_DIVER;
 
     return Map;
-    //原因↑返し値が代入されていない
 }
 
 void Player::SetUp()//ステージ更新ごとに行う
@@ -65,7 +69,7 @@ void Player::SetUp()//ステージ更新ごとに行う
                 X = i;
                 Y = j;
                 targetX = pos.x;
-                targetY = pos.y;
+                targetY = pos.y;    //更新前のデータが戻ってる
             }
             else if (Map[i][j] == GOAL)
             {   //ゴールを登録

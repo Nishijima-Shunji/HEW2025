@@ -149,6 +149,7 @@
     <ClCompile Include="o2.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Onikinme.cpp" />
+    <ClCompile Include="pauseButton.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="o2.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Onikinme.h" />
+    <ClInclude Include="pauseButton.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="SceneManager.h" />

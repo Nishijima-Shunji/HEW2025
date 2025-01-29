@@ -36,6 +36,15 @@ struct ConstBuffer {
 	DirectX::XMMATRIX matrixProj;
 	//ワールド変換行列
 	DirectX::XMMATRIX matrixWorld;
+
+	float fadeRange;  // ぼやけ範囲を指定
+
+	bool applyBlur;
+
+	float fadeStrength;  // フェードの強さ
+	// パディングを追加して 16 バイト境界を維持
+	float padding[2];
+
 };
 
 // ※ID3D11で始まるポインタ型の変数は、解放する必要がある

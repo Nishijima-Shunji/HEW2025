@@ -41,6 +41,12 @@ public:
     void Update() override;
     void Draw() override;
 
+    // アニメーション
+    void randomNum();
+    void NumConfirmed();
+    void MendakoConfirmed();
+    void SensuikanExit();
+
     void BgAnimation();
     void SensuikanAnimation();
 

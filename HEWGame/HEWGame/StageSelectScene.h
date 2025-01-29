@@ -26,6 +26,7 @@ private:
     int nextStage = 1;
 
     int loadstate = 0;
+    int state = 0;
 
     int mendako[8] = { 0 };
 
