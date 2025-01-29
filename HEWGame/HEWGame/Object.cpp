@@ -127,11 +127,21 @@ void Object::SetPos(float x, float y, float z) {
 	pos.z = z;
 }
 
+void Object::SetPos(DirectX::XMFLOAT3 _pos) {
+	//座標をセットする
+	pos = _pos;
+}
+
 void Object::SetSize(float x, float y, float z) {
 	//大きさをセットする
 	size.x = x;
 	size.y = y;
 	size.z = z;
+}
+
+void Object::SetSize(DirectX::XMFLOAT3 _siz) {
+	//座標をセットする
+	size = _siz;
 }
 
 void Object::SetAngle(float a) {

@@ -15,8 +15,10 @@ private:
     std::unique_ptr<Object> select_bg;
     std::unique_ptr<Object> load_bg;
     std::unique_ptr<Object> sensuikan;
+    std::unique_ptr<Object> Score_Bord;
     std::vector<std::unique_ptr<Object>> stageicon;
     std::vector<std::unique_ptr<Bubble>> bubble;
+    std::vector<std::unique_ptr<Object>> Score_mendako;
     std::unique_ptr<RandomGene> rg[ALLRANDOM];
     
     int framecount = 0;
@@ -26,7 +28,15 @@ private:
     int loadstate = 0;
     int state = 0;
 
+    int mendako[8] = { 0 };
+
     bool move = false;
+
+    void Select();
+    void Load();
+    void Move();
+ 
+    void BG_Animation();
 
 public:
     StageSelectScene();
@@ -35,10 +45,5 @@ public:
 
     void Update() override;
     void Draw() override;
-
-    void Select();
-    void Load();
-    void Move();
-    void BG_Animation();
 };
 

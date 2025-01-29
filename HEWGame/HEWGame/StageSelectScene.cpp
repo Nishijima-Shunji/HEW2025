@@ -1,6 +1,7 @@
 #include "StageSelectScene.h"
 #include "Game.h"
 #include "camera.h"
+#include "File.h"
 
 StageSelectScene::StageSelectScene() {
 	textureManager = new TextureManager(g_pDevice);
@@ -13,7 +14,10 @@ StageSelectScene::StageSelectScene() {
 	select_bg->SetColor(1.0f, 1.0f, 1.0f, 1.0f);	//色を設定
 
 	load_bg = std::make_unique<Object>();
-	load_bg->Init(textureManager, L"asset/loadbg.png");
+
+	load_bg->Init(textureManager, L"asset/loadbg.png", 1, 1);
+	load_bg->SetPos(0.0f, 0.0f, 0.0f);			//位置を設定
+	load_bg->SetSize(0.0f, 0.0f, 0.0f);			//大きさを設定
 
 	// 事前に読み込み
 	for (int i = 0; i < 300; i++) {
@@ -56,9 +60,36 @@ StageSelectScene::StageSelectScene() {
 
 	loadstate = 0;
 
+	//乱数
 	rg[BUBBLE_X] = std::make_unique<RandomGene>(-960, 960);
 	rg[BUBBLE_SPEED] = std::make_unique<RandomGene>(10.0f, 15.0f);
 	rg[BUBBLE_SIZE] = std::make_unique<RandomGene>(10.0f, 15.0f);
+
+	// 生成
+	Score_Bord = std::make_unique<Object>();
+	Score_Bord->Init(textureManager, L"asset/UI/Lording.png", 1, 1);
+	Score_Bord->SetPos(0.0f, -600.0f, 0.0f);
+	Score_Bord->SetSize(158.0f, 88.9f, 0.0f);
+	
+	//めんだこの読み込み
+	for (int stage = 1; stage < 9; stage++) {
+		mendako[stage - 1] = LoadFile(stage);
+	}
+
+	Score_mendako.emplace_back(std::make_unique<Object>());
+	Score_mendako[0]->Init(textureManager, L"asset/UI/mendako2.png", 1, 1);
+	Score_mendako[0]->SetPos(-117.5f, -642.0f, 0.0f);
+	Score_mendako[0]->SetSize(30.5f, 30.5f, 0.0f);
+
+	Score_mendako.emplace_back(std::make_unique<Object>());
+	Score_mendako[1]->Init(textureManager, L"asset/UI/mendako2.png", 1, 1);
+	Score_mendako[1]->SetPos(2.5f, -642.0f, 0.0f);
+	Score_mendako[1]->SetSize(30.5f, 30.5f, 0.0f);
+
+	Score_mendako.emplace_back(std::make_unique<Object>());
+	Score_mendako[2]->Init(textureManager, L"asset/UI/mendako2.png", 1, 1);
+	Score_mendako[2]->SetPos(118.5f, -642.0f, 0.0f);
+	Score_mendako[2]->SetSize(30.5f, 30.5f, 0.0f);
 }
 
 StageSelectScene::~StageSelectScene() {
@@ -83,6 +114,10 @@ void StageSelectScene::Draw() {
 		obj->Draw();
 	}
 	sensuikan->Draw();
+	Score_Bord->Draw();
+	for (auto& obj : Score_mendako) {
+		obj->Draw();
+	}
 	for (auto& obj : bubble) {
 		obj->Draw();
 	}
@@ -115,6 +150,28 @@ void StageSelectScene::Move() {
 			sensuikan->SetPos(pos.x, pos.y, pos.z);
 			sensuikan->SetDirection(0);
 		}
+
+		DirectX::XMFLOAT3 SB_pos = Score_Bord->GetPos(), SB_siz = Score_Bord->GetSize();
+		if (SB_pos.y > -600.0f) {
+			SB_pos.y -= 50.0f;
+			SB_siz.x /= 1.1f;
+			SB_siz.y /= 1.1f;
+			Score_Bord->SetPos(SB_pos);
+			Score_Bord->SetSize(SB_siz);
+			int stage_mendako = 0;
+			for (auto& obj : Score_mendako) {
+				if (mendako[nowStage - 1] - stage_mendako < 1) {
+					break;
+				}
+				DirectX::XMFLOAT3 SM_pos = obj->GetPos(), SM_siz = obj->GetSize();
+				SM_pos.y -= 50.0f;
+				SM_siz.x /= 1.1f;
+				SM_siz.y /= 1.1f;
+				obj->SetPos(SM_pos);
+				obj->SetSize(SM_siz);
+				stage_mendako++;
+			}
+		}
 	}
 	if (nextStage < 5) {
 		// 目的地と今の位置がだいたい同じなら停止
@@ -126,6 +183,30 @@ void StageSelectScene::Move() {
 		// 目的地と今の位置がだいたい同じなら停止
 		if (abs((stageicon[nextStage - 5]->GetPos().x - sensuikan->GetPos().x)) < 10.0f) {
 			nowStage = nextStage;
+		}
+	}
+
+	if (nextStage == nowStage) {
+		DirectX::XMFLOAT3 SB_pos = Score_Bord->GetPos(), SB_siz = Score_Bord->GetSize();
+		if (SB_pos.y < 100.0f) {
+			SB_pos.y += 50.0f;
+			SB_siz.x *= 1.1f;
+			SB_siz.y *= 1.1f;
+			Score_Bord->SetPos(SB_pos);
+			Score_Bord->SetSize(SB_siz);
+			int stage_mendako = 0;
+			for (auto& obj : Score_mendako) {
+				if (mendako[nowStage - 1] - stage_mendako < 1) {
+					break;
+				}
+				DirectX::XMFLOAT3 SM_pos = obj->GetPos(), SM_siz = obj->GetSize();
+				SM_pos.y += 50.0f;
+				SM_siz.x *= 1.1f;
+				SM_siz.y *= 1.1f;
+				obj->SetPos(SM_pos);
+				obj->SetSize(SM_siz);
+				stage_mendako++;
+			}
 		}
 	}
 }
