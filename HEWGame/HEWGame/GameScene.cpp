@@ -117,12 +117,15 @@ GameScene::GameScene(const int _stage) {
 		buttonParams[i].frequency = 0.01f + (rand() % 100 - 50) * 0.0001f;   // 周波数にランダム値を追加
 		buttonParams[i].phase = (rand() % 360) * 0.0174533f;                 // 位相をランダム化 (0 ～ 2π)
 	}
-
 }
 
 GameScene::~GameScene() {
 	//データの保存
-	SaveFile(stage, mendako);
+	int prv_mendako;
+	prv_mendako = LoadFile(stage);
+	if (prv_mendako < mendako) {
+		SaveFile(stage, mendako);
+	}
 
 	// mapdataのリソースを解放
 	for (auto& row : mapdata) {

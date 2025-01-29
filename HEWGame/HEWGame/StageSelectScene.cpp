@@ -77,17 +77,17 @@ StageSelectScene::StageSelectScene() {
 	}
 
 	Score_mendako.emplace_back(std::make_unique<Object>());
-	Score_mendako[0]->Init(textureManager, L"asset/UI/mendako2.png", 1, 1);
+	Score_mendako[0]->Init(textureManager, L"asset/UI/mendako2-02.png", 1, 1);
 	Score_mendako[0]->SetPos(-117.5f, -642.0f, 0.0f);
 	Score_mendako[0]->SetSize(30.5f, 30.5f, 0.0f);
 
 	Score_mendako.emplace_back(std::make_unique<Object>());
-	Score_mendako[1]->Init(textureManager, L"asset/UI/mendako2.png", 1, 1);
+	Score_mendako[1]->Init(textureManager, L"asset/UI/mendako2-02.png", 1, 1);
 	Score_mendako[1]->SetPos(2.5f, -642.0f, 0.0f);
 	Score_mendako[1]->SetSize(30.5f, 30.5f, 0.0f);
 
 	Score_mendako.emplace_back(std::make_unique<Object>());
-	Score_mendako[2]->Init(textureManager, L"asset/UI/mendako2.png", 1, 1);
+	Score_mendako[2]->Init(textureManager, L"asset/UI/mendako2-02.png", 1, 1);
 	Score_mendako[2]->SetPos(118.5f, -642.0f, 0.0f);
 	Score_mendako[2]->SetSize(30.5f, 30.5f, 0.0f);
 }
