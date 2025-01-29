@@ -307,7 +307,7 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	case 4: obj = std::make_unique<Object>(); u = 1; v = 1; break;
 	case 5: obj = std::make_unique<Mendako>(); u = 4; v = 2; break;
 	case 6: obj = std::make_unique<Kagamidai>(); u = 4; v = 2; break;
-	case 7: obj = std::make_unique<Kagamidai>(); u = 4; v = 3; dir = 1; break;
+	case 7: obj = std::make_unique<Kagamidai>(); u = 4; v = 2; dir = 1; break;
 	case 8: obj = std::make_unique<Trap>(); u = 1; v = 1; break;
 	case 9: obj = std::make_unique<Kairyu>(); u = 1; v = 1; break;
 	case 10: obj = std::make_unique<Kairyu>(); u = 1; v = 1; dir = 1; break;

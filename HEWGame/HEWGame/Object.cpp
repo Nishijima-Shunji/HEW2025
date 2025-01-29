@@ -99,7 +99,7 @@ void Object::Draw() {
 	float flipU = (direction == 1) ? -1.0f : 1.0f;  // 右向きならU軸を反転
 	float offsetU = (direction == 1) ? 1.0f : 0.0f;  // 反転時に右側から開始するためにオフセットを適用
 	cb.matrixTex = DirectX::XMMatrixScaling(flipU, 1.0f, 1.0f);
-	cb.matrixTex *= DirectX::XMMatrixTranslation(offsetU + (float)numU / splitX, (float)numV / splitY, 0.0f);
+	cb.matrixTex *= DirectX::XMMatrixTranslation((offsetU + (float)numU) / splitX, (float)numV / splitY, 0.0f);
 	cb.matrixTex = DirectX::XMMatrixTranspose(cb.matrixTex);
 
 	// 頂点カラーのデータを作成
