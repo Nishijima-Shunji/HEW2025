@@ -102,8 +102,8 @@ public:
 	void SetShouldApplyBlur(bool set) { shouldApplyBlur = set; };
 
 	std::vector<std::vector<int>> GetMap(std::vector<std::vector<int>>);
-
 	void SetTexture(TextureManager* textureManager, const wchar_t* imgname);  // テクスチャ設定
+	DirectX::XMINT2 GetXY() { return DirectX::XMINT2{ PosX,PosY }; };
 
 
 };

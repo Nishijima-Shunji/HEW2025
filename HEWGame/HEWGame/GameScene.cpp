@@ -58,6 +58,7 @@ GameScene::GameScene(const int _stage) {
 	game_bg->SetPos(0.0f, 0.0f, 0.0f);
 	game_bg->SetSize(1920.0f, 1080.0f, 0.0f);
 
+	// ==========UI==========
 	for (int i = 0; i < 4; i++) {
 		cylinder.emplace_back(std::make_unique<O2>());
 		cylinder[i]->Init(textureManager, L"asset/UI/O2_1.png");
@@ -70,6 +71,7 @@ GameScene::GameScene(const int _stage) {
 		o2[i]->SetSize(22.5f, 40.0f, 0.0f);
 	}
 
+	// ==========ポーズ画面==========
 	c_pos = g_Camera.Camera_Pos;
 	pause = std::make_unique<Object>();
 	pause->Init(textureManager, L"asset/UI/pause.png");
@@ -79,7 +81,7 @@ GameScene::GameScene(const int _stage) {
 
 	for (int i = 0; i < 3; i++) {
 		button.emplace_back(std::make_unique<Object>());
-		button[i]->Init(textureManager, L"asset/UI/haguruma.png");
+		button[i]->Init(textureManager, L"asset/UI/haguruma2.png");
 		button[i]->SetPos((i * 120.0f) + (c_pos.x - 130.0f), c_pos.y - 305.0f, 0.0f);
 		button[i]->SetSize(80.0f, 80.0f, 0.0f);
 		button[i]->SetShouldApplyBlur(true);
@@ -91,27 +93,27 @@ GameScene::GameScene(const int _stage) {
 	// 設定ウィンドウ
 	setting = std::make_unique<Object>();
 	setting->Init(textureManager, L"asset/UI/sound_UI.png");
-	setting->SetPos(0.0f, 0.0f, 0.0f);
-	setting->SetSize(450.0f, 300.0f, 0.0f);
+	setting->SetPos(c_pos.x, c_pos.y, 0.0f);
+	setting->SetSize(360.0f, 240.0f, 0.0f);
 
 	for (int i = 0; i < 2; i++) {
 		sound_cursol.emplace_back(std::make_unique<SoundCursol>());
 		sound_cursol[i]->Init(textureManager, L"asset/UI/sound.png");
-		sound_cursol[i]->SetPos(-140.0f, (i * -255.0f) + 50.0f, 0.0f);
-		sound_cursol[i]->SetSize(100.0f, 100.0f, 0.0f);
+		sound_cursol[i]->SetPos(c_pos.x + 80.0f, (i * -100.0f) + c_pos.y - 50.0f, 0.0f);
+		sound_cursol[i]->SetSize(40.0f, 40.0f, 0.0f);
 	}
 
 	cursol = std::make_unique<Cursol>();
 	cursol->Init(textureManager, L"asset/UI/cursol.png");
 	cursol->SetPos(-200.0f, 0.0f, 0.0f);
-	cursol->SetSize(150.0f, 150.0f, 0.0f);
+	cursol->SetSize(60.0f, 60.0f, 0.0f);
 
 	close = std::make_unique<Object>();
 	close->Init(textureManager, L"asset/UI/batten2.png");
-	close->SetPos(300.0f, 230.0f, 0.0f);
-	close->SetSize(75.0f, 75.0f, 0.0f);
+	close->SetPos(c_pos.x + 30.0f, c_pos.y - 30.0f, 0.0f);
+	close->SetSize(30.0f, 30.0f, 0.0f);
 
-	// 初期化 (一度だけ実行)
+	// ポーズ画面のアイコンの動きを設定
 	for (int i = 0; i < 3; i++) {
 		buttonParams[i].amplitude = 8.0f + (rand() % 100 - 50) * 0.05f;      // 振幅にランダム値を追加
 		buttonParams[i].frequency = 0.01f + (rand() % 100 - 50) * 0.0001f;   // 周波数にランダム値を追加
@@ -144,6 +146,8 @@ void GameScene::Update() {
 	if (state == 0) {
 		// ゲーム時間の計測開始
 		start = std::chrono::high_resolution_clock::now();
+		g_Sound.RoadBGM(BGM01);
+		g_Sound.PlayBGM();
 		state = 1;
 	}
 	else if (state == 1) {
@@ -186,6 +190,7 @@ void GameScene::Update() {
 			}
 		}
 
+		// ポーズ(仮キー)
 		if (input.GetKeyTrigger(VK_P)) {
 			state = 2;
 		}
@@ -199,7 +204,7 @@ void GameScene::Update() {
 	else if (state == 3) {
 		PauseSelect(&input);
 	}
-	else if (state == 4) {
+	else if (state == 5) {
 		OptionSelect(&input);
 	}
 	PauseAnimation();
@@ -220,6 +225,10 @@ void GameScene::Draw() {
 
 		obj->Draw();
 	}
+	for (const auto& obj : darknessObj) {
+
+		obj->Draw();
+	}
 
 	// UI
 	for (const auto& obj : o2) {
@@ -236,7 +245,7 @@ void GameScene::Draw() {
 			obj->Draw();
 		}
 	}
-	if (state == 4) {
+	if (state == 5) {
 		setting->Draw();
 		for (int i = 0; i < 2; i++) {
 			sound_cursol[i]->Draw();
@@ -251,7 +260,6 @@ void GameScene::LoadMapData(int stage) {
 
 	std::string stageStr = std::to_string(stage);  // int を文字列に変換
 	std::wstring mapPath = L"Data/MAP_STAGE" + std::wstring(stageStr.begin(), stageStr.end()) + L".csv";
-	//std::wstring mapPath = L"Data/TestData.csv";
 
 	maplist = Loadmap(mapPath.c_str());
 
@@ -290,8 +298,15 @@ void GameScene::LoadMapData(int stage) {
 					obj->SetXY(j, i);
 
 					characterObj.emplace_back(std::move(obj));
-					//maplist[i][j] = -1;
 				}
+			}
+			// 最初に見えるオブジェクトの上以外に暗闇を配置
+			if (maplist[i][j] != 2 && maplist[i][j] != 3 && maplist[i][j] != 4 && maplist[i][j] != 5 && maplist[i][j] != 11 && maplist[i][j] != 12 && maplist[i][j] != -9) {
+				darknessObj.emplace_back(std::make_unique<Darkness>());
+				darknessObj.back()->Init(textureManager, L"asset/S_Darkness.png");
+				darknessObj.back()->SetPos(j * 30.0f, i * -30.0f, 0.0f);
+				darknessObj.back()->SetSize(30.0f, 30.0f, 0.0f);
+				darknessObj.back()->SetXY(j, i);
 			}
 		}
 	}
@@ -371,6 +386,8 @@ void GameScene::MapUpdate() {
 						mapdata[i][j] = std::move(obj);
 					}
 				}
+				// 光で暗闇削除
+				CheckAndEraseObject(i, j, darknessObj, maplist);
 			}
 		}
 	}
@@ -402,45 +419,56 @@ void GameScene::PauseSelect(Input* input) {
 		switch (selectbutton) {
 			// オプション
 		case 0:
+			state = 5;
 			break;
 			// 操作説明
 		case 1:
+			state = 6;
 			break;
 			// ステージ選択に戻る
 		case 2:
+			SceneManager::ChangeScene(SceneManager::SELECT);
 			break;
 		}
 	}
 }
 
 void GameScene::PauseAnimation() {
+	// ==========ポーズボタンを押したとき(デバッグ：Pキー)下から出てくる==========
 	if (state == 2) {
+		// ウィンドウがカメラの中心より低い位置なら上に移動差せる
 		if (pause->GetPos().y < c_pos.y + 0.0f) {
-			pause->SetPos(c_pos.x, pause->GetPos().y + 80.0f, 0.0f);
+			pause->SetPos(c_pos.x, pause->GetPos().y + 65.0f, 0.0f);
 			for (int i = 0; i < 3; i++) {
-				button[i]->SetPos((i * 110.0f) + (c_pos.x - 110.0f), button[i]->GetPos().y + 80.0f, 0.0f);
+				button[i]->SetPos((i * 110.0f) + (c_pos.x - 110.0f), button[i]->GetPos().y + 65.0f, 0.0f);
 			}
 		}
+		/// もし通り過ぎたなら中心に固定
 		else if (pause->GetPos().y >= c_pos.y + 0.0f) {
 			pause->SetPos(c_pos.x, c_pos.y, 0.0f);
 			for (int i = 0; i < 3; i++) {
 				button[i]->SetPos((i * 110.0f) + (c_pos.x - 110.0f), c_pos.y - 5.0f, 0.0f);
 			}
+			// ポーズ画面開いている状態へ
 			state = 3;
 		}
 	}
+	// ==========もう一度ポーズキーを押したときに下に降ろして閉じる==========
 	else if (state == 4) {
+		// 画面外より上にあるなら下に下げる
 		if (pause->GetPos().y > c_pos.y - 500.0f) {
 			pause->SetPos(c_pos.x, pause->GetPos().y - 80.0f, 0.0f);
 			for (int i = 0; i < 3; i++) {
 				button[i]->SetPos((i * 110.0f) + (c_pos.x - 110.0f), button[i]->GetPos().y - 80.0f, 0.0f);
 			}
 		}
+		// 画面外まで到達したら
 		else if (pause->GetPos().y <= -500.0f) {
+			// ゲームの状態へ
 			state = 1;
 		}
 	}
-
+	// ポーズ画面を開いているならアイコンを動かす
 	if (state == 3) {
 		// 毎フレームの更新
 		for (int i = 0; i < 3; i++) {
@@ -521,6 +549,7 @@ void GameScene::o2Gauge(std::chrono::milliseconds time) {
 
 void GameScene::OptionSelect(Input* input) {
 	static int select = 1;
+	// 選択中を切り替え
 	if (input->GetKeyTrigger(VK_UP)) {
 		select--;
 		if (select < 0) {
@@ -533,22 +562,43 @@ void GameScene::OptionSelect(Input* input) {
 			select = 0;
 		}
 	}
+	// カーソルのアニメーション
 	float cursol_move = sin(framecount / 180.0f * 3.14) * 15.0f;
+
+	// 閉じるボタンの色リセット
 	close->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+	DirectX::XMFLOAT3 closePos = close->GetPos();
 	switch (select) {
 	case 0:
-		cursol->SetPos((c_pos.x - 20.0f), (c_pos.y - 20.0f) + cursol_move, 0.0f);
+		// 閉じるボタン
+		cursol->SetPos(closePos.x - 10.0f, closePos.y + cursol_move, 0.0f);
 		close->SetColor(1.0f, 0.0f, 0.0f, 1.0f);
 		if (input->GetKeyTrigger(VK_RETURN))
 		{
 			state = 1;
 		}
 		break;
-	case 1: cursol->SetPos(c_pos.x - 30.0f, c_pos.y - 50.0f + cursol_move, 0.0f);
+		// BGMボリューム
+	case 1: cursol->SetPos(closePos.x - 30.0f, closePos.y + cursol_move, 0.0f);
 		g_Sound.SetVolBGM(sound_cursol[0]->Update(input));
 		break;
-	case 2: cursol->SetPos(c_pos.x - 30.0f, c_pos.y - 20.0f + cursol_move, 0.0f);
+		// SEボリューム
+	case 2: cursol->SetPos(closePos.x - 30.0f, closePos.y + cursol_move, 0.0f);
 		g_Sound.SetVolSE(sound_cursol[1]->Update(input));
 		break;
+	}
+}
+
+void GameScene::CheckAndEraseObject(int i, int j, std::vector<std::unique_ptr<Darkness>>& darknessObj, std::vector<std::vector<int>>& maplist) {
+	for (auto it = darknessObj.begin(); it != darknessObj.end();) {
+		auto& obj = *it;
+
+		if (obj->GetXY().x == j && obj->GetXY().y == i) {
+			if ((maplist[i][j] == 20) && obj->GetFlg()) {
+				it = darknessObj.erase(it);
+				continue;
+			}
+		}
+		++it;
 	}
 }

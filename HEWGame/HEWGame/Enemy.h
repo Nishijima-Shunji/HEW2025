@@ -20,7 +20,10 @@ private:
 	bool movingUp = true;
 	int prevObj = 0;
 	bool hasStoredPrevTile;
-
+	bool moveRight = false;
+	bool moveLeft = false;
+	bool moveUp = false;
+	bool moveDown = false;
 	int framecount;
 	int animcount;
 

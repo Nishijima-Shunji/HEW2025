@@ -151,92 +151,82 @@ void Enemy::Move() {
 //void Enemy::Move() {
 //	if (moveX) {
 //		// X方向に移動
-//		if ((PosX - targetX) > 0) {
-//			nextPosX = PosX - 1;
-//			if (Map[PosY][nextPosX] != WALL) {
-//				pos.x -= 1.0f;
-//			}
-//		}
-//		else {
+//		if (moveRight) {
 //			nextPosX = PosX + 1;
 //			if (Map[PosY][nextPosX] != WALL) {
 //				pos.x += 1.0f;
 //			}
+//			else {
+//				// 壁に到達したら方向を反転
+//				moveRight = false;
+//				moveLeft = true;
+//			}
+//		}
+//		else if (moveLeft) {
+//			nextPosX = PosX - 1;
+//			if (Map[PosY][nextPosX] != WALL) {
+//				pos.x -= 1.0f;
+//			}
+//			else {
+//				// 壁に到達したら方向を反転
+//				moveRight = true;
+//				moveLeft = false;
+//			}
 //		}
 //
 //		if (std::abs(pos.x - nextPosX * 30.0f) < 0.1f) {
-//			// 現在の位置を記憶しておく（最初の移動時のみ）
-//			if (!hasStoredPrevTile) {
-//				prevObj = Map[PosY][PosX];  // 現在のタイル内容を保存
-//				hasStoredPrevTile = true;
-//			}
-//
-//			// 先に新しい位置の内容を記憶
-//			int nextTile = Map[PosY][nextPosX];
-//
-//			// 目的地がプレイヤー(2)ならstateを1にする
-//			if (nextTile == P_DIVER) {
+//			// 目的地がプレイヤー(2)ならstateをtrueにする
+//			if (Map[PosY][nextPosX] == P_DIVER) {
 //				state = true;
 //			}
-//
-//			// 現在の位置を元のタイルに戻す
-//			Map[PosY][PosX] = prevObj;
-//
-//			// 敵の位置を更新
 //			PosX = nextPosX;
-//
-//			// 新しい位置の内容を次回のために保存
-//			prevObj = nextTile;
-//
-//			// 新しい位置に敵を配置
 //			Map[PosY][PosX] = 3;
-//
 //			move = false;
+//
+//			// ターゲットの位置を現在地に設定
 //			targetX = PosX;
-//			moveX = false;  // X方向にこれ以上移動しない
 //		}
 //	}
 //
 //	if (moveY) {
 //		// Y方向に移動
-//		if ((PosY - targetY) > 0) {
+//		if (moveUp) {
 //			nextPosY = PosY - 1;
-//			if (Map[nextPosY][PosX] != WALL) {
-//				pos.y += 1.0f;
-//			}
-//		}
-//		else {
-//			nextPosY = PosY + 1;
 //			if (Map[nextPosY][PosX] != WALL) {
 //				pos.y -= 1.0f;
 //			}
+//			else {
+//				// 壁に到達したら方向を反転
+//				moveUp = false;
+//				moveDown = true;
+//			}
+//		}
+//		else if (moveDown) {
+//			nextPosY = PosY + 1;
+//			if (Map[nextPosY][PosX] != WALL) {
+//				pos.y += 1.0f;
+//			}
+//			else {
+//				// 壁に到達したら方向を反転
+//				moveUp = true;
+//				moveDown = false;
+//			}
 //		}
 //
-//		// 目的地に到着したら処理
 //		if (std::abs(pos.y - (nextPosY * -30.0f)) < 0.1f) {
-//			// 現在の位置を記憶しておく
-//			if (!hasStoredPrevTile) {
-//				prevObj = Map[PosY][PosX];  // 現在のタイル内容を保存
-//				hasStoredPrevTile = true;
-//			}
-//
-//			// 敵の移動処理
-//			Map[PosY][PosX] = prevObj;   // 元の位置に記憶していた内容を戻す
-//
-//			// 目的地がプレイヤー(2)ならstateを1にする
+//			// 目的地がプレイヤー(2)ならstateをtrueにする
 //			if (Map[nextPosY][PosX] == P_DIVER) {
 //				state = true;
 //			}
-//
 //			PosY = nextPosY;
-//			prevObj = Map[nextPosY][PosX];  // 新しい位置の内容を記憶
-//			Map[PosY][PosX] = 3;  // 新しい位置に敵を配置
-//
+//			Map[PosY][PosX] = 3;
 //			move = false;
+//
+//			// ターゲットの位置を現在地に設定
 //			targetY = PosY;
-//			moveY = false;  // Y方向にこれ以上移動しない
 //		}
 //	}
 //}
+
 
 

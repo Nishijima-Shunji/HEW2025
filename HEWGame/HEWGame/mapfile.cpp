@@ -43,7 +43,7 @@
 #include <codecvt>
 
 std::vector<std::vector<int>> Loadmap(const wchar_t* filePath) {
-    std::vector<std::vector<int>> DataTable(MAP_HEIGHT, std::vector<int>(MAP_WIDTH, -1));
+    std::vector<std::vector<int>> DataTable(MAP_HEIGHT, std::vector<int>(MAP_WIDTH, -9));
 
     // ファイルを開く
     std::wifstream fileStream(filePath);
@@ -84,7 +84,7 @@ std::vector<std::vector<int>> Loadmap(const wchar_t* filePath) {
             for (int j = 0; j < MAP_WIDTH; j++) {
                 DataTable[i - 1][j] = (j < datas.size() && !datas[j].empty())
                     ? std::wcstol(datas[j].c_str(), nullptr, 10)
-                    : -1;
+                    : -9;
             }
         }
     } while (std::getline(fileStream, bufferString));

@@ -105,6 +105,9 @@
     <ClCompile Include="Wall.cpp">
       <Filter>オブジェクト\ギミック</Filter>
     </ClCompile>
+    <ClCompile Include="Darkness.cpp">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -203,12 +206,15 @@
     <ClInclude Include="Wall.h">
       <Filter>オブジェクト\ギミック</Filter>
     </ClInclude>
+    <ClInclude Include="Darkness.h">
+      <Filter>オブジェクト\ギミック</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\MAP_STAGE2.csv">
+    <None Include="Data\TestData.csv">
       <Filter>リソース\マップ</Filter>
     </None>
-    <None Include="Data\TestData.csv">
+    <None Include="Data\MAP_STAGE2.csv">
       <Filter>リソース\マップ</Filter>
     </None>
   </ItemGroup>

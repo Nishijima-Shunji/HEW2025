@@ -8,6 +8,7 @@
 #include "O2.h"
 #include "Cursol.h"
 #include "SoundCursol.h"
+#include "Darkness.h"
 
 #define MAXTIME (600000)  //1•ª
 //#define MAXTIME (10000)     //10•b
@@ -26,6 +27,7 @@ private:
     int mapval = 0;
     std::vector<std::vector<std::unique_ptr<Object>>> mapdata;
     std::vector<std::unique_ptr<Object>> characterObj;
+    std::vector<std::unique_ptr<Darkness>> darknessObj;
 
     std::vector<std::unique_ptr<O2>> cylinder;
     std::vector<std::unique_ptr<O2>> o2;
@@ -68,12 +70,12 @@ public:
     std::unique_ptr<Object> CreateObject(int objectType, TextureManager* textureManager);
     std::unique_ptr<Object> DeleteObject(int objectType, TextureManager* textureManager);
 
+    void CheckDead();
+    void CheckAndEraseObject(int i, int j, std::vector<std::unique_ptr<Darkness>>& darknessObj, std::vector<std::vector<int>>& maplist);
     void MapUpdate();
     void PauseSelect(Input* input);
     void PauseAnimation();
-
-    void o2Gauge(std::chrono::milliseconds time);
-
     void OptionSelect(Input*);
+    void o2Gauge(std::chrono::milliseconds time);
 };
 

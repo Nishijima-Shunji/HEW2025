@@ -135,6 +135,7 @@
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="Bubble.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Darkness.cpp" />
     <ClCompile Include="direct3d.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="File.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Bubble.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Darkness.h" />
     <ClInclude Include="direct3d.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="File.h" />

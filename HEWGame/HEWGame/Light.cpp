@@ -47,7 +47,8 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 		//‰¡•‚ğæ“¾
 		for (int i = 0; i != 32; i++)
 		{
-			if (Map[0][i] != NOTHING)
+			//if (Map[0][i] != NOTHING)
+			if (Map[0][i] != -9)
 			{
 				Width = i;
 			}
@@ -55,7 +56,8 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 		//‚‚³‚ğæ“¾
 		for (int j = 0; j != 16; j++)
 		{
-			if (Map[j][0] != NOTHING)
+			//if (Map[j][0] != NOTHING)
+			if (Map[j][0] != -9)
 			{
 				Height = j;
 			}
