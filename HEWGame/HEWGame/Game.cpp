@@ -47,7 +47,11 @@ void Game::Init(HWND hWnd) {
 	//初期シーンをタイトルにする
 	//sm.ChangeScene(sm.TITLE);
 	//sm.ChangeScene(sm.SELECT);
+<<<<<<< Updated upstream
 	sm.ChangeScene(sm.GAME,4);
+=======
+	sm.ChangeScene(sm.GAME,2);
+>>>>>>> Stashed changes
 	//sm.ChangeScene(sm.RESULT);
 
 
