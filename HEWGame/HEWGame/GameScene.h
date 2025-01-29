@@ -23,6 +23,7 @@ private:
 
     std::unique_ptr<Object> game_bg;
     std::vector<Object*> game_bg_list;  // オブジェクトのリスト
+    std::unique_ptr<Object> Mendako_e; //メンダコのエフェクト
 
     int mapval = 0;
     std::vector<std::vector<std::unique_ptr<Object>>> mapdata;
@@ -37,6 +38,10 @@ private:
     std::vector<std::unique_ptr<SoundCursol>> sound_cursol;
     std::unique_ptr<Cursol> cursol;
     std::unique_ptr<Object> close;
+
+    DirectX::XMFLOAT3 e_pos = {0.0f,0.0f,0.0f};//メンダコエフェクトpos
+
+    //std::vector<std::vector<int>> maplist;
 
     int WidthMAX = 0;
     int HeightMAX = 0;
@@ -57,6 +62,12 @@ private:
     ButtonParams buttonParams[3];
 
     DirectX::XMFLOAT3 c_pos;
+    bool mendakoAnime_g = false;//メンダコアニメ
+    bool menFg = false;//メンダコフラグ
+    bool menGk = true;
+    int men_Ac = 0;//アニメカウント
+
+
 
 public:
 

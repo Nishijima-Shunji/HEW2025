@@ -14,7 +14,7 @@ private:
     int targetX, targetY; // 移動先のマス座標
     float speed;       // 移動速度
 
-	bool menAlive = true;//メンダコの生存状況
+	
 
 	bool Men_hit = false;//メンダコが当たったか調べる
 	int Mendako_C;//メンダコ取得数
@@ -26,6 +26,7 @@ private:
 	int animcount;
 	int state = 0;
 	int animTimer = 0;
+	bool menAlive = true;//メンダコの生存状況
 
 	enum AnimationState {
 		WAITING,       // 通常待機アニメーション
@@ -36,15 +37,16 @@ private:
 
 public:
 
-	//右上から何個目を切り抜いて表示するか
-	float numU = 0;
-	float numV = 0;
 
+	
+	bool GetFg_men() { return menAlive;};
+	bool GetMendakoCount() { return Mendako_C; };
 	void Init();
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
 	void Uninit();
 
-	void MendakoPos();
-	void Catch();
+	void Catch();//メンダコ取得
+	
+
 	
 };

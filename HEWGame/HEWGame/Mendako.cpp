@@ -35,7 +35,7 @@ extern Input input;
 
 void Mendako::Init()
 {
-    menAlive = true;
+    //menAlive = true;
 }
 
 std::vector<std::vector<int>> Mendako::Update(std::vector<std::vector<int>> MapDate)
@@ -48,7 +48,10 @@ std::vector<std::vector<int>> Mendako::Update(std::vector<std::vector<int>> MapD
     }
     if (Map[PosY][PosX] == P_DIVER)
     {
-        Men_hit = true;
+        //Men_hit = true;
+        if (menAlive) {
+            Men_hit = true;
+        }
     }
     if (Men_hit)
     {
@@ -70,33 +73,26 @@ void Mendako::Catch()
 {
     if (frameCounter % 2 == 0) 
     {
-        if (size.x > 0)
+        if (size.x < 35)
         {
-            
-            angle += 10.0f;
-            size.x -= 1.0f;
-            size.y -= 1.0f;
+            size.x += 1.0f;
+            size.y += 1.0f;
+            pos.y += 1.0f;
         }
-        else
-        {
+        else {
+            size.x = 0.0f;
+            size.y = 0.0f;
             menAlive = false;
-           
-
         }
     }
     frameCounter++;
 
     if (!menAlive) {
         Mendako_C++;
-        menAlive = true;
         Men_hit = false;
     }
    
 }
-
-
-
-
 
 
 void Mendako::Uninit()
