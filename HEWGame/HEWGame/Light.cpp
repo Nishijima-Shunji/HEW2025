@@ -29,7 +29,7 @@ Input input;
 //!	@param	
 //!	@retval 
 //==============================================================================
-std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapData)
+std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapData, GameScene& game)
 {
 	input.Update();
 
@@ -136,7 +136,7 @@ void Light::SetGimmick()
 void Light::Change() {
 	//ライト切り替え
 	//=============================================================================================
-	if (input.GetKeyTrigger(VK_Q)) {	//前に戻る
+	if (input.GetKeyTrigger(VK_Q) || input.GetButtonTrigger(XINPUT_LEFT_SHOULDER)) {	//前に戻る
 		if (Number != 1)
 		{
 			int num = 10000 + (Pos_X * 100 + Pos_Y);
@@ -146,7 +146,7 @@ void Light::Change() {
 			Pos_Y = Lightpos[Number] % 100;
 		}
 	}
-	if (input.GetKeyTrigger(VK_E)) {	//次に進む
+	if (input.GetKeyTrigger(VK_E) || input.GetButtonTrigger(XINPUT_RIGHT_SHOULDER)) {	//次に進む
 		if (Number != LightMAX)//ライトの登録上限
 		{
 			int num = 10000 + (Pos_X * 100 + Pos_Y);
@@ -184,7 +184,7 @@ void Light::Move()
 	Old_Pos_Y = Pos_Y;
 
 	//上に移動を検知
-	if (input.GetKeyTrigger(VK_W)) {
+	if (input.GetKeyTrigger(VK_W) || input.GetButtonTrigger(XINPUT_UP)) {
 		//右レーンに存在
 		if (Pos_Y == Width)
 		{
@@ -236,7 +236,7 @@ void Light::Move()
 	}
 
 	//下に移動を検知
-	if (input.GetKeyTrigger(VK_S)) {
+	if (input.GetKeyTrigger(VK_S) || input.GetButtonTrigger(XINPUT_DOWN)) {
 		//右レーンに存在
 		if (Pos_Y == Width)
 		{
@@ -288,7 +288,7 @@ void Light::Move()
 	}
 
 	//右に移動を検知
-	if (input.GetKeyTrigger(VK_D)) {
+	if (input.GetKeyTrigger(VK_D) || input.GetButtonTrigger(XINPUT_RIGHT)) {
 		//上部レーンに存在
 		if (Pos_X == 0)
 		{
@@ -340,7 +340,7 @@ void Light::Move()
 	}
 
 	//左に移動を検知
-	if (input.GetKeyTrigger(VK_A)) {
+	if (input.GetKeyTrigger(VK_A) || input.GetButtonTrigger(XINPUT_LEFT)) {
 		//上部レーンに存在
 		if (Pos_X == 0)
 		{
@@ -401,7 +401,7 @@ void Light::Spin()
 void Light::Flash() 
 {
 	//ライトの点灯を検知
-	if (input.GetKeyTrigger(VK_SPACE))
+	if (input.GetKeyTrigger(VK_SPACE) || input.GetButtonTrigger(XINPUT_A))
 	{
 		if (Stop == true)
 		{

@@ -38,7 +38,7 @@ void Mendako::Init()
     //menAlive = true;
 }
 
-std::vector<std::vector<int>> Mendako::Update(std::vector<std::vector<int>> MapDate)
+std::vector<std::vector<int>> Mendako::Update(std::vector<std::vector<int>> MapDate, GameScene& game)
 {
 
     Map = MapDate;

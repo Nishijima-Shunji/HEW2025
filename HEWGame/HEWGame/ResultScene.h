@@ -19,6 +19,7 @@ private:
     int Mscore;
     int Score;
     int tempScore = 0;
+    int temptime = 0;
     int revealIndex = 0;
     int framecount = 0;
     int scoreFixCounter = 0;
@@ -44,6 +45,7 @@ public:
     // アニメーション
     void randomNum();
     void NumConfirmed();
+    void TimeConfirmed();
     void MendakoConfirmed();
     void SensuikanExit();
 

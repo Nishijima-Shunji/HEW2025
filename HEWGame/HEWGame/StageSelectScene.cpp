@@ -6,6 +6,8 @@
 StageSelectScene::StageSelectScene() {
 	textureManager = new TextureManager(g_pDevice);
 
+	g_Camera.SetCamera(0.0f,0.0f,1.0f);
+
 	select_bg = std::make_unique<Object>();
 	select_bg->Init(textureManager, L"asset/stage_select2/stage_select 2_000.png", 1, 1);
 	select_bg->SetPos(0.0f, 0.0f, 0.0f);			//位置を設定
@@ -14,7 +16,6 @@ StageSelectScene::StageSelectScene() {
 	select_bg->SetColor(1.0f, 1.0f, 1.0f, 1.0f);	//色を設定
 
 	load_bg = std::make_unique<Object>();
-
 	load_bg->Init(textureManager, L"asset/loadbg.png", 1, 1);
 	load_bg->SetPos(0.0f, 0.0f, 0.0f);			//位置を設定
 	load_bg->SetSize(0.0f, 0.0f, 0.0f);			//大きさを設定
@@ -296,16 +297,19 @@ void StageSelectScene::Select() {
 	// 移動
 	if (!move && loadstate == 0) {
 		// ステージ移動
-		if (input.GetKeyTrigger(VK_LEFT) && nowStage > 1) {
+		if ((input.GetKeyTrigger(VK_LEFT) || input.GetButtonPress(XINPUT_LEFT)) && nowStage > 1) {
 			nextStage -= 1;
 		}
-		if (input.GetKeyTrigger(VK_RIGHT) && nowStage < 8) {
+		if ((input.GetKeyTrigger(VK_RIGHT) || input.GetButtonPress(XINPUT_RIGHT)) && nowStage < 4) {
 			nextStage += 1;
 		}
 		// 決定
-		if (input.GetKeyTrigger(VK_RETURN) && nowStage == nextStage) {
+		if ((input.GetKeyTrigger(VK_RETURN) || input.GetButtonPress(XINPUT_A)) && nowStage == nextStage) {
 			loadstate = 5;
 			framecount = 0;
+		}
+		if (input.GetButtonPress(XINPUT_B)) {
+			SceneManager::ChangeScene(SceneManager::TITLE,1);
 		}
 	}
 }

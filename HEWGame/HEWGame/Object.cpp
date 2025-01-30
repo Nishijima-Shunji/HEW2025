@@ -65,7 +65,7 @@ void Object::Init(TextureManager* textureManager, const wchar_t* imgname, int sx
 	}*/
 }
 
-std::vector<std::vector<int>> Object::Update(std::vector<std::vector<int>> MapDate)
+std::vector<std::vector<int>> Object::Update(std::vector<std::vector<int>> MapDate, GameScene& game)
 {
 	Map = MapDate;
 
@@ -162,7 +162,7 @@ void Object::SetUV(int u, int v) {
 	numV = v;
 }
 
-DirectX::XMFLOAT3 Object::GetPos(void) {
+DirectX::XMFLOAT3 Object::GetPos(void) const{
 	return pos;
 }
 
@@ -217,6 +217,17 @@ std::vector<std::pair<int, int>> Object::findCoordinate(
 void Object::SetXY(int setX, int setY) {
 	PosX = setX;
 	PosY = setY;
+}
+
+bool Object::CheckCollision(const Object& other) const
+{
+	// ˆÊ’u‚Ì·•ªŒvZ‚Æ‹——£‚ÌŒvZ
+	float dx = pos.x - other.GetPos().x;
+	float dy = pos.y - other.GetPos().y;
+	float distance = sqrt(dx * dx + dy * dy);
+
+	// Õ“Ë”»’è
+	return distance < (radius + other.GetRadius());
 }
 
 
