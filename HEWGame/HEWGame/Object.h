@@ -8,6 +8,7 @@
 
 //ステージオブジェクト一覧
 #define NOTHING  (-1)	//無
+#define DARKNESS (-9)	//暗闇
 #define SPACE    (0)	//空間
 #define WALL     (1)	//壁
 #define P_DIVER  (2)	//プレイヤー

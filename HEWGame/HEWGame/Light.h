@@ -19,6 +19,7 @@ private:
 	bool Stop	 = false;
 
 	int Direction = 0;	//ライト方向	0：上　1：下　2：右　3：左
+	//要修正：↑Object.hにdirectionがある
 	int Old_Pos_X = 0;	//移動前座標：X
 	int Old_Pos_Y = 0;	//移動前座標：Y
 	int Pos_X = 0;		//移動後座標：X
@@ -47,6 +48,12 @@ public:
 	void Spin();
 	//発光処理
 	void Flash();
+	//
+	void FlashSpace();
+	//
+	void FlashGimmick();
+	//
+	void Reflection(int);
 };
 
 
