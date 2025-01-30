@@ -45,8 +45,10 @@ GameScene::GameScene(const int _stage) {
 	textureManager = new TextureManager(g_pDevice);
 	// ステージ選択で選んだ番号のマップデータをロード
 	LoadMapData(stage);
-	// ステージに合わせてズーム(今はステージ2に合わせてるだけ)
-	g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+	// ステージに合わせてズーム
+	ChangeCamera();
+	//g_Camera.Camera_Pos.z = 1.0f;
+	c_pos = g_Camera.Camera_Pos;
 
 	Mendako_e = std::make_unique<Object>();
 	Mendako_e->Init(textureManager, L"asset/mendako2.png",6,1);
@@ -65,28 +67,27 @@ GameScene::GameScene(const int _stage) {
 	for (int i = 0; i < 4; i++) {
 		cylinder.emplace_back(std::make_unique<O2>());
 		cylinder[i]->Init(textureManager, L"asset/UI/O2_1.png");
-		cylinder[i]->SetPos((i * 30.0f) + 530.0f, 0.0f, 0.0f);
+		cylinder[i]->SetPos((i * 30.0f) + c_pos.x + (980.0f / c_pos.z) - 90.0f, c_pos.y + (540.0f / c_pos.z) - 30.0f, 0.0f);
 		cylinder[i]->SetSize(25.0f, 50.0f, 0.0f);
 
 		o2.emplace_back(std::make_unique<O2>());
 		o2[i]->Init(textureManager, L"asset/UI/O2_2.png");
-		o2[i]->SetPos((i * 30.0f) + 530.0f, -3.5f, 0.0f);
+		o2[i]->SetPos((i * 30.0f) + c_pos.x + (980.0f / c_pos.z) - 90.0f, c_pos.y + (540.0f / c_pos.z) - 35.0f, 0.0f);
 		o2[i]->SetSize(22.5f, 40.0f, 0.0f);
 	}
 
 	// ==========ポーズ画面==========
-	c_pos = g_Camera.Camera_Pos;
 	pause = std::make_unique<Object>();
 	pause->Init(textureManager, L"asset/UI/pause.png");
 	pause->SetPos(c_pos.x, c_pos.y - 300.f, 0.0f);
-	pause->SetSize(500.0f, 300.0f, 0.0f);
+	pause->SetSize(1000.0f / c_pos.z, 600.0f / c_pos.z, 0.0f);
 	pause->SetShouldApplyBlur(true);
 
 	for (int i = 0; i < 3; i++) {
 		button.emplace_back(std::make_unique<Object>());
 		button[i]->Init(textureManager, L"asset/UI/haguruma2.png");
-		button[i]->SetPos((i * 120.0f) + (c_pos.x - 130.0f), c_pos.y - 305.0f, 0.0f);
-		button[i]->SetSize(80.0f, 80.0f, 0.0f);
+		button[i]->SetPos((i * (260.0f / c_pos.z)) + (c_pos.x - (260.0f / c_pos.z)), c_pos.y - 305.0f, 0.0f);
+		button[i]->SetSize(80.0f / c_pos.z, 80.0f / c_pos.z, 0.0f);
 		button[i]->SetShouldApplyBlur(true);
 	}
 	button[1]->SetTexture(textureManager, L"asset/UI/setumei.png");
@@ -97,7 +98,7 @@ GameScene::GameScene(const int _stage) {
 	setting = std::make_unique<Object>();
 	setting->Init(textureManager, L"asset/UI/sound_UI.png");
 	setting->SetPos(c_pos.x, c_pos.y, 0.0f);
-	setting->SetSize(360.0f, 240.0f, 0.0f);
+	setting->SetSize(720.0f / c_pos.z, 480.0f / c_pos.z, 0.0f);
 
 	for (int i = 0; i < 2; i++) {
 		sound_cursol.emplace_back(std::make_unique<SoundCursol>());
@@ -109,12 +110,12 @@ GameScene::GameScene(const int _stage) {
 	cursol = std::make_unique<Cursol>();
 	cursol->Init(textureManager, L"asset/UI/cursol.png");
 	cursol->SetPos(-200.0f, 0.0f, 0.0f);
-	cursol->SetSize(60.0f, 60.0f, 0.0f);
+	cursol->SetSize(100.0f / c_pos.z, 100.0f / c_pos.z, 0.0f);
 
 	close = std::make_unique<Object>();
 	close->Init(textureManager, L"asset/UI/batten2.png");
-	close->SetPos(c_pos.x + 30.0f, c_pos.y - 30.0f, 0.0f);
-	close->SetSize(30.0f, 30.0f, 0.0f);
+	close->SetPos(c_pos.x + 280.0f / c_pos.z, c_pos.y + 180.0f / c_pos.z, 0.0f);
+	close->SetSize(60.0f / c_pos.z, 60.0f / c_pos.z, 0.0f);
 
 	// ポーズ画面のアイコンの動きを設定
 	for (int i = 0; i < 3; i++) {
@@ -460,9 +461,9 @@ void GameScene::PauseSelect(Input* input) {
 		state = 4;
 	}
 	for (int i = 0; i < 3; i++) {
-		button[i]->SetSize(80.0f, 80.0f, 0.0f);
+		button[i]->SetSize(160.0f / c_pos.z, 160.0f / c_pos.z, 0.0f);
 	}
-	button[selectbutton]->SetSize(100.0f, 100.0f, 0.0f);
+	button[selectbutton]->SetSize(260.0f / c_pos.z, 260.0f / c_pos.z, 0.0f);
 
 	if (input->GetKeyTrigger(VK_RETURN)) {
 		switch (selectbutton) {
@@ -489,14 +490,14 @@ void GameScene::PauseAnimation() {
 		if (pause->GetPos().y < c_pos.y + 0.0f) {
 			pause->SetPos(c_pos.x, pause->GetPos().y + 65.0f, 0.0f);
 			for (int i = 0; i < 3; i++) {
-				button[i]->SetPos((i * 110.0f) + (c_pos.x - 110.0f), button[i]->GetPos().y + 65.0f, 0.0f);
+				button[i]->SetPos((i * (260.0f / c_pos.z)) + (c_pos.x - (260.0f / c_pos.z)), button[i]->GetPos().y + 65.0f, 0.0f);
 			}
 		}
 		/// もし通り過ぎたなら中心に固定
 		else if (pause->GetPos().y >= c_pos.y + 0.0f) {
 			pause->SetPos(c_pos.x, c_pos.y, 0.0f);
 			for (int i = 0; i < 3; i++) {
-				button[i]->SetPos((i * 110.0f) + (c_pos.x - 110.0f), c_pos.y - 5.0f, 0.0f);
+				button[i]->SetPos((i * (260.0f / c_pos.z)) + (c_pos.x - (260.0f / c_pos.z)), c_pos.y - 5.0f, 0.0f);
 			}
 			// ポーズ画面開いている状態へ
 			state = 3;
@@ -508,7 +509,7 @@ void GameScene::PauseAnimation() {
 		if (pause->GetPos().y > c_pos.y - 500.0f) {
 			pause->SetPos(c_pos.x, pause->GetPos().y - 80.0f, 0.0f);
 			for (int i = 0; i < 3; i++) {
-				button[i]->SetPos((i * 110.0f) + (c_pos.x - 110.0f), button[i]->GetPos().y - 80.0f, 0.0f);
+				button[i]->SetPos((i * (260.0f / c_pos.z)) + (c_pos.x - (260.0f / c_pos.z)), button[i]->GetPos().y - 80.0f, 0.0f);
 			}
 		}
 		// 画面外まで到達したら
@@ -522,7 +523,7 @@ void GameScene::PauseAnimation() {
 		// 毎フレームの更新
 		for (int i = 0; i < 3; i++) {
 			// 初期位置
-			DirectX::XMFLOAT3 initialPos((i * 110.0f) + (c_pos.x - 110.0f), c_pos.y - 5.0f, 0.0f);
+			DirectX::XMFLOAT3 initialPos((i * (260.0f / c_pos.z)) + (c_pos.x - (260.0f / c_pos.z)), c_pos.y - 5.0f, 0.0f);
 
 			// ボタンごとの揺れパラメータを使用
 			float offsetX = buttonParams[i].amplitude * sin(framecount * buttonParams[i].frequency + buttonParams[i].phase);
@@ -620,7 +621,7 @@ void GameScene::OptionSelect(Input* input) {
 	switch (select) {
 	case 0:
 		// 閉じるボタン
-		cursol->SetPos(closePos.x - 10.0f, closePos.y + cursol_move, 0.0f);
+		cursol->SetPos(closePos.x - 80.0f / c_pos.z, closePos.y + cursol_move, 0.0f);
 		close->SetColor(1.0f, 0.0f, 0.0f, 1.0f);
 		if (input->GetKeyTrigger(VK_RETURN))
 		{
@@ -628,11 +629,11 @@ void GameScene::OptionSelect(Input* input) {
 		}
 		break;
 		// BGMボリューム
-	case 1: cursol->SetPos(closePos.x - 30.0f, closePos.y + cursol_move, 0.0f);
+	case 1: cursol->SetPos(c_pos.x - 250.0f / c_pos.z, c_pos.y + cursol_move + 50.0f / c_pos.z, 0.0f);
 		g_Sound.SetVolBGM(sound_cursol[0]->Update(input));
 		break;
 		// SEボリューム
-	case 2: cursol->SetPos(closePos.x - 30.0f, closePos.y + cursol_move, 0.0f);
+	case 2: cursol->SetPos(c_pos.x - 250.0f / c_pos.z, c_pos.y + cursol_move - 140.0f / c_pos.z, 0.0f);
 		g_Sound.SetVolSE(sound_cursol[1]->Update(input));
 		break;
 	}
@@ -649,5 +650,35 @@ void GameScene::CheckAndEraseObject(int i, int j, std::vector<std::unique_ptr<Da
 			}
 		}
 		++it;
+	}
+}
+
+void GameScene::ChangeCamera()
+{
+	switch (stage) {
+	case 1:
+		g_Camera.SetCamera(90.0f, -80.0f, 4.0f);
+		break;
+	case 2:
+		g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+		break;
+	case 3:
+		g_Camera.SetCamera(190.0f, -100.0f, 3.5f);
+		break;
+	case 4:
+		g_Camera.SetCamera(220.0f, -230.0f, 1.8f);
+		break;
+	case 5:
+		g_Camera.SetCamera(315.0f, -210.0f, 2.0f);
+		break;
+	case 6:
+		g_Camera.SetCamera(250.0f, -130.0f, 1.0f);
+		break;
+	case 7:
+		g_Camera.SetCamera(250.0f, -155.0f, 2.5f);
+		break;
+	case 8:
+		g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+		break;
 	}
 }

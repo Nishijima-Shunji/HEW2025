@@ -67,7 +67,7 @@ private:
     bool menGk = true;
     int men_Ac = 0;//アニメカウント
 
-
+    void ChangeCamera();
 
 public:
 
