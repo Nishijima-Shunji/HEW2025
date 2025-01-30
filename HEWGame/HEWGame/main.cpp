@@ -18,7 +18,7 @@
 // マクロの定義
 //-----------------------------------------------------------------------------
 #define CLASS_NAME   "DX21Smpl"// ウインドウクラスの名前
-#define WINDOW_NAME  "DirectX初期化"// ウィンドウの名前
+#define WINDOW_NAME  "海中時計"// ウィンドウの名前
 
 //-----------------------------------------------------------------------------
 // リンクライブラリの設定
@@ -66,30 +66,58 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
 	RegisterClassEx(&wc);
 
-	// ウィンドウの情報をまとめる
+	bool fullscreen = true;
 	HWND hWnd;
-	hWnd = CreateWindowEx(0,	// 拡張ウィンドウスタイル
-		CLASS_NAME,				// ウィンドウクラスの名前
-		WINDOW_NAME,			// ウィンドウの名前
-		WS_OVERLAPPEDWINDOW,	// ウィンドウスタイル
-		CW_USEDEFAULT,			// ウィンドウの左上Ｘ座標
-		CW_USEDEFAULT,			// ウィンドウの左上Ｙ座標 
-		SCREEN_WIDTH,			// ウィンドウの幅
-		SCREEN_HEIGHT,			// ウィンドウの高さ
-		NULL,					// 親ウィンドウのハンドル
-		NULL,					// メニューハンドルまたは子ウィンドウID
-		hInstance,				// インスタンスハンドル
-		NULL);					// ウィンドウ作成データ
 
-	//ウィンドウのサイズを修正
-	RECT rc1, rc2;
-	GetWindowRect(hWnd, &rc1);	//ウィンドウの短径領域を取得
-	GetClientRect(hWnd, &rc2);	//クライアントの短径領域を取得
-	int sx = SCREEN_WIDTH;
-	int sy = SCREEN_HEIGHT;
-	sx += ((rc1.right - rc1.left) - (rc2.right - rc2.left));
-	sy += ((rc1.bottom - rc1.top) - (rc2.bottom - rc2.top));
-	SetWindowPos(hWnd, NULL, 0, 0, sx, sy, (SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOMOVE));	//ウィンドウサイズを変更
+	//フルスクリーン化
+	if (fullscreen) {
+		//ディスプレイ設定を画面解像度に合わせて変更
+		DEVMODE dm = {};
+		dm.dmSize = sizeof(dm);
+		dm.dmPelsWidth = SCREEN_WIDTH;
+		dm.dmPelsHeight = SCREEN_HEIGHT;
+		dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
+		ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
+
+		//フルスクリーンウィンドウの作成
+		hWnd = CreateWindowEx(
+			0,
+			CLASS_NAME,
+			WINDOW_NAME,
+			WS_POPUP | WS_VISIBLE,
+			0, 0,
+			dm.dmPelsWidth, dm.dmPelsHeight,
+			NULL, NULL,
+			hInstance,
+			NULL
+		);
+	}
+	else {
+		// ウィンドウの情報をまとめる
+		int sx = 1280;
+		int sy = 720;
+
+		hWnd = CreateWindowEx(0,	// 拡張ウィンドウスタイル
+			CLASS_NAME,				// ウィンドウクラスの名前
+			WINDOW_NAME,			// ウィンドウの名前
+			WS_OVERLAPPEDWINDOW,	// ウィンドウスタイル
+			CW_USEDEFAULT,			// ウィンドウの左上Ｘ座標
+			CW_USEDEFAULT,			// ウィンドウの左上Ｙ座標 
+			sx,						// ウィンドウの幅
+			sy,						// ウィンドウの高さ
+			NULL,					// 親ウィンドウのハンドル
+			NULL,					// メニューハンドルまたは子ウィンドウID
+			hInstance,				// インスタンスハンドル
+			NULL);					// ウィンドウ作成データ
+
+		//ウィンドウのサイズを修正
+		RECT rc1, rc2;
+		GetWindowRect(hWnd, &rc1);	//ウィンドウの短径領域を取得
+		GetClientRect(hWnd, &rc2);	//クライアントの短径領域を取得
+		sx += ((rc1.right - rc1.left) - (rc2.right - rc2.left));
+		sy += ((rc1.bottom - rc1.top) - (rc2.bottom - rc2.top));
+		SetWindowPos(hWnd, NULL, 0, 0, sx, sy, (SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOMOVE));	//ウィンドウサイズを変更
+	}
 
 	// 指定されたウィンドウの表示状態を設定(ウィンドウを表示)
 	ShowWindow(hWnd, nCmdShow);
@@ -164,10 +192,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 			nowTick = GetTickCount64();	//現在時間を取得
 			//前回計測から1000ミリ秒が経過したか
 			if (nowTick >= oldTick + 1000) {
-				//FPS表示
-				char str[32];
-				wsprintfA(str, "FPS=%d", fpsCounter);
-				SetWindowTextA(hWnd, str);
 				//カウンターリセット
 				fpsCounter = 0;
 				oldTick = nowTick;

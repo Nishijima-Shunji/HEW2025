@@ -45,8 +45,8 @@ GameScene::GameScene(const int _stage) {
 	textureManager = new TextureManager(g_pDevice);
 	// ステージ選択で選んだ番号のマップデータをロード
 	LoadMapData(stage);
-	// ステージに合わせてズーム(今はステージ2に合わせてるだけ)
-	g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+	// ステージに合わせてズーム
+	ChangeCamera();
 
 	Mendako_e = std::make_unique<Object>();
 	Mendako_e->Init(textureManager, L"asset/mendako2.png",6,1);
@@ -252,6 +252,10 @@ void GameScene::Update() {
 	}
 	PauseAnimation();
 	framecount++;
+
+	//=================
+	ChangeCamera();
+	//====================
 }
 
 void GameScene::Draw() {
@@ -649,5 +653,35 @@ void GameScene::CheckAndEraseObject(int i, int j, std::vector<std::unique_ptr<Da
 			}
 		}
 		++it;
+	}
+}
+
+void GameScene::ChangeCamera()
+{
+	switch (stage) {
+	case 1:
+		g_Camera.SetCamera(200.0f, -100.0f, 2.5f);
+		break;
+	case 2:
+		g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+		break;
+	case 3:
+		g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+		break;
+	case 4:
+		g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+		break;
+	case 5:
+		g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+		break;
+	case 6:
+		g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+		break;
+	case 7:
+		g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+		break;
+	case 8:
+		g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
+		break;
 	}
 }
