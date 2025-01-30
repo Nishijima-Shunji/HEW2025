@@ -9,18 +9,14 @@
 class Player : public Object
 {
 private:
-    float x, y;        // 実数座標（アニメーション用）
     int targetX, targetY; // 移動先のマス座標
-    float speed;       // 移動速度
-
-
 
 	int X;
 	int Y;
 	int Goal_X;
 	int Goal_Y;
-	float deltaTime = 0.1f;
 
+	bool Start = false;
 	bool Vertical;	//垂直移動
 	bool Horizontal;//水平移動
 	bool Reverse;	//反転

@@ -40,6 +40,7 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 	//新しいマップ情報を取得
 	Map = MapData;
 	
+	//↓エラー原因：ライトの回数分発生している・移動するたび発生している
 	if (SetUp == false)
 	{
 		Width = 0;
@@ -84,6 +85,9 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 	//=============================================================================================
 	Move();
 
+	//回転処理
+	//=============================================================================================
+	Spin();
 
 	//発光処理
 	//=============================================================================================
@@ -137,7 +141,7 @@ void Light::Change() {
 	//ライト切り替え
 	//=============================================================================================
 	if (input.GetKeyTrigger(VK_Q) || input.GetButtonTrigger(XINPUT_LEFT_SHOULDER)) {	//前に戻る
-		if (Number != 1)
+		if (Number != 1)//ライトの最低登録
 		{
 			int num = 10000 + (Pos_X * 100 + Pos_Y);
 			Lightpos[Number] = num;
@@ -395,7 +399,36 @@ void Light::Move()
 //回転処理
 void Light::Spin()
 {
+	if (Pos_X != 0 && Pos_X != Height)
+	{
+		if (Pos_Y != 0 && Pos_Y != Width)
+		{
+			if (input.GetKeyTrigger(VK_R))
+			{
+				switch (Direction)
+				{
+				case 0:
+					angle = 270;
+					Direction = 2;
+					break;
+				case 1:
+					angle = 90;
+					Direction = 3;
+					break;
+				case 2:
+					angle = 180;
+					Direction = 1;
+					break;
+				case 3:
+					angle = 0;
+					Direction = 0;
+					break;
+				}
+			}
+		}
+	}
 
+	SetAngle(angle);
 }
 //発光処理
 void Light::Flash() 
@@ -575,7 +608,7 @@ void Light::FlashSpace()
 		//サメ
 		else if (Map[Pos_X][Pos_Y] == E_SHARK)
 		{
-			//Map[Pos_X][Pos_Y] = Luminous;
+			Map[Pos_X][Pos_Y] = Luminous;
 		}
 		//発光マス
 		else if (Map[Pos_X][Pos_Y] == Luminous)

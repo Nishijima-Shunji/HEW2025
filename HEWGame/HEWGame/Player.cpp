@@ -33,8 +33,11 @@
 std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapData,GameScene& game)
 {
     Map = MapData;
-
-    SetUp();
+    if (Start == false)
+    {
+        SetUp();
+        Start = true;
+    }
 
     Move();
 
@@ -47,7 +50,6 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
     framecount++;
 
     return Map;
-    //原因↑返し値が代入されていない
 }
 
 void Player::SetUp()//ステージ更新ごとに行う
