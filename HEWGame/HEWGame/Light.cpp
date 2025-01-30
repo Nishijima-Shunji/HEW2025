@@ -29,7 +29,7 @@ Input input;
 //!	@param	
 //!	@retval 
 //==============================================================================
-std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapData)
+std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapData, GameScene& game)
 {
 	input.Update();
 

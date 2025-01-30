@@ -38,12 +38,12 @@ void Trap::Init()
 
 }
 
-std::vector<std::vector<int>> Trap::Update(std::vector<std::vector<int>> MapDate)
+std::vector<std::vector<int>> Trap::Update(std::vector<std::vector<int>> MapData, GameScene& game)
 {
-    Map = MapDate;
+    Map = MapData;
 
     // 待機アニメーション
-    SetUV(animcount % 4 , (animcount / 4) % 2);
+    SetUV(animcount % 1 , (animcount / 1) % 1);
     if (framecount % 5 == 0) {
         animcount++;
     }
@@ -51,19 +51,6 @@ std::vector<std::vector<int>> Trap::Update(std::vector<std::vector<int>> MapDate
     framecount++;
 
     return Map;
-}
-
-void Trap::DebugList()
-{
-    std::cout << "マップ更新" << std::endl;
-    //デバッグ	マップ数値表示
-    for (int i = 0; i < 18; i++) {
-        for (int j = 0; j < 32; j++) {
-            std::cout << MoveList[i][j] << ",";
-        }
-        std::cout << std::endl;
-    }
-    //======================
 }
 
 void Trap::Uninit()

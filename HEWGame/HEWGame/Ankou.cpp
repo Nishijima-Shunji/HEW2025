@@ -38,7 +38,7 @@ void Ankou::Init()
 
 }
 
-std::vector<std::vector<int>> Ankou::Update(std::vector<std::vector<int>> MapDate)
+std::vector<std::vector<int>> Ankou::Update(std::vector<std::vector<int>> MapDate, GameScene& game)
 {
     Map = MapDate;
 

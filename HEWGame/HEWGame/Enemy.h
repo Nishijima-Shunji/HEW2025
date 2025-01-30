@@ -24,7 +24,7 @@ private:
 	bool state = false;
 
 public:
-	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
+	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>,GameScene&);
 
 	void FindLight();
 	void Move();

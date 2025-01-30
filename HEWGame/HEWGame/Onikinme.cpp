@@ -38,7 +38,7 @@ void Onikinme::Init()
 
 }
 
-std::vector<std::vector<int>> Onikinme::Update(std::vector<std::vector<int>> MapDate)
+std::vector<std::vector<int>> Onikinme::Update(std::vector<std::vector<int>> MapDate, GameScene& game)
 {
     Map = MapDate;
 

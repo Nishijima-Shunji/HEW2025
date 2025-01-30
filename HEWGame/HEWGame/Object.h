@@ -67,6 +67,7 @@ protected:
 	int splitY = 1;
 
 	int direction = 0;
+	float radius = 25.0f;
 
 	int PosX;
 	int PosY;
@@ -78,18 +79,18 @@ protected:
 
 public:
 
-	DirectX::XMFLOAT3 GetPos(void);
+	DirectX::XMFLOAT3 GetPos(void)const;
 	DirectX::XMFLOAT3 GetSize(void);
 	float GetAngle(void);
 	DirectX::XMFLOAT4 GetColor(void);
+	float GetRadius() const { return radius; }
 
 	//右上から何個目を切り抜いて表示するか
 	float numU = 0;
 	float numV = 0;
 
 	virtual void Init(TextureManager* textureManager, const wchar_t* imgname, int sx = 1, int sy = 1);
-	virtual std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
-	virtual void Update(GameScene& scene);
+	virtual std::vector<std::vector<int>> Update(std::vector<std::vector<int>>, GameScene&);
 	virtual void Draw();
 	virtual void Uninit();
    
@@ -103,6 +104,8 @@ public:
 	void SetDirection(int);
 	void SetXY(int, int);
 	void SetShouldApplyBlur(bool set) { shouldApplyBlur = set; };
+	void SetRadius(float r) { radius = r; }
+	bool CheckCollision(const Object& other) const;
 
 	std::vector<std::vector<int>> GetMap(std::vector<std::vector<int>>);
 	void SetTexture(TextureManager* textureManager, const wchar_t* imgname);  // テクスチャ設定

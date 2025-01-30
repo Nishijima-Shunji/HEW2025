@@ -42,7 +42,7 @@ public:
 	bool GetFg_men() { return menAlive;};
 	bool GetMendakoCount() { return Mendako_C; };
 	void Init();
-	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
+	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>, GameScene& game);
 	void Uninit();
 
 	void Catch();//ƒƒ“ƒ_ƒRæ“¾

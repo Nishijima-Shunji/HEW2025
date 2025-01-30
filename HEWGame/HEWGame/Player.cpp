@@ -30,7 +30,7 @@
 //!	@retval 
 //==============================================================================
 
-std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapData)
+std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapData,GameScene& game)
 {
     Map = MapData;
 

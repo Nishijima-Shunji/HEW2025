@@ -52,6 +52,7 @@ private:
     int mendako = 0;
     bool deadFlg = false;
     int framecount = 0;
+    int mendakoScore = 0;
 
     struct ButtonParams {
         float amplitude;  // —h‚ê‚Ì‘å‚«‚³
@@ -76,6 +77,8 @@ public:
 
     void Update() override;
     void Draw() override;
+
+    std::vector<std::unique_ptr<Object>>& GetCharacterObjects() { return characterObj;}
 
     void LoadMapData(const int _stage);
     std::unique_ptr<Object> CreateObject(int objectType, TextureManager* textureManager);

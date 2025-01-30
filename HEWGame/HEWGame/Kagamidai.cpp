@@ -38,7 +38,7 @@ void Kagamidai::Init()
 
 }
 
-std::vector<std::vector<int>> Kagamidai::Update(std::vector<std::vector<int>> MapDate)
+std::vector<std::vector<int>> Kagamidai::Update(std::vector<std::vector<int>> MapDate, GameScene& game)
 {
     Map = MapDate;
     // 待機アニメーション

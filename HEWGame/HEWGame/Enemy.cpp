@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-std::vector<std::vector<int>> Enemy::Update(std::vector<std::vector<int>> MapData)
+std::vector<std::vector<int>> Enemy::Update(std::vector<std::vector<int>> MapData,GameScene& game)
 {
 	Map = MapData;
 

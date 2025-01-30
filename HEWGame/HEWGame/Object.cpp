@@ -12,7 +12,6 @@
 #include "camera.h"
 #include <iostream>
 #include <utility>
-#include "GameScene.h"
 
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
@@ -66,17 +65,13 @@ void Object::Init(TextureManager* textureManager, const wchar_t* imgname, int sx
 	}*/
 }
 
-std::vector<std::vector<int>> Object::Update(std::vector<std::vector<int>> MapDate)
+std::vector<std::vector<int>> Object::Update(std::vector<std::vector<int>> MapDate, GameScene& game)
 {
 	Map = MapDate;
 
 	//std::cout << "失敗" << std::endl;
 
 	return Map;
-}
-
-void Object::Update(GameScene& scene) {
-
 }
 
 void Object::Draw() {
@@ -167,7 +162,7 @@ void Object::SetUV(int u, int v) {
 	numV = v;
 }
 
-DirectX::XMFLOAT3 Object::GetPos(void) {
+DirectX::XMFLOAT3 Object::GetPos(void) const{
 	return pos;
 }
 
@@ -222,6 +217,17 @@ std::vector<std::pair<int, int>> Object::findCoordinate(
 void Object::SetXY(int setX, int setY) {
 	PosX = setX;
 	PosY = setY;
+}
+
+bool Object::CheckCollision(const Object& other) const
+{
+	// 位置の差分計算と距離の計算
+	float dx = pos.x - other.GetPos().x;
+	float dy = pos.y - other.GetPos().y;
+	float distance = sqrt(dx * dx + dy * dy);
+
+	// 衝突判定
+	return distance < (radius + other.GetRadius());
 }
 
 

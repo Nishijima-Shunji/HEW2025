@@ -51,7 +51,7 @@ GameScene::GameScene(const int _stage) {
 	c_pos = g_Camera.Camera_Pos;
 
 	Mendako_e = std::make_unique<Object>();
-	Mendako_e->Init(textureManager, L"asset/mendako2.png",6,1);
+	Mendako_e->Init(textureManager, L"asset/mendako2.png", 6, 1);
 
 	game_bg = std::make_unique<Object>();
 	if (stage <= 4) {
@@ -152,7 +152,7 @@ void GameScene::Update() {
 		start = std::chrono::high_resolution_clock::now();
 		g_Sound.RoadBGM(BGM01);
 		g_Sound.PlayBGM();
-		g_Sound.SetVolBGM(0.0f);
+		//g_Sound.SetVolBGM(0.0f);
 		state = 1;
 	}
 	else if (state == 1) {
@@ -169,13 +169,14 @@ void GameScene::Update() {
 		for (const auto& row : mapdata) {
 			for (const auto& obj : row) {
 				if (obj) {
-					maplist = obj->Update(maplist);
+					// それ以外の場合
+					maplist = obj->Update(maplist,*this);
 				}
 			}
 		}
 		// キャラクターオブジェクトの更新
 		for (const auto& obj : characterObj) {
-			maplist = obj->Update(maplist);
+			maplist = obj->Update(maplist,*this);
 		}
 
 		// マップ情報更新
@@ -233,16 +234,27 @@ void GameScene::Update() {
 			men_Ac++; // フレームカウントを増加
 		}
 
+		if (framecount % 2 == 0) {
+			int textureIndex = (framecount / 2) % 49;  // 0 から 299 の範囲にリマップ
+			std::wstring texturePath = L"asset/noise/noise_";
+			std::wstring pathindex = L"000" + std::to_wstring(textureIndex);	// 3桁に調整   
+			pathindex = pathindex.substr(pathindex.size() - 3);  // 最後の3桁のみを使用
+			texturePath += pathindex;
+			texturePath += L".jpg";
+			for (int j = 0; j < darknessObj.size(); j++) {
+				darknessObj[j]->SetTexture(textureManager, texturePath.c_str());
+			}
+		}
 
-		// ポーズ(仮キー)
-		if (input.GetKeyTrigger(VK_P)) {
+		// ポーズ
+		if (input.GetKeyTrigger(VK_P) || input.GetButtonTrigger(XINPUT_START)) {
 			state = 2;
 		}
 
 		// 死亡していたらシーンチェンジ
 		if (deadFlg || input.GetKeyTrigger(VK_3)) {
 			// スコアをリザルトに渡して移動
-			SceneManager::ChangeScene(SceneManager::RESULT, score);
+			SceneManager::ChangeScene(SceneManager::RESULT, score, mendakoScore, elapsed.count());
 		}
 	}
 	else if (state == 3) {
@@ -258,7 +270,7 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	// 背景
 	game_bg->Draw();
-	
+
 
 	for (const auto& row : mapdata) {
 		for (const auto& obj : row) {
@@ -267,7 +279,7 @@ void GameScene::Draw() {
 			}
 		}
 	}
-	
+
 	for (const auto& obj : characterObj) {
 
 		obj->Draw();
@@ -351,13 +363,22 @@ void GameScene::LoadMapData(int stage) {
 				}
 			}
 			// 最初に見えるオブジェクトの上以外に暗闇を配置
-			/*if (maplist[i][j] != 2 && maplist[i][j] != 3 && maplist[i][j] != 4 && maplist[i][j] != 5 && maplist[i][j] != 11 && maplist[i][j] != 12 && maplist[i][j] != -9) {
+			if (maplist[i][j] != 2 && maplist[i][j] != 3 && maplist[i][j] != 4 && maplist[i][j] != 5 && maplist[i][j] != 11 && maplist[i][j] != 12 && maplist[i][j] != -9) {
 				darknessObj.emplace_back(std::make_unique<Darkness>());
-				darknessObj.back()->Init(textureManager, L"asset/S_Darkness.png");
+				darknessObj.back()->Init(textureManager, L"asset/noise/noise_001.jpg");
 				darknessObj.back()->SetPos(j * 30.0f, i * -30.0f, 0.0f);
 				darknessObj.back()->SetSize(30.0f, 30.0f, 0.0f);
 				darknessObj.back()->SetXY(j, i);
-			}*/
+
+				for (int i = 0; i < 49; i++) {
+					std::wstring texturePath = L"asset/noise/noise_";
+					std::wstring pathindex = L"000" + std::to_wstring(i);	// 3桁に調整   
+					pathindex = pathindex.substr(pathindex.size() - 3);  // 最後の3桁のみを使用
+					texturePath += pathindex;
+					texturePath += L".jpg";
+					darknessObj.back()->SetTexture(textureManager, texturePath.c_str());
+				}
+			}
 		}
 	}
 }
@@ -445,19 +466,19 @@ void GameScene::MapUpdate() {
 
 void GameScene::PauseSelect(Input* input) {
 	static int selectbutton = 0;
-	if (input->GetKeyTrigger(VK_LEFT)) {
+	if (input->GetKeyTrigger(VK_LEFT) || input->GetButtonTrigger(XINPUT_LEFT)) {
 		selectbutton--;
 		if (selectbutton < 0) {
 			selectbutton = 2;
 		}
 	}
-	if (input->GetKeyTrigger(VK_RIGHT)) {
+	if (input->GetKeyTrigger(VK_RIGHT) || input->GetButtonTrigger(XINPUT_RIGHT)) {
 		selectbutton++;
 		if (selectbutton > 2) {
 			selectbutton = 0;
 		}
 	}
-	if (input->GetKeyTrigger(VK_P)) {
+	if (input->GetKeyTrigger(VK_P) || input->GetButtonTrigger(XINPUT_START)) {
 		state = 4;
 	}
 	for (int i = 0; i < 3; i++) {
@@ -465,7 +486,7 @@ void GameScene::PauseSelect(Input* input) {
 	}
 	button[selectbutton]->SetSize(260.0f / c_pos.z, 260.0f / c_pos.z, 0.0f);
 
-	if (input->GetKeyTrigger(VK_RETURN)) {
+	if (input->GetKeyTrigger(VK_RETURN) || input->GetButtonTrigger(XINPUT_A)) {
 		switch (selectbutton) {
 			// オプション
 		case 0:
@@ -599,14 +620,17 @@ void GameScene::o2Gauge(std::chrono::milliseconds time) {
 
 void GameScene::OptionSelect(Input* input) {
 	static int select = 1;
+	if (input->GetButtonTrigger(XINPUT_B)) {
+		state = 3;
+	}
 	// 選択中を切り替え
-	if (input->GetKeyTrigger(VK_UP)) {
+	if (input->GetKeyTrigger(VK_UP) || input->GetButtonTrigger(XINPUT_UP)) {
 		select--;
 		if (select < 0) {
 			select = 2;
 		}
 	}
-	if (input->GetKeyTrigger(VK_DOWN)) {
+	if (input->GetKeyTrigger(VK_DOWN) || input->GetButtonTrigger(XINPUT_DOWN)) {
 		select++;
 		if (select > 2) {
 			select = 0;
@@ -623,7 +647,7 @@ void GameScene::OptionSelect(Input* input) {
 		// 閉じるボタン
 		cursol->SetPos(closePos.x - 80.0f / c_pos.z, closePos.y + cursol_move, 0.0f);
 		close->SetColor(1.0f, 0.0f, 0.0f, 1.0f);
-		if (input->GetKeyTrigger(VK_RETURN))
+		if (input->GetKeyTrigger(VK_RETURN) || input->GetButtonTrigger(XINPUT_A))
 		{
 			state = 1;
 		}

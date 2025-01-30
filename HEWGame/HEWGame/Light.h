@@ -32,7 +32,7 @@ public:
 	void DebugMap();
 
 	//ライトの更新
-	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
+	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>, GameScene&);
 
 	//更新のパーツ分担
 	// 

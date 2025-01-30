@@ -4,7 +4,7 @@
 //!	@file	ファイル名
 //!	@brief	ゲームの基礎
 //!	@note	制作中
-//!	@author	西嶋
+//!	@author	
 //*****************************************************************************
 
 //-----------------------------------------------------------------------------
@@ -45,15 +45,10 @@ void Game::Init(HWND hWnd) {
 	test = hWnd;
 
 	//初期シーンをタイトルにする
-	//sm.ChangeScene(sm.TITLE);
+	//sm.ChangeScene(sm.TITLE,0);
 	//sm.ChangeScene(sm.SELECT);
-	sm.ChangeScene(sm.GAME,1);
+	sm.ChangeScene(sm.GAME,2);
 	//sm.ChangeScene(sm.RESULT);
-
-
-	//マップデータを読み込み
-	std::wstring mapPath = L"C:/GitLocal/HEWGame/HEW2025/HEWGame/HEWGame/Data/TestData.csv";
-	DataTable = Loadmap(mapPath.c_str());
 }
 //==============================================================================
 //!	@fn		

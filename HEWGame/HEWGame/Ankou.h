@@ -36,6 +36,6 @@ public:
 	float numV = 0;
 
 	void Init();
-	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
+	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>,GameScene& game);
 	void Uninit();
 };
