@@ -24,6 +24,7 @@ private:
     std::unique_ptr<Cursol> cursol;
     std::unique_ptr<Object> close;
     std::vector<Object*> title_Ob;  // タイトルオブジェクト
+    bool trigger = false;
 
     int framecount = 0;
     int state = 0;
@@ -34,13 +35,14 @@ private:
     void InitTitleObjects(int count);
 
 public:
-    TitleScene();
+    TitleScene(int num);
     ~TitleScene();
 
     void Update() override;
     void Draw() override;
 
     void InitAnimation();
+    void InitRoad();
     void BGanimation();
 
     void Select(Input* input);

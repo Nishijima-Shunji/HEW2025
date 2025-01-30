@@ -6,6 +6,8 @@
 #include <iostream>
 #include <vector>
 
+class GameScene;  // 前方宣言
+
 //ステージオブジェクト一覧
 #define NOTHING  (-1)	//無
 #define SPACE    (0)	//空間
@@ -87,6 +89,7 @@ public:
 
 	virtual void Init(TextureManager* textureManager, const wchar_t* imgname, int sx = 1, int sy = 1);
 	virtual std::vector<std::vector<int>> Update(std::vector<std::vector<int>>);
+	virtual void Update(GameScene& scene);
 	virtual void Draw();
 	virtual void Uninit();
    

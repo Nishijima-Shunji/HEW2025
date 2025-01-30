@@ -12,6 +12,7 @@
 #include "camera.h"
 #include <iostream>
 #include <utility>
+#include "GameScene.h"
 
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
@@ -72,6 +73,10 @@ std::vector<std::vector<int>> Object::Update(std::vector<std::vector<int>> MapDa
 	//std::cout << "失敗" << std::endl;
 
 	return Map;
+}
+
+void Object::Update(GameScene& scene) {
+
 }
 
 void Object::Draw() {

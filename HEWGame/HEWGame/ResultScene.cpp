@@ -60,10 +60,10 @@ ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setsc
 			result_bg->SetTexture(textureManager, texturePath.c_str());
 		}
 	}
-	Mscore = 2;
-	Score = 5290;
 	// スコアをコピー
 	tempScore = Score;
+	timescore = 70000;
+	temptime = timescore / 1000;
 
 	g_Camera.SetCamera(0.0f, 0.0f, 1.0f);
 }
@@ -79,6 +79,7 @@ void ResultScene::Update() {
 	if (state == 0) {
 		// スコアの未確定アニメーション
 		randomNum();
+		TimeConfirmed();
 	}
 	// =====数字をランダムに変える=====
 	else if (state == 1) {
@@ -86,7 +87,7 @@ void ResultScene::Update() {
 		MendakoConfirmed();
 		// スコアの固定
 		NumConfirmed();
-		
+
 		// メンダコのアニメーション用
 		animtime++;
 		// 確定処理のカウントを進める
@@ -94,7 +95,7 @@ void ResultScene::Update() {
 	}
 	// =====ボタン入力受付=====
 	else if (state == 2) {
-		if (input.GetKeyTrigger(VK_SPACE) || input.GetButtonTrigger(VK_A)) {
+		if (input.GetKeyTrigger(VK_SPACE) || input.GetButtonTrigger(XINPUT_A)) {
 			state = 3;
 		}
 	}
@@ -119,7 +120,7 @@ void ResultScene::Draw() {
 	result_bg->Draw();
 	board->Draw();
 	sensuikan->Draw();
-	if (mendakoSet > 0) {
+	if (mendakoSet > 1) {
 		button->Draw();
 	}
 	for (auto& obj : scoreNum) {
@@ -133,6 +134,28 @@ void ResultScene::Draw() {
 			mendako[i]->Draw();
 		}
 	}
+}
+
+void ResultScene::TimeConfirmed() {
+	// 分と秒を計算
+	int minutes = temptime / 60;  // 分を計算
+	int seconds = temptime % 60; // 秒を計算
+
+	// 分と秒の各桁を分解
+	int displayTime[4] = {
+		minutes / 10,  // 分の十の位
+		minutes % 10,  // 分の一の位
+		seconds / 10,  // 秒の十の位
+		seconds % 10   // 秒の一の位
+	};
+
+	// 分の表示 (timeNum[0] と timeNum[1])
+	timeNum[0]->SetUV(displayTime[0], 0); // 分の十の位
+	timeNum[1]->SetUV(displayTime[1], 0); // 分の一の位
+
+	// 秒の表示 (timeNum[3] と timeNum[4])
+	timeNum[3]->SetUV(displayTime[2], 0); // 秒の十の位
+	timeNum[4]->SetUV(displayTime[3], 0); // 秒の一の位
 }
 
 void ResultScene::randomNum() {

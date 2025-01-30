@@ -39,7 +39,7 @@ BaseScene* SceneManager::m_pNextScene = nullptr;
 void SceneManager::ChangeScene(SCENE scene,int num1, int num2, int num3) {
     switch (scene) {
     case SCENE::TITLE:
-        m_pNextScene = new TitleScene(); // タイトルシーンを設定
+        m_pNextScene = new TitleScene(num1); // タイトルシーンを設定
         break;
     case SCENE::GAME:
         m_pNextScene = new GameScene(num1);  // ゲームシーンを設定

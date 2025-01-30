@@ -3,7 +3,7 @@
 #include <cstdlib>  // rand()とsrand()のため
 #include <ctime>    // time()のため
 
-TitleScene::TitleScene() {
+TitleScene::TitleScene(int num) : state(num) {
 	textureManager = new TextureManager(g_pDevice);
 
 	// ロゴ表示
@@ -12,6 +12,10 @@ TitleScene::TitleScene() {
 	logo->SetPos(0.0f, 0.0f, 0.0f);
 	logo->SetSize(800.0f, 800.0f, 0.0f);
 	logo->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+	if (state = 1) {
+		InitRoad();
+	}
 }
 
 TitleScene::~TitleScene() {
@@ -99,9 +103,15 @@ void TitleScene::Draw() {
 }
 
 void TitleScene::InitAnimation() {
-	// SE再生
-		//playSE();
+	InitRoad();
+	// 徐々にロゴを消していく
+	logo->SetColor(1.0f, 1.0f, 1.0f, logo->GetColor().w - 0.01f);
+	if (logo->GetColor().w <= 0) {
+		state = 1;
+	}
+}
 
+void TitleScene::InitRoad() {
 	// タイトル背景====================
 	title_bg = new Object;
 	title_bg->Init(textureManager, L"asset/title/title 2_000.png");
@@ -180,16 +190,10 @@ void TitleScene::InitAnimation() {
 		}
 	}
 
-
-	// 徐々にロゴを消していく
-	logo->SetColor(1.0f, 1.0f, 1.0f, logo->GetColor().w - 0.01f);
-	if (logo->GetColor().w <= 0) {
-		state = 1;
-		// BGM再生
-		g_Sound.RoadBGM(BGM01);
-		g_Sound.SetVolBGM(0.05f);
-		g_Sound.PlayBGM();
-	}
+	// BGM再生
+	g_Sound.RoadBGM(BGM01);
+	g_Sound.SetVolBGM(0.05f);
+	g_Sound.PlayBGM();
 }
 
 void TitleScene::BGanimation() {
@@ -210,6 +214,22 @@ void TitleScene::BGanimation() {
 }
 
 void TitleScene::Select(Input* input) {
+	//static DirectX::XMFLOAT2 stick_old = { 0.0f, 0.0f }; // 前フレームのスティック状態
+	DirectX::XMFLOAT2 stick = input->GetLeftAnalogStick(); // 現在のスティック状態
+
+	//float threshold = 0.1f; // しきい値を設定
+	//bool neutral = (abs(stick.x) <= threshold && abs(stick.y) <= threshold);
+
+	//if (neutral && !trigger) {
+	//	trigger = true; // トリガーをオン
+	//}
+	//else if (!neutral && trigger) {
+	//	trigger = false; // トリガーをオフ
+	//}
+
+	//stick_old = stick; // 現在のスティック状態を保存
+
+
 	// 選択先と今の位置が異なるなら移動開始
 	if (nowButton != selectButton) {
 		move = true;
@@ -231,12 +251,12 @@ void TitleScene::Select(Input* input) {
 		}
 	}
 	else {
-		if (input->GetKeyTrigger(VK_LEFT)) {
+		if (input->GetKeyTrigger(VK_LEFT) || (stick.x < 0.7f && trigger) || input->GetButtonTrigger(XINPUT_LEFT)) {
 			if (nowButton > 1) {
 				selectButton--;
 			}
 		}
-		if (input->GetKeyTrigger(VK_RIGHT)) {
+		if (input->GetKeyTrigger(VK_RIGHT) || (stick.x > 0.7f && trigger) || input->GetButtonTrigger(XINPUT_RIGHT)) {
 			if (nowButton < 3) {
 				selectButton++;
 			}
@@ -279,7 +299,7 @@ void TitleScene::Select(Input* input) {
 	}
 
 	// シーンの切り替えがあるから一番最後に置く
-	if (input->GetKeyTrigger(VK_RETURN)) {
+	if (input->GetKeyTrigger(VK_RETURN) || input->GetButtonTrigger(XINPUT_A)) {
 		switch (nowButton) {
 		case 1: state = 2; break;
 		case 2: SceneManager::ChangeScene(SceneManager::SELECT); break;
@@ -290,24 +310,28 @@ void TitleScene::Select(Input* input) {
 
 void TitleScene::OptionSelect(Input* input) {
 	static int select = 1;
-	if (input->GetKeyTrigger(VK_UP)) {
+	DirectX::XMFLOAT2 stick = input->GetLeftAnalogStick();
+	if (input->GetKeyTrigger(VK_UP) || input->GetButtonTrigger(XINPUT_UP)) {
 		select--;
 		if (select < 0) {
 			select = 2;
 		}
 	}
-	if (input->GetKeyTrigger(VK_DOWN)) {
+	if (input->GetKeyTrigger(VK_DOWN) || input->GetButtonTrigger(XINPUT_DOWN)) {
 		select++;
 		if (select > 2) {
 			select = 0;
 		}
+	}
+	if (input->GetButtonTrigger(XINPUT_B)) {
+		state = 1;
 	}
 	float cursol_move = sin(framecount / 180.0f * 3.14) * 15.0f;
 	switch (select) {
 	case 0:
 		cursol->SetPos(220.0f, 230.0f + cursol_move, 0.0f);
 		close->SetColor(1.0f, 0.0f, 0.0f,1.0f);
-		if (input->GetKeyTrigger(VK_RETURN))
+		if (input->GetKeyTrigger(VK_RETURN) || input->GetButtonTrigger(XINPUT_A))
 		{
 			state = 1;
 		}
@@ -322,3 +346,4 @@ void TitleScene::OptionSelect(Input* input) {
 			break;
 	}
 }
+
