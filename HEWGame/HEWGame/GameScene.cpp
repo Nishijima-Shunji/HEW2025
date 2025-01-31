@@ -32,10 +32,10 @@ static std::unordered_map<int, std::wstring> textureMapping = {
 	{9, L"asset/S_Kairyu.png"},		//海流
 	{10, L"asset/S_Kairyu.png"},	//海流
 	{11, L"asset/Wall2.png"},		//マップ端
-	{12, L"asset/S_Light.png"},		//ライト
+	{12, L"asset/Light.png"},		//ライト
 	{15, L"asset/demonfish1.png"},	//オニキンメ
 	{16, L"asset/Lightfish1.png"},	//アンコウ
-	{20, L"asset/S_Lumine.png"}		//光マス
+	{20, L"asset/Lumine1.png"}		//光マス
 };
 
 GameScene::GameScene(const int _stage) {
