@@ -68,7 +68,9 @@ protected:
 	int splitY = 1;
 
 	int direction = 0;
-	float radius = 25.0f;
+
+	// 当たり判定の半径
+	float radius = 7.5f;
 
 	int PosX;
 	int PosY;
@@ -109,7 +111,7 @@ public:
 	bool CheckCollision(const Object& other) const;
 
 	std::vector<std::vector<int>> GetMap(std::vector<std::vector<int>>);
-	void SetTexture(TextureManager* textureManager, const wchar_t* imgname);  // テクスチャ設定
+	void SetTexture(TextureManager* textureManager, const wchar_t* imgname, int setSplitX = 1, int setSplitY = 1);  // テクスチャ設定
 	DirectX::XMINT2 GetXY() { return DirectX::XMINT2{ PosX,PosY }; };
 
 

@@ -13,7 +13,7 @@ TitleScene::TitleScene(int num) : state(num) {
 	logo->SetSize(800.0f, 800.0f, 0.0f);
 	logo->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-	if (state = 1) {
+	if (state == 1) {
 		InitRoad();
 	}
 }
@@ -25,8 +25,7 @@ TitleScene::~TitleScene() {
 	for (auto obj : title_Ob) {
 		delete obj;
 	}
-	g_Sound.ReleaseBGM();
-	g_Sound.ReleaseSE();
+
 }
 
 void TitleScene::InitTitleObjects(int count) {
@@ -61,6 +60,11 @@ void TitleScene::Update() {
 	else if (state == 1) {
 		// タイトルの操作
 		Select(&input);
+		if (input.GetKeyTrigger(VK_M)) {
+			g_Sound.StopBGM();
+			g_Sound.ReleaseBGM();
+			g_Sound.PlayBGM();
+		}
 	}
 	else if (state == 2) {
 		// オプション
@@ -103,12 +107,16 @@ void TitleScene::Draw() {
 }
 
 void TitleScene::InitAnimation() {
-	InitRoad();
+	static int count = 0;
+	if (count == 0) {
+		InitRoad();
+	}
 	// 徐々にロゴを消していく
 	logo->SetColor(1.0f, 1.0f, 1.0f, logo->GetColor().w - 0.01f);
 	if (logo->GetColor().w <= 0) {
 		state = 1;
 	}
+	count++;
 }
 
 void TitleScene::InitRoad() {
@@ -191,9 +199,10 @@ void TitleScene::InitRoad() {
 	}
 
 	// BGM再生
-	g_Sound.RoadBGM(BGM01);
+	g_Sound.RoadBGM(BGM_Title);
 	g_Sound.SetVolBGM(0.05f);
 	g_Sound.PlayBGM();
+	g_Sound.SetVolSE(0.05f);
 }
 
 void TitleScene::BGanimation() {
@@ -216,19 +225,6 @@ void TitleScene::BGanimation() {
 void TitleScene::Select(Input* input) {
 	//static DirectX::XMFLOAT2 stick_old = { 0.0f, 0.0f }; // 前フレームのスティック状態
 	DirectX::XMFLOAT2 stick = input->GetLeftAnalogStick(); // 現在のスティック状態
-
-	//float threshold = 0.1f; // しきい値を設定
-	//bool neutral = (abs(stick.x) <= threshold && abs(stick.y) <= threshold);
-
-	//if (neutral && !trigger) {
-	//	trigger = true; // トリガーをオン
-	//}
-	//else if (!neutral && trigger) {
-	//	trigger = false; // トリガーをオフ
-	//}
-
-	//stick_old = stick; // 現在のスティック状態を保存
-
 
 	// 選択先と今の位置が異なるなら移動開始
 	if (nowButton != selectButton) {
@@ -254,11 +250,13 @@ void TitleScene::Select(Input* input) {
 		if (input->GetKeyTrigger(VK_LEFT) || (stick.x < 0.7f && trigger) || input->GetButtonTrigger(XINPUT_LEFT)) {
 			if (nowButton > 1) {
 				selectButton--;
+				g_Sound.PlaySE(SE_CursolMove1);
 			}
 		}
 		if (input->GetKeyTrigger(VK_RIGHT) || (stick.x > 0.7f && trigger) || input->GetButtonTrigger(XINPUT_RIGHT)) {
 			if (nowButton < 3) {
 				selectButton++;
+				g_Sound.PlaySE(SE_CursolMove1);
 			}
 		}
 	}
@@ -301,8 +299,13 @@ void TitleScene::Select(Input* input) {
 	// シーンの切り替えがあるから一番最後に置く
 	if (input->GetKeyTrigger(VK_RETURN) || input->GetButtonTrigger(XINPUT_A)) {
 		switch (nowButton) {
-		case 1: state = 2; break;
-		case 2: SceneManager::ChangeScene(SceneManager::SELECT); break;
+		case 1: g_Sound.PlaySE(SE_CursolMove2); state = 2; break;
+		case 2:
+			g_Sound.PlaySE(SE_Confilm);
+			g_Sound.StopBGM();
+			g_Sound.ReleaseBGM();
+			SceneManager::ChangeScene(SceneManager::SELECT);
+			break;
 		case 3: SendMessage(GetGameWindowHandle(), WM_CLOSE, 0, 0); break;
 		}
 	}
@@ -313,37 +316,52 @@ void TitleScene::OptionSelect(Input* input) {
 	DirectX::XMFLOAT2 stick = input->GetLeftAnalogStick();
 	if (input->GetKeyTrigger(VK_UP) || input->GetButtonTrigger(XINPUT_UP)) {
 		select--;
+		// カーソル移動音
+		g_Sound.PlaySE(SE_CursolMove1);
+		// ボタン移動
 		if (select < 0) {
 			select = 2;
 		}
 	}
 	if (input->GetKeyTrigger(VK_DOWN) || input->GetButtonTrigger(XINPUT_DOWN)) {
 		select++;
+		// カーソル移動音
+		g_Sound.PlaySE(SE_CursolMove1);
 		if (select > 2) {
 			select = 0;
 		}
 	}
+	// 閉じる
 	if (input->GetButtonTrigger(XINPUT_B)) {
+		g_Sound.PlaySE(SE_CursolMove2);
 		state = 1;
 	}
+
+	// クリオネふわふわ
 	float cursol_move = sin(framecount / 180.0f * 3.14) * 15.0f;
+
+	// カーソル位置による動作
 	switch (select) {
 	case 0:
 		cursol->SetPos(220.0f, 230.0f + cursol_move, 0.0f);
-		close->SetColor(1.0f, 0.0f, 0.0f,1.0f);
+		close->SetColor(1.0f, 0.0f, 0.0f, 1.0f);
+		// 閉じる
 		if (input->GetKeyTrigger(VK_RETURN) || input->GetButtonTrigger(XINPUT_A))
 		{
+			g_Sound.PlaySE(SE_CursolMove2);
 			state = 1;
 		}
 		break;
 	case 1: cursol->SetPos(-300.0f, 50.0f + cursol_move, 0.0f);
-			close->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-			g_Sound.SetVolBGM(sound_cursol[0]->Update(input));
-			break;
+		close->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		// BGMvol
+		g_Sound.SetVolBGM(sound_cursol[0]->Update(input));
+		break;
 	case 2: cursol->SetPos(-300.0f, -200.0f + cursol_move, 0.0f);
-			close->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-			g_Sound.SetVolSE(sound_cursol[1]->Update(input));
-			break;
+		close->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+		// SEvol
+		g_Sound.SetVolSE(sound_cursol[1]->Update(input));
+		break;
 	}
 }
 

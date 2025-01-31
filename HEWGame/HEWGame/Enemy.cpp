@@ -1,24 +1,37 @@
 #include "Enemy.h"
+#include "GameScene.h"
 
-std::vector<std::vector<int>> Enemy::Update(std::vector<std::vector<int>> MapData,GameScene& game)
+Enemy::Enemy() {
+
+}
+
+std::vector<std::vector<int>> Enemy::Update(std::vector<std::vector<int>> MapData, GameScene& game)
 {
 	Map = MapData;
+	if (!state) {
+		if (!move) {
+			FindLight();
+		}
 
-	if (!move) {
-		FindLight();
+		Move();
+
+		CheckDead(game);
+		// 到着後に探索を再開
+		if (PosX == targetX && PosY == targetY) {
+			hasReachedTarget = true;
+		}
+
+		// 待機アニメーション
+		SetUV(animcount % 8, (animcount / 8) % 2);
+		if (framecount % 5 == 0) {
+			animcount++;
+		}
 	}
-
-	Move();
-
-	// 到着後に探索を再開
-	if (PosX == targetX && PosY == targetY) {
-		hasReachedTarget = true;
-	}
-
-	// 待機アニメーション
-	SetUV(animcount % 8, (animcount / 8) % 2);
-	if (framecount % 5 == 0) {
-		animcount++;
+	else {
+		if (!animationEnd) {
+			// サメの噛みつきアニメーション
+			Animation();
+		}
 	}
 	framecount++;
 
@@ -49,6 +62,7 @@ void Enemy::FindLight() {
 				}
 				break;
 			}
+			// 光が見つかったら目的地設定
 			if (Map[PosY][tempX] == (20)) {
 				targetX = tempX;
 				moveX = true;
@@ -147,28 +161,28 @@ void Enemy::FindLight() {
 void Enemy::Move() {
 	if (moveX) {
 		// X方向に移動
+		// 左
 		if (direction == 2 || !inLight) {
 			if ((PosX - targetX) > 0) {
 				nextPosX = PosX - 1;
 				if (Map[PosY][nextPosX] != WALL) {
-					pos.x -= 1.0f;
+					pos.x -= speed;
+					SetDirection(0);
 				}
 			}
 		}
+		// 右
 		if (direction == 3 || !inLight) {
 			if ((PosX - targetX) < 0) {
 				nextPosX = PosX + 1;
 				if (Map[PosY][nextPosX] != WALL) {
-					pos.x += 1.0f;
+					pos.x += speed;
+					SetDirection(1);
 				}
 			}
 		}
 
 		if (std::abs(pos.x - nextPosX * 30.0f) < 0.1f) {
-			// 目的地がプレイヤー(2)ならstateを1にする
-			if (Map[PosY][nextPosX] == P_DIVER) {
-				state = true;
-			}
 			PosX = nextPosX;
 			//Map[PosY][PosX] = 3;
 			move = false;
@@ -185,7 +199,7 @@ void Enemy::Move() {
 			if ((PosY - targetY) > 0) {
 				nextPosY = PosY - 1;
 				if (Map[nextPosY][PosX] != WALL) {
-					pos.y += 1.0f;
+					pos.y += speed;
 				}
 			}
 		}
@@ -193,16 +207,12 @@ void Enemy::Move() {
 			if ((PosY - targetY) < 0) {
 				nextPosY = PosY + 1;
 				if (Map[nextPosY][PosX] != WALL) {
-					pos.y -= 1.0f;
+					pos.y -= speed;
 				}
 			}
 		}
 
 		if (std::abs(pos.y - (nextPosY * -30.0f)) < 0.1f) {
-			// 目的地がプレイヤー(2)ならstateを1にする
-			if (Map[nextPosY][PosX] == P_DIVER) {
-				state = true;
-			}
 			PosY = nextPosY;
 			//Map[PosY][PosX] = 3;
 			move = false;
@@ -212,6 +222,36 @@ void Enemy::Move() {
 			moveY = false;  // Y方向にこれ以上移動しない
 		}
 	}
+}
+
+void Enemy::CheckDead(GameScene& game) {
+	auto& characterObj = game.GetCharacterObjects(); // 参照を使う
+
+	for (const auto& obj : characterObj) {
+		// Player オブジェクトかどうかを確認
+		Player* player = dynamic_cast<Player*>(obj.get());
+		if (player) {
+			if (this->CheckCollision(*player)) {
+				state = true;
+				SetTexture(game.GetTexture_ptr(), L"asset/shake2.png",1,1);
+				framecount = 0;
+			}
+		}
+	}
+}
+
+void Enemy::Animation() {
+	if (framecount % 15 == 0) {
+		// 10 フレームごと
+		int uvIndex = (framecount / 10) % 4; 
+
+		SetUV(uvIndex, 1);
+	}
+	// 終了
+	if (framecount >= 0) { 
+		animationEnd = true;
+	}
+
 }
 
 

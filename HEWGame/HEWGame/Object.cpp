@@ -185,7 +185,13 @@ std::vector<std::vector<int>> Object::GetMap(std::vector<std::vector<int>> Mapda
 	return Mapdate;
 }
 
-void Object::SetTexture(TextureManager* textureManager, const wchar_t* imgname) {
+void Object::SetTexture(TextureManager* textureManager, const wchar_t* imgname, int setSplitX,int setSplitY) {
+	splitX = setSplitX;
+	splitY = setSplitY;
+	vertexList[1].u = 1.0f / splitX;
+	vertexList[2].v = 1.0f / splitY;
+	vertexList[3].u = 1.0f / splitX;
+	vertexList[3].v = 1.0f / splitY;
 	m_pTextureView = textureManager->GetTexture(imgname);
 }
 

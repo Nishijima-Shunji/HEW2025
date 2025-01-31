@@ -45,9 +45,9 @@ void Game::Init(HWND hWnd) {
 	test = hWnd;
 
 	//初期シーンをタイトルにする
-	//sm.ChangeScene(sm.TITLE,0);
+	sm.ChangeScene(sm.TITLE,0);
 	//sm.ChangeScene(sm.SELECT);
-	sm.ChangeScene(sm.GAME,2);
+	//sm.ChangeScene(sm.GAME,2);
 	//sm.ChangeScene(sm.RESULT);
 }
 //==============================================================================

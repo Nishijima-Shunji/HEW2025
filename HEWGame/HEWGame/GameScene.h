@@ -10,8 +10,8 @@
 #include "SoundCursol.h"
 #include "Darkness.h"
 
-#define MAXTIME (600000)  //1分
-//#define MAXTIME (10000)     //10秒
+#define MAXTIME (100000)  // 50秒
+//#define MAXTIME (10000)     // 10秒
 
 const int MAP_HEIGHT = 18;
 const int MAP_WIDTH = 32;
@@ -24,6 +24,7 @@ private:
     std::unique_ptr<Object> game_bg;
     std::vector<Object*> game_bg_list;  // オブジェクトのリスト
     std::unique_ptr<Object> Mendako_e; //メンダコのエフェクト
+    std::unique_ptr<Object> sensuikan; //メンダコのエフェクト
 
     int mapval = 0;
     std::vector<std::vector<std::unique_ptr<Object>>> mapdata;
@@ -38,6 +39,8 @@ private:
     std::vector<std::unique_ptr<SoundCursol>> sound_cursol;
     std::unique_ptr<Cursol> cursol;
     std::unique_ptr<Object> close;
+    std::unique_ptr<Object> control;
+    std::unique_ptr<Object> Abutton;
 
     DirectX::XMFLOAT3 e_pos = {0.0f,0.0f,0.0f};//メンダコエフェクトpos
 
@@ -49,8 +52,8 @@ private:
     int state = 0;
     int score = 0;
     int stage = 0;
-    int mendako = 0;
     bool deadFlg = false;
+    bool goalFlg = false;
     int framecount = 0;
     int mendakoScore = 0;
 
@@ -63,8 +66,8 @@ private:
     ButtonParams buttonParams[3];
 
     DirectX::XMFLOAT3 c_pos;
-    bool mendakoAnime_g = false;//メンダコアニメ
-    bool menFg = false;//メンダコフラグ
+    bool mendakoAnime_g = false; //メンダコアニメ
+    //bool menFg = false;//メンダコフラグ
     bool menGk = true;
     int men_Ac = 0;//アニメカウント
 
@@ -79,6 +82,7 @@ public:
     void Draw() override;
 
     std::vector<std::unique_ptr<Object>>& GetCharacterObjects() { return characterObj;}
+    TextureManager* GetTexture_ptr() { return textureManager; };
 
     void LoadMapData(const int _stage);
     std::unique_ptr<Object> CreateObject(int objectType, TextureManager* textureManager);
@@ -91,5 +95,6 @@ public:
     void PauseAnimation();
     void OptionSelect(Input*);
     void o2Gauge(std::chrono::milliseconds time);
+    void DeadAnimation();
 };
 

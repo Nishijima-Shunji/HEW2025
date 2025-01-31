@@ -7,6 +7,8 @@ private:
 	int targetX;
 	int targetY;
 
+	int speed = 1.0f;
+
 	int move = 0;
 	bool movingToTarget = false;
 	bool moveX;
@@ -22,13 +24,17 @@ private:
 	int animcount;
 
 	bool state = false;
+	bool animationEnd = false;
 
 public:
+	Enemy();
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>,GameScene&);
 
 	void FindLight();
 	void Move();
-	int GetState() { return state; };
+	int GetFlg() { return animationEnd; };
+	void CheckDead(GameScene&);
+	void Animation();
 };
 
 
