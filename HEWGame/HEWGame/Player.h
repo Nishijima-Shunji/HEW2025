@@ -23,6 +23,8 @@ private:
 
 	int MoveList[18][32];
 
+	bool goalFlg = false;
+
 	int framecount;
 	int animcount;
 
@@ -36,6 +38,7 @@ public:
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>,GameScene&);
 	//void Uninit();
 
+	bool GetFlg() { return goalFlg; };
 	void SetUp();
 	void Move();
 	void Animation();

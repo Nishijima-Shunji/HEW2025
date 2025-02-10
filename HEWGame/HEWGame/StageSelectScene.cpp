@@ -91,6 +91,9 @@ StageSelectScene::StageSelectScene() {
 	Score_mendako[2]->Init(textureManager, L"asset/UI/mendako2-02.png", 1, 1);
 	Score_mendako[2]->SetPos(118.5f, -642.0f, 0.0f);
 	Score_mendako[2]->SetSize(30.5f, 30.5f, 0.0f);
+
+	g_Sound.RoadBGM(BGM_StageSelect);
+	g_Sound.PlayBGM();
 }
 
 StageSelectScene::~StageSelectScene() {
@@ -305,10 +308,15 @@ void StageSelectScene::Select() {
 		}
 		// Œˆ’è
 		if ((input.GetKeyTrigger(VK_RETURN) || input.GetButtonPress(XINPUT_A)) && nowStage == nextStage) {
+			g_Sound.PlaySE(SE_Dive);
+			g_Sound.StopBGM();
+			g_Sound.ReleaseBGM();
 			loadstate = 5;
 			framecount = 0;
 		}
 		if (input.GetButtonPress(XINPUT_B)) {
+			g_Sound.StopBGM();
+			g_Sound.ReleaseBGM();
 			SceneManager::ChangeScene(SceneManager::TITLE,1);
 		}
 	}

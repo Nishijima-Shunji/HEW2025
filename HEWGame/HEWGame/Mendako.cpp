@@ -9,6 +9,7 @@
 //	Include header files.
 //-----------------------------------------------------------------------------
 #include "Mendako.h"
+#include "GameScene.h"
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -30,12 +31,11 @@
 
 void Mendako::Init()
 {
-    //menAlive = true;
+	//menAlive = true;
 }
 
 std::vector<std::vector<int>> Mendako::Update(std::vector<std::vector<int>> MapDate, GameScene& game)
 {
-
     Map = MapDate;
 
     if (Map[PosY][PosX] == P_DIVER)
@@ -45,45 +45,58 @@ std::vector<std::vector<int>> Mendako::Update(std::vector<std::vector<int>> MapD
             Men_hit = true;
         }
     }
-    if (Men_hit)
-    {
-        Catch();
-    }
-    // 待機アニメーション
+	auto& characterObj = game.GetCharacterObjects(); // 参照を使う
 
-    SetUV(animcount % 4, (animcount / 4) % 2);
-    if (framecount % 5 == 0) {
-        animcount++;
-    }
+	for (const auto& obj : characterObj) {
+		// Player オブジェクトかどうかを確認
+		Player* player = dynamic_cast<Player*>(obj.get());
+		if (menAlive) {
+			if (player) {
+				if (this->CheckCollision(*player)) {
+					Men_hit = true;
+				}
+			}
+		}
+	}
+	if (Men_hit)
+	{
+		Catch();
+	}
+	// 待機アニメーション
 
-    framecount++;
-    return Map;
+	SetUV(animcount % 4, (animcount / 4) % 2);
+	if (framecount % 5 == 0) {
+		animcount++;
+	}
+
+	framecount++;
+	return Map;
 }
 
 
 void Mendako::Catch()
 {
-    if (frameCounter % 2 == 0) 
-    {
-        if (size.x < 35)
-        {
-            size.x += 1.0f;
-            size.y += 1.0f;
-            pos.y += 1.0f;
-        }
-        else {
-            size.x = 0.0f;
-            size.y = 0.0f;
-            menAlive = false;
-        }
-    }
-    frameCounter++;
+	if (frameCounter % 2 == 0)
+	{
+		if (size.x < 35)
+		{
+			size.x += 1.0f;
+			size.y += 1.0f;
+			pos.y += 1.0f;
+		}
+		else {
+			size.x = 0.0f;
+			size.y = 0.0f;
+			menAlive = false;
+		}
+	}
+	frameCounter++;
 
-    if (!menAlive) {
-        Mendako_C++;
-        Men_hit = false;
-    }
-   
+	if (!menAlive) {
+		Mendako_C++;
+ 		Men_hit = false;
+	}
+
 }
 
 

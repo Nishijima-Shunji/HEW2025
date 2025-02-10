@@ -5,18 +5,24 @@
 //SE入れて
 typedef enum
 {
-	SE01 = 0,
+	SE_CursolMove1	= 0,
+	SE_CursolMove2	= 1,
+	SE_CursolMove3	= 2,
+	SE_Confilm		= 3,
+	SE_Cansel		= 4,
+	SE_Dive			= 5,
+	SE_FloatOn		= 6,
 
-	SOUND_LABEL_SE_MAX
+	SOUND_LABEL_SE_MAX = 7
 } SOUND_LABEL_SE;
 
 //BGM入れて
 typedef enum
 {
-	BGM01 = 0,
-	BGM02 = 1,
-	BGM03 = 2,
-	BGM04 = 3,
+	BGM_Title = 0,
+	BGM_GameStage = 1,
+	BGM_StageSelect = 2,
+	BGM_Result = 3,
 
 	SOUND_LABEL_BGM_MAX
 } SOUND_LABEL_BGM;
@@ -39,7 +45,13 @@ private:
 	} PARAM_SE;
 	PARAM_SE m_param_SE[SOUND_LABEL_SE_MAX] =
 	{
-		{"asset/SE/JUMPSE.wav"} ,		//（ループしないのでfalse設定）
+		{"asset/SE/CursolMove1.wav"} ,		//（ループしないのでfalse設定）
+		{"asset/SE/CursolMove2.wav"} ,
+		{"asset/SE/CursolMove3.wav"} ,
+		{"asset/SE/Confilm.wav"} ,
+		{"asset/SE/Cansel.wav"} ,
+		{"asset/SE/Dive.wav"} ,
+		{"asset/SE/FloatOn.wav"} ,
 	};
 
 	//BGMのパラメータ
@@ -49,8 +61,10 @@ private:
 	} PARAM_BGM;
 	PARAM_BGM m_param_BGM[SOUND_LABEL_BGM_MAX] =
 	{
-		{"asset/BGM/S1.wav"},	//ループさせるのでtrue設定
-		{"asset/BGM/Map01BGM.wav"},
+		{"asset/BGM/T1.wav"},	//ループさせるのでtrue設定
+		{"asset/BGM/S1.wav"},
+		{"asset/BGM/Wave.wav"},
+		{"asset/BGM/umi.wav"}
 	};
 
 	//ロード用に使う変数

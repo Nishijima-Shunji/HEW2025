@@ -24,18 +24,18 @@ static std::unordered_map<int, std::wstring> textureMapping = {
 	{1, L"asset/Wall.png"},			//壁
 	{2, L"asset/survivor3.png"},	//プレイヤー
 	{3, L"asset/shake1.png"},		//敵
-	{4, L"asset/S_Goal.png"},		//ゴール
+	{4, L"asset/hata2.png"},		//ゴール
 	{5, L"asset/mendako.png"},		//メンダコ
 	{6, L"asset/mirror_fish.png"},	//鏡鯛
 	{7, L"asset/mirror_fish.png"},	//鏡鯛
 	{8, L"asset/S_trap.png"},		//トラップ
-	{9, L"asset/S_Kairyu.png"},		//海流
-	{10, L"asset/S_Kairyu.png"},	//海流
+	{9, L"asset/bubble2.png"},		//海流
+	{10, L"asset/bubble2.png"},		//海流
 	{11, L"asset/Wall2.png"},		//マップ端
-	{12, L"asset/S_Light.png"},		//ライト
+	{12, L"asset/Light.png"},		//ライト
 	{15, L"asset/demonfish1.png"},	//オニキンメ
 	{16, L"asset/Lightfish1.png"},	//アンコウ
-	{20, L"asset/S_Lumine.png"}		//光マス
+	{20, L"asset/Lumine1.png"}		//光マス
 };
 
 GameScene::GameScene(const int _stage) {
@@ -64,6 +64,7 @@ GameScene::GameScene(const int _stage) {
 	}
 	game_bg->SetPos(0.0f, 0.0f, 0.0f);
 	game_bg->SetSize(1920.0f, 1080.0f, 0.0f);
+
 
 	// ==========UI==========
 	for (int i = 0; i < 4; i++) {
@@ -119,20 +120,32 @@ GameScene::GameScene(const int _stage) {
 	close->SetPos(c_pos.x + 280.0f / c_pos.z, c_pos.y + 180.0f / c_pos.z, 0.0f);
 	close->SetSize(60.0f / c_pos.z, 60.0f / c_pos.z, 0.0f);
 
+	control = std::make_unique<Object>();
+	control->Init(textureManager, L"asset/UI/control.png");
+	control->SetPos(c_pos.x, c_pos.y, 0.0f);
+	control->SetSize(1920.0f / c_pos.z, 1080.0f / c_pos.z, 0.0f);
+
+	Abutton = std::make_unique<Object>();
+	Abutton->Init(textureManager, L"asset/UI/Abutton.png");
+	Abutton->SetPos(c_pos.x + 300.0f, c_pos.y - 180.0f, 0.0f);
+	Abutton->SetSize(150.0f / c_pos.z, 150.0f / c_pos.z, 0.0f);
+
 	// ポーズ画面のアイコンの動きを設定
 	for (int i = 0; i < 3; i++) {
 		buttonParams[i].amplitude = 8.0f + (rand() % 100 - 50) * 0.05f;      // 振幅にランダム値を追加
 		buttonParams[i].frequency = 0.01f + (rand() % 100 - 50) * 0.0001f;   // 周波数にランダム値を追加
 		buttonParams[i].phase = (rand() % 360) * 0.0174533f;                 // 位相をランダム化 (0 ～ 2π)
 	}
+	g_Sound.RoadBGM(BGM_GameStage);
+	g_Sound.PlayBGM();
 }
 
 GameScene::~GameScene() {
 	//データの保存
 	int prv_mendako;
 	prv_mendako = LoadFile(stage);
-	if (prv_mendako < mendako) {
-		SaveFile(stage, mendako);
+	if (prv_mendako < mendakoScore) {
+		SaveFile(stage, mendakoScore);
 	}
 	play.Uninit();
 
@@ -154,7 +167,7 @@ void GameScene::Update() {
 		// ゲーム時間の計測開始
 		start = std::chrono::high_resolution_clock::now();
 		g_Sound.RoadBGM(BGM01);
-		//g_Sound.PlayBGM();
+		g_Sound.PlayBGM();
 		//g_Sound.SetVolBGM(0.0f);
 		state = 1;
 	}
@@ -168,9 +181,18 @@ void GameScene::Update() {
 		// 古いマップデータの保存
 		oldlist = maplist;
 
+		// マップオブジェクトの更新
+		for (const auto& row : mapdata) {
+			for (const auto& obj : row) {
+				if (obj) {
+					// それ以外の場合
+					maplist = obj->Update(maplist,*this);
+				}
+			}
+		}
 		// キャラクターオブジェクトの更新
 		for (const auto& obj : characterObj) {
-			maplist = obj->Update(maplist,*this);
+			maplist = obj->Update(maplist, *this);
 		}
 		maplist = play.Update(maplist);
 
@@ -184,25 +206,35 @@ void GameScene::Update() {
 		for (auto& obj : characterObj) {
 			Enemy* enemy = dynamic_cast<Enemy*>(obj.get());
 			if (enemy) {  // dynamic_castが成功した場合のみ処理
-				deadFlg = enemy->GetState();
+				deadFlg = enemy->GetFlg();
 				if (deadFlg) {
 					break;
 				}
 			}
 		}
+		for (auto& obj : characterObj) {
+			Player* player = dynamic_cast<Player*>(obj.get());
+			if (player) {  // dynamic_castが成功した場合のみ処理
+				goalFlg = player->GetFlg();
+				if (goalFlg) {
+					break;
+				}
+			}
+		}
+
 		// メンダコアニメーションの処理
 		if (!mendakoAnime_g && menGk) { // アニメーションが進行中でなく、menGk が true の場合に実行
 			for (auto& obj : characterObj) {
 				Mendako* mendako = dynamic_cast<Mendako*>(obj.get()); // characterObj の要素を Mendako 型にキャスト
 				if (mendako) {  // dynamic_cast が成功した場合のみ処理
-					menFg = mendako->GetFg_men(); // Mendako のフラグを取得
+					bool menFg = mendako->GetFg_men(); // Mendako のフラグを取得
 
-					if (menFg) { // menFg が true の場合、アニメーションを開始しない
-						menGk = true;
-						break;
-					}
+					//if (menFg) { // menFg が true の場合、アニメーションを開始しない
+					//	menGk = true;
+					//	break;
+					//}
 
-					if (menFg != true) { // menFg が false の場合、アニメーションを開始
+					if (!menFg) { // menFg が false の場合、アニメーションを開始
 						e_pos = mendako->GetPos(); // Mendako の位置を取得
 						mendakoAnime_g = true; // アニメーションを開始
 
@@ -229,8 +261,9 @@ void GameScene::Update() {
 			men_Ac++; // フレームカウントを増加
 		}
 
+		// 暗闇アニメーション
 		if (framecount % 2 == 0) {
-			int textureIndex = (framecount / 2) % 49;  // 0 から 299 の範囲にリマップ
+			int textureIndex = (framecount / 2) % 41;  // 0 から 29 の範囲にリマップ
 			std::wstring texturePath = L"asset/noise/noise_";
 			std::wstring pathindex = L"000" + std::to_wstring(textureIndex);	// 3桁に調整   
 			pathindex = pathindex.substr(pathindex.size() - 3);  // 最後の3桁のみを使用
@@ -246,9 +279,23 @@ void GameScene::Update() {
 			state = 2;
 		}
 
-		// 死亡していたらシーンチェンジ
-		if (deadFlg || input.GetKeyTrigger(VK_3)) {
+		// リザルトシーンに移動
+		if (deadFlg || goalFlg || input.GetKeyTrigger(VK_3)) {
+			// めんだこスコア
+			for (auto& obj : characterObj) {
+				Mendako* mendako = dynamic_cast<Mendako*>(obj.get()); // characterObj の要素を Mendako 型にキャスト
+				if (mendako) {  // dynamic_cast が成功した場合のみ処理
+					mendakoScore += mendako->GetMendakoCount(); // Mendako のフラグを取得
+				}
+			}
+
+			if (deadFlg) {
+				mendakoScore = 0;
+				score = 0;
+			}
 			// スコアをリザルトに渡して移動
+			g_Sound.StopBGM();
+			g_Sound.ReleaseBGM();
 			SceneManager::ChangeScene(SceneManager::RESULT, score, mendakoScore, elapsed.count());
 		}
 	}
@@ -276,11 +323,9 @@ void GameScene::Draw() {
 	}
 
 	for (const auto& obj : characterObj) {
-
 		obj->Draw();
 	}
 	for (const auto& obj : darknessObj) {
-
 		obj->Draw();
 	}
 
@@ -310,8 +355,14 @@ void GameScene::Draw() {
 		cursol->Draw();
 		close->Draw();
 	}
+
+	if (state == 0) {
+		control->Draw();
+		Abutton->Draw();
+	}
 }
 
+// ==========マップ生成==========
 void GameScene::LoadMapData(int stage) {
 	mapdata.clear();
 
@@ -380,7 +431,7 @@ void GameScene::LoadMapData(int stage) {
 				darknessObj.back()->SetSize(30.0f, 30.0f, 0.0f);
 				darknessObj.back()->SetXY(j, i);
 
-				for (int i = 0; i < 49; i++) {
+				for (int i = 0; i < 41; i++) {
 					std::wstring texturePath = L"asset/noise/noise_";
 					std::wstring pathindex = L"000" + std::to_wstring(i);	// 3桁に調整   
 					pathindex = pathindex.substr(pathindex.size() - 3);  // 最後の3桁のみを使用
@@ -408,8 +459,8 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	case 6: obj = std::make_unique<Kagamidai>(); u = 4; v = 2; break;
 	case 7: obj = std::make_unique<Kagamidai>(); u = 4; v = 2; dir = 1; break;
 	case 8: obj = std::make_unique<Trap>(); u = 1; v = 1; break;
-	case 9: obj = std::make_unique<Kairyu>(); u = 1; v = 1; break;
-	case 10: obj = std::make_unique<Kairyu>(); u = 1; v = 1; dir = 1; break;
+	case 9: obj = std::make_unique<Kairyu>(); u = 5; v = 2; break;
+	case 10: obj = std::make_unique<Kairyu>(); u = 5; v = 2; dir = 1; break;
 	case 11: obj = std::make_unique<Object>(); u = 1; v = 1; break;
 	case 12: obj = std::make_unique<Light>(); u = 1; v = 1; break;
 	case 15: obj = std::make_unique<Onikinme>(); u = 4; v = 1; break;
@@ -432,6 +483,7 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	return obj;
 }
 
+// ==========ゲーム中の更新==========
 void GameScene::MapUpdate() {
 	//マップデータの更新
 	for (int i = 0; i < maplist.size(); ++i) {
@@ -505,7 +557,7 @@ void GameScene::PauseSelect(Input* input) {
 			break;
 			// 操作説明
 		case 1:
-			state = 6;
+			//state = 6;
 			break;
 			// ステージ選択に戻る
 		case 2:

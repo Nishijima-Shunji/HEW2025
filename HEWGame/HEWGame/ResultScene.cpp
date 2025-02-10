@@ -42,12 +42,12 @@ ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setsc
 		scoreNum.back()->SetUV(0, 0);
 
 		timeNum.emplace_back(std::make_unique<Object>());
-		timeNum.back()->Init(textureManager, L"asset/UI/num.png", 10, 1);	// 仮の画像を使用
+		timeNum.back()->Init(textureManager, L"asset/UI/num.png", 10, 1);	// 数字
 		timeNum.back()->SetPos((i * 60.0f) + 380.0f, 60.0f, 0.0f);
 		timeNum.back()->SetSize(60.0f, 60.0f, 0.0f);
 		timeNum.back()->SetUV(0, 0);
 	}
-	//timeNum[2]->SetTexture(textureManager,L"asset/UI/:.png");
+	timeNum[2]->SetTexture(textureManager,L"asset/water.png");
 
 	// 事前に読み込み
 	for (int i = 0; i < 300; i++) {
@@ -60,12 +60,24 @@ ResultScene::ResultScene(int setscore, int setMscore, int settime) : Score(setsc
 			result_bg->SetTexture(textureManager, texturePath.c_str());
 		}
 	}
-	// スコアをコピー
-	tempScore = Score;
-	timescore = 70000;
+	
+	int MaxMendako = 3;
+	int MaxTime = 300000;
+	if (Mscore > MaxMendako) Mscore = MaxMendako;
+
+	// 残り時間を計算
+	int remainingTime = MaxTime - timescore;
+	if (remainingTime < 0) remainingTime = 0;
+
+	// スコア計算
+	tempScore = (remainingTime / 1000) * 10 + (Mscore * 10000);
+
 	temptime = timescore / 1000;
 
 	g_Camera.SetCamera(0.0f, 0.0f, 1.0f);
+
+	g_Sound.RoadBGM(BGM_Result);
+	g_Sound.PlayBGM();
 }
 
 ResultScene::~ResultScene() {
@@ -96,6 +108,7 @@ void ResultScene::Update() {
 	// =====ボタン入力受付=====
 	else if (state == 2) {
 		if (input.GetKeyTrigger(VK_SPACE) || input.GetButtonTrigger(XINPUT_A)) {
+			g_Sound.PlaySE(SE_FloatOn);
 			state = 3;
 		}
 	}
@@ -228,6 +241,8 @@ void ResultScene::SensuikanExit() {
 
 	// 画面外チェック
 	if (sensuikan->GetPos().y > 1000.0f) {
+		g_Sound.StopBGM();
+		g_Sound.ReleaseBGM();
 		SceneManager::ChangeScene(SceneManager::SELECT);
 		velocityY = 0.0f;  // シーン変更時に速度をリセット
 	}

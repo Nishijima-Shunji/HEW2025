@@ -119,7 +119,7 @@ void Player::Move()
 
     if (Map[X][Y] == GOAL)
     {
-
+        goalFlg = true;
     }
     
     if (targetX == pos.x && targetY == pos.y)//ˆÚ“®‚ªŠ®—¹‚µ‚½
