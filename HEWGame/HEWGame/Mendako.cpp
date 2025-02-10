@@ -9,11 +9,6 @@
 //	Include header files.
 //-----------------------------------------------------------------------------
 #include "Mendako.h"
-#include "Input.h"
-//-----------------------------------------------------------------------------
-// プロトタイプ宣言
-//-----------------------------------------------------------------------------
-extern Input input;
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -42,10 +37,7 @@ std::vector<std::vector<int>> Mendako::Update(std::vector<std::vector<int>> MapD
 {
 
     Map = MapDate;
-    if (input.GetKeyTrigger(VK_B))
-    {
-        Map[1][1] = P_DIVER;
-    }
+
     if (Map[PosY][PosX] == P_DIVER)
     {
         //Men_hit = true;

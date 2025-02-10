@@ -60,7 +60,7 @@ void Player::SetUp()//ステージ更新ごとに行う
             {   //プレイヤーを登録
 
                 MoveList[i][j] = P_DIVER;
-                Map[i][j] = NOTHING;
+                Map[i][j] = DARKNESS;
 
                 X = i;
                 Y = j;
@@ -78,31 +78,31 @@ void Player::SetUp()//ステージ更新ごとに行う
             {   //メンダコを登録
 
                 MoveList[i][j] = MENDAKO;
-                Map[i][j] = NOTHING;
+                Map[i][j] = DARKNESS;
             }
             else if (Map[i][j] == TRAP)
             {   //トラップを登録
 
                 MoveList[i][j] = TRAP;
-                Map[i][j] = NOTHING;
+                Map[i][j] = DARKNESS;
             }
             else if (Map[i][j] == STREAM_R)
             {   //海流(右)を登録
 
                 MoveList[i][j] = STREAM_R;
-                Map[i][j] = NOTHING;
+                Map[i][j] = DARKNESS;
             }
             else if (Map[i][j] == STREAM_L)
             {   //海流(左)を登録
 
                 MoveList[i][j] = STREAM_L;
-                Map[i][j] = NOTHING;
+                Map[i][j] = DARKNESS;
             }
             else if (Map[i][j] == MOB_1)
             {   //オニキンメを登録
 
                 MoveList[i][j] = MOB_1;
-                Map[i][j] = NOTHING;
+                Map[i][j] = DARKNESS;
             }
             else
             {

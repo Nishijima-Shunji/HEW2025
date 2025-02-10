@@ -4,6 +4,7 @@
 #include <memory>
 #include <chrono>
 
+#include "Play.h"
 #include "Light.h"
 #include "O2.h"
 #include "Cursol.h"
@@ -39,7 +40,11 @@ private:
     std::unique_ptr<Cursol> cursol;
     std::unique_ptr<Object> close;
 
+    std::unique_ptr<Object> hold_obj[4];
+
     DirectX::XMFLOAT3 e_pos = {0.0f,0.0f,0.0f};//メンダコエフェクトpos
+
+    Play play;
 
     //std::vector<std::vector<int>> maplist;
 

@@ -65,3 +65,43 @@ void ResetFile()
 		fout.close();
 	}
 }
+
+void SaveDirection(int direction, int num)
+{
+	ofstream fout;
+
+	string filename = "SaveData/direction";
+	filename += to_string(num);
+	filename.append(".bin");
+
+	fout.open(filename, ios::out | ios::binary);
+	if (fout.is_open()) {
+		fout.write((char*)&direction, sizeof(direction));
+	}
+	else {
+		cout << "ファイルが開けませんでした" << endl;
+	}
+	fout.close();
+}
+
+int LoadDirection(int num)
+{
+	int direction;
+	ifstream fin;
+
+	string filename = "SaveData/direction";
+	filename += to_string(num);
+	filename.append(".bin");
+
+	fin.open(filename, ios::in | ios::binary);
+
+	if (fin.is_open()) {
+		fin.read((char*)&direction, sizeof(direction));
+	}
+	else {
+		cout << "ファイルが存在しませんでした" << endl;
+	}
+	fin.close();
+
+	return direction;
+}

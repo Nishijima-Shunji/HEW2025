@@ -108,6 +108,12 @@
     <ClCompile Include="Darkness.cpp">
       <Filter>オブジェクト\ギミック</Filter>
     </ClCompile>
+    <ClCompile Include="LightData.cpp">
+      <Filter>その他</Filter>
+    </ClCompile>
+    <ClCompile Include="Play.cpp">
+      <Filter>その他</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -208,6 +214,15 @@
     </ClInclude>
     <ClInclude Include="Darkness.h">
       <Filter>オブジェクト\ギミック</Filter>
+    </ClInclude>
+    <ClInclude Include="LightData.h">
+      <Filter>その他</Filter>
+    </ClInclude>
+    <ClInclude Include="Play.h">
+      <Filter>その他</Filter>
+    </ClInclude>
+    <ClInclude Include="StageObjDefine.h">
+      <Filter>基礎</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -144,6 +144,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Kagamidai.cpp" />
     <ClCompile Include="Kairyu.cpp" />
+    <ClCompile Include="LightData.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mapfile.cpp" />
     <ClCompile Include="Mendako.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Onikinme.cpp" />
     <ClCompile Include="pauseButton.cpp" />
+    <ClCompile Include="Play.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -173,6 +175,7 @@
     <ClInclude Include="Bubble.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Darkness.h" />
+    <ClInclude Include="StageObjDefine.h" />
     <ClInclude Include="direct3d.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="File.h" />
@@ -181,12 +184,14 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Kagamidai.h" />
     <ClInclude Include="Kairyu.h" />
+    <ClInclude Include="LightData.h" />
     <ClInclude Include="mapfile.h" />
     <ClInclude Include="Mendako.h" />
     <ClInclude Include="o2.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Onikinme.h" />
     <ClInclude Include="pauseButton.h" />
+    <ClInclude Include="Play.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="SceneManager.h" />

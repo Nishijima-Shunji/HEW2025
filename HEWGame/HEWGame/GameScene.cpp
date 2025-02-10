@@ -45,6 +45,8 @@ GameScene::GameScene(const int _stage) {
 	textureManager = new TextureManager(g_pDevice);
 	// ステージ選択で選んだ番号のマップデータをロード
 	LoadMapData(stage);
+	//プレイヤーが操作するライトの設定
+	play.Init(maplist);
 	// ステージに合わせてズーム
 	ChangeCamera();
 	//g_Camera.Camera_Pos.z = 1.0f;
@@ -132,6 +134,7 @@ GameScene::~GameScene() {
 	if (prv_mendako < mendako) {
 		SaveFile(stage, mendako);
 	}
+	play.Uninit();
 
 	// mapdataのリソースを解放
 	for (auto& row : mapdata) {
@@ -151,7 +154,7 @@ void GameScene::Update() {
 		// ゲーム時間の計測開始
 		start = std::chrono::high_resolution_clock::now();
 		g_Sound.RoadBGM(BGM01);
-		g_Sound.PlayBGM();
+		//g_Sound.PlayBGM();
 		//g_Sound.SetVolBGM(0.0f);
 		state = 1;
 	}
@@ -165,19 +168,11 @@ void GameScene::Update() {
 		// 古いマップデータの保存
 		oldlist = maplist;
 
-		// マップオブジェクトの更新
-		for (const auto& row : mapdata) {
-			for (const auto& obj : row) {
-				if (obj) {
-					// それ以外の場合
-					maplist = obj->Update(maplist,*this);
-				}
-			}
-		}
 		// キャラクターオブジェクトの更新
 		for (const auto& obj : characterObj) {
 			maplist = obj->Update(maplist,*this);
 		}
+		maplist = play.Update(maplist);
 
 		// マップ情報更新
 		MapUpdate();
@@ -325,6 +320,19 @@ void GameScene::LoadMapData(int stage) {
 
 	maplist = Loadmap(mapPath.c_str());
 
+	for (int i = 0; i <= MAP_WIDTH; i++) {
+		if (maplist[0][i] == -9) {
+			WidthMAX = i - 1;
+			break;
+		}
+	}
+	for (int i = 0; i <= MAP_HEIGHT; i++) {
+		if (maplist[0][i] == -9) {
+			HeightMAX = i - 1;
+			break;
+		}
+	}
+
 	mapdata.resize(maplist.size()); // 外側のベクトルをリサイズ
 
 	for (int i = 0; i < maplist.size(); ++i) {
@@ -332,7 +340,7 @@ void GameScene::LoadMapData(int stage) {
 		//↑データ入ってる
 		for (int j = 0; j < maplist[i].size(); ++j) {
 			int objectType = maplist[i][j];
-			if (objectType != -1 && (objectType == 1 || objectType == 4 || objectType == 11 || objectType == 19 || objectType == 20)) {
+			if(objectType == 1 || objectType == 4 || objectType == 11 || objectType == 12 || objectType == 19 || objectType == 20) {
 				auto obj = CreateObject(objectType, textureManager); // オブジェクト生成
 				if (obj) {
 					float x = j * 30.0f; // x座標		列 * Objectの大きさ * オフセット
@@ -363,7 +371,9 @@ void GameScene::LoadMapData(int stage) {
 				}
 			}
 			// 最初に見えるオブジェクトの上以外に暗闇を配置
-			if (maplist[i][j] != 2 && maplist[i][j] != 3 && maplist[i][j] != 4 && maplist[i][j] != 5 && maplist[i][j] != 11 && maplist[i][j] != 12 && maplist[i][j] != -9) {
+			if (maplist[i][j] != P_DIVER && maplist[i][j] != E_SHARK && maplist[i][j] != GOAL && 
+				maplist[i][j] != MENDAKO && maplist[i][j] != MAP_END && maplist[i][j] != LIGHT_1 &&
+				maplist[i][j] != -9 && i != 0 && i != HeightMAX && j != 0 && j != WidthMAX) {
 				darknessObj.emplace_back(std::make_unique<Darkness>());
 				darknessObj.back()->Init(textureManager, L"asset/noise/noise_001.jpg");
 				darknessObj.back()->SetPos(j * 30.0f, i * -30.0f, 0.0f);
@@ -425,7 +435,7 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 void GameScene::MapUpdate() {
 	//マップデータの更新
 	for (int i = 0; i < maplist.size(); ++i) {
-		mapdata[i].resize(maplist[i].size()); // 各行をリサイズ
+		//mapdata[i].resize(maplist[i].size()); // 各行をリサイズ
 		for (int j = 0; j < maplist[i].size(); ++j) {
 
 			//古いマップデータと比較
@@ -457,6 +467,7 @@ void GameScene::MapUpdate() {
 						mapdata[i][j] = std::move(obj);
 					}
 				}
+
 				// 光で暗闇削除
 				CheckAndEraseObject(i, j, darknessObj, maplist);
 			}
