@@ -184,6 +184,17 @@ void Play::MoveLight()
 				Direction[light_number] = DOWN;
 			}
 
+			if (old_pos_x == 1 && old_pos_y == height) {
+				new_pos_x--;
+				new_pos_y--;
+				Direction[light_number] = RIGHT;
+			}
+			else if (old_pos_x == width - 1 && old_pos_y == height) {
+				new_pos_x++;
+				new_pos_y--;
+				Direction[light_number] = LEFT;
+			}
+
 			if (new_pos_x > 0 && new_pos_x < width &&
 				new_pos_y > 0 && new_pos_y < height) {
 				if (Map[new_pos_y - 1][new_pos_x] != MAP_END) {
@@ -215,6 +226,17 @@ void Play::MoveLight()
 					new_pos_x--;
 				}
 				Direction[light_number] = UP;
+			}
+
+			if (old_pos_x == 1 && old_pos_y == 0) {
+				new_pos_x--;
+				new_pos_y++;
+				Direction[light_number] = RIGHT;
+			}
+			else if (old_pos_x == width - 1 && old_pos_y == 0) {
+				new_pos_x++;
+				new_pos_y++;
+				Direction[light_number] = LEFT;
 			}
 
 			if (new_pos_x > 0 && new_pos_x < width &&
@@ -250,6 +272,17 @@ void Play::MoveLight()
 				Direction[light_number] = LEFT;
 			}
 
+			if (old_pos_x == 0 && old_pos_y == 1) {
+				new_pos_x++;
+				new_pos_y--;
+				Direction[light_number] = DOWN;
+			}
+			else if (old_pos_x == 0 && old_pos_y == height - 1) {
+				new_pos_x++;
+				new_pos_y++;
+				Direction[light_number] = UP;
+			}
+
 			if (new_pos_x > 0 && new_pos_x < width &&
 				new_pos_y > 0 && new_pos_y < height) {
 				if (Map[new_pos_y][new_pos_x + 1] != MAP_END) {
@@ -281,6 +314,17 @@ void Play::MoveLight()
 					new_pos_y--;
 				}
 				Direction[light_number] = RIGHT;
+			}
+
+			if (old_pos_x == width && old_pos_y == 1) {
+				new_pos_x--;
+				new_pos_y--;
+				Direction[light_number] = DOWN;
+			}
+			else if (old_pos_x == width && old_pos_y == height - 1) {
+				new_pos_x--;
+				new_pos_y++;
+				Direction[light_number] = UP;
 			}
 
 			if (new_pos_x > 0 && new_pos_x < width &&
@@ -385,7 +429,7 @@ bool Play::Flash(const int pos_x, const int pos_y,
 		//‹¾‘â
 		case MIRROR_U:
 		case MIRROR_D:
-			Map[pos_y][pos_x] = Luminous; //”­Œõ
+			Map[pos_y][pos_x] = LUMINOUS; //”­Œõ
 			Reflection(pos_x, pos_y, nowlight);
 		}
 	}
@@ -426,9 +470,9 @@ bool Play::Flash(const int pos_x, const int pos_y,
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			if (LightUpMap[i][j] > 0) {
-				Map[i][j] = Luminous;
+				Map[i][j] = LUMINOUS;
 			}
-			else if(Map[i][j] == Luminous){
+			else if(Map[i][j] == LUMINOUS){
 				Map[i][j] = SPACE;
 			}
 			else {

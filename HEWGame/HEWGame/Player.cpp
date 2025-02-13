@@ -126,10 +126,10 @@ void Player::Move()
     {
         //ライトとの接触確認
         //照射中
-        if (Map[X][Y] == Luminous)
+        if (Map[X][Y] == LUMINOUS)
         {
             //上下マスの発光を確認
-            if (Map[X - 1][Y] == Luminous || Map[X + 1][Y] == Luminous)
+            if (Map[X - 1][Y] == LUMINOUS || Map[X + 1][Y] == LUMINOUS)
             {
                 Vertical = true;
             }
@@ -138,7 +138,7 @@ void Player::Move()
                 Vertical = false;
             }
             //左右マスの発光を確認
-            if (Map[X][Y - 1] == Luminous || Map[X][Y + 1] == Luminous)
+            if (Map[X][Y - 1] == LUMINOUS || Map[X][Y + 1] == LUMINOUS)
             {
                 Horizontal = true;
             }
@@ -150,11 +150,11 @@ void Player::Move()
             //上下移動
             if (Vertical == true)
             {
-                if (Map[X - 1][Y] != Luminous && Map[X - 1][Y] != GOAL)      //上のマスが発光していない
+                if (Map[X - 1][Y] != LUMINOUS && Map[X - 1][Y] != GOAL)      //上のマスが発光していない
                 {
                     Reverse = false;
                 }
-                else if (Map[X + 1][Y] != Luminous && Map[X + 1][Y] != GOAL) //下のマスが発光していない
+                else if (Map[X + 1][Y] != LUMINOUS && Map[X + 1][Y] != GOAL) //下のマスが発光していない
                 {
                     Reverse = true;
                 }
@@ -174,11 +174,11 @@ void Player::Move()
             //左右移動
             if (Horizontal == true)
             {
-                if (Map[X][Y - 1] != Luminous && Map[X][Y - 1] != GOAL)      //左のマスが発光していない
+                if (Map[X][Y - 1] != LUMINOUS && Map[X][Y - 1] != GOAL)      //左のマスが発光していない
                 {
                     Reverse = false;
                 }
-                else if (Map[X][Y + 1] != Luminous && Map[X][Y + 1] != GOAL) //右のマスが発光していない
+                else if (Map[X][Y + 1] != LUMINOUS && Map[X][Y + 1] != GOAL) //右のマスが発光していない
                 {
                     Reverse = true;
                 }

@@ -522,8 +522,8 @@ void GameScene::MapUpdate() {
 							obj->SetAngle(play.GetAngle(i, j));
 						}
 
-						if (objectType == Luminous) {
-							if (maplist[i][j - 1] == Luminous || maplist[i][j + 1] == Luminous ||
+						if (objectType == LUMINOUS) {
+							if (maplist[i][j - 1] == LUMINOUS || maplist[i][j + 1] == LUMINOUS ||
 								maplist[i][j - 1] == LIGHT_1 || maplist[i][j + 1] == LIGHT_1 ||
 								maplist[i][j - 1] == LIGHT_2 || maplist[i][j + 1] == LIGHT_2 ||
 								maplist[i][j - 1] == LIGHT_3 || maplist[i][j + 1] == LIGHT_3) {
@@ -746,7 +746,7 @@ void GameScene::CheckAndEraseObject(int i, int j, std::vector<std::unique_ptr<Da
 		auto& obj = *it;
 
 		if (obj->GetXY().x == j && obj->GetXY().y == i) {
-			if ((maplist[i][j] == Luminous || maplist[i][j] == LIGHTUPWALL) && obj->GetFlg()) {
+			if ((maplist[i][j] == LUMINOUS || maplist[i][j] == LIGHTUPWALL) && obj->GetFlg()) {
 				it = darknessObj.erase(it);
 				continue;
 			}

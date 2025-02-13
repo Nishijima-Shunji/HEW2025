@@ -42,7 +42,7 @@ void Enemy::FindLight() {
 	if (move) return;  // à⁄ìÆíÜÇÕíTçıÇçsÇÌÇ»Ç¢
 	bool foundLight = false;
 
-	if (Map[PosY][PosX] == Luminous) {
+	if (Map[PosY][PosX] == LUMINOUS) {
 		inLight = true;
 	}
 	else {
@@ -50,108 +50,133 @@ void Enemy::FindLight() {
 	}
 
 	// Xï˚å¸Ç…åıÇíTÇ∑
-	for (int tempX = PosX - 1; tempX >= 0; tempX--) {
-		if (!inLight || direction == 2) {
+	for (int tempX = PosX - 1; tempX > 0; tempX--) {
+		if (!inLight || direction == LEFT) {
 			// íTçıíÜÇ…ï«Ç™Ç†ÇÍÇŒÇªÇ±Ç≈ÇªÇÃï˚å¸ÇÕèIóπ
-			if (Map[PosY][tempX] == 1 || Map[PosY][tempX] == 11 || Map[PosY][tempX] == 12) {
-				if ((Map[PosY][PosX - 1] == WALL || Map[PosY][PosX - 1] == 11 || Map[PosY][PosX - 1] == 12 || Map[PosY][PosX - 1] == 4) && inLight) {
-					direction = 3;
+			if (Map[PosY][tempX] == WALL || Map[PosY][tempX] == LIGHTUPWALL ||
+				Map[PosY][tempX] == MAP_END || Map[PosY][tempX] == LIGHT_1) {
+				if ((Map[PosY][PosX - 1] == WALL || Map[PosY][PosX - 1] == LIGHTUPWALL ||
+					Map[PosY][PosX - 1] == MAP_END || Map[PosY][PosX - 1] == LIGHT_1 
+					|| Map[PosY][PosX - 1] == GOAL) 
+					&& inLight) {
+					direction = RIGHT;
 					targetX = tempX;
 					moveX = true;
 					foundLight = true;
 				}
+
 				break;
 			}
 			// åıÇ™å©Ç¬Ç©Ç¡ÇΩÇÁñ⁄ìIínê›íË
-			if (Map[PosY][tempX] == (20)) {
+			if (Map[PosY][tempX] == LUMINOUS) {
 				targetX = tempX;
 				moveX = true;
 				foundLight = true;
+
 				break;
 			}
 		}
-		if (inLight && (Map[PosY - 1][PosX != Luminous] && Map[PosY + 1][PosX != Luminous]) && !prevlight) {
-			direction = 3;
+		if (inLight && (Map[PosY - 1][PosX] != LUMINOUS && Map[PosY + 1][PosX] != LUMINOUS) 
+			&& !prevlight) {
+			direction = RIGHT;
 		}
 	}
-	for (int tempX = PosX + 1; tempX < 32; tempX++) {
-		if (!inLight || direction == 3) {
+	for (int tempX = PosX + 1; tempX < WIDTH; tempX++) {
+		if (!inLight || direction == RIGHT) {
 			// íTçıíÜÇ…ï«Ç™Ç†ÇÍÇŒÇªÇ±Ç≈ÇªÇÃï˚å¸ÇÕèIóπ
-			if (Map[PosY][tempX] == 1 || Map[PosY][tempX] == 11 || Map[PosY][tempX] == 12) {
-				if ((Map[PosY][PosX + 1] == WALL || Map[PosY][PosX + 1] == 11 || Map[PosY][PosX + 1] == 12 || Map[PosY][PosX + 1] == 4) && inLight) {
-					direction = 2;
+			if (Map[PosY][tempX] == WALL || Map[PosY][tempX] == LIGHTUPWALL ||
+				Map[PosY][tempX] == MAP_END || Map[PosY][tempX] == LIGHT_1) {
+				if ((Map[PosY][PosX + 1] == WALL || Map[PosY][PosX + 1] == LIGHTUPWALL ||
+					Map[PosY][PosX + 1] == MAP_END || Map[PosY][PosX + 1] == LIGHT_1 || 
+					Map[PosY][PosX + 1] == GOAL) 
+					&& inLight) {
+					direction = LEFT;
 					targetX = tempX;
 					moveX = true;
 					foundLight = true;
 				}
+
 				break;
 			}
-			if (Map[PosY][tempX] == Luminous) {
+			if (Map[PosY][tempX] == LUMINOUS) {
 				targetX = tempX;
 				moveX = true;
 				foundLight = true;
+
 				break;
 			}
 		}
-		if (inLight && (Map[PosY - 1][PosX] != Luminous && Map[PosY + 1][PosX] != Luminous) && !prevlight) {
-			direction = 3;
+		if (inLight && (Map[PosY - 1][PosX] != LUMINOUS && Map[PosY + 1][PosX] != LUMINOUS) 
+			&& !prevlight) {
+			direction = RIGHT;
 		}
 	}
 
 	// Yï˚å¸Ç…åıÇíTÇ∑
-	for (int tempY = PosY - 1; tempY >= 0; tempY--) {
-		if (!inLight || direction == 0) {
+	for (int tempY = PosY - 1; tempY > 0; tempY--) {
+		if (!inLight || direction == UP) {
 			// íTçıíÜÇ…ï«Ç™Ç†ÇÍÇŒÇªÇ±Ç≈ÇªÇÃï˚å¸ÇÕèIóπ
-			if (Map[tempY][PosX] == 1 || Map[tempY][PosX] == 11 || Map[tempY][PosX] == 12) {
-				if ((Map[PosY - 1][PosX] == WALL || Map[PosY - 1][PosX] == 11 || Map[PosY - 1][PosX] == 12 || Map[PosY - 1][PosX] == 4) && inLight) {
-					direction = 1;
+			if (Map[tempY][PosX] == WALL || Map[tempY][PosX] == LIGHTUPWALL ||
+				Map[tempY][PosX] == MAP_END || Map[tempY][PosX] == LIGHT_1) {
+				if ((Map[PosY - 1][PosX] == WALL || Map[PosY - 1][PosX] == LIGHTUPWALL ||
+					Map[PosY - 1][PosX] == MAP_END || Map[PosY - 1][PosX] == LIGHT_1 ||
+					Map[PosY - 1][PosX] == GOAL) 
+					&& inLight) {
+					direction = DOWN;
 					targetY = tempY;
 					moveY = true;
 					foundLight = true;
 				}
 				break;
 			}
-			if (Map[tempY][PosX] == Luminous) {
+			if (Map[tempY][PosX] == LUMINOUS) {
 				targetY = tempY;
 				moveY = true;
 				foundLight = true;
 				break;
 			}
 		}
-		if (inLight && (Map[PosY][PosX - 1] != Luminous && Map[PosY][PosX + 1] != Luminous) && !prevlight) {
-			direction = 1;
+		if (inLight && (Map[PosY][PosX - 1] != LUMINOUS && Map[PosY][PosX + 1] != LUMINOUS) && 
+			!prevlight) {
+			direction = DOWN;
 		}
 	}
-	for (int tempY = PosY + 1; tempY < 18; tempY++) {
-		if (!inLight || direction == 1) {
+	for (int tempY = PosY + 1; tempY < HEIGHT; tempY++) {
+		if (!inLight || direction == DOWN) {
 			// íTçıíÜÇ…ï«Ç™Ç†ÇÍÇŒÇªÇ±Ç≈ÇªÇÃï˚å¸ÇÕèIóπ
-			if (Map[tempY][PosX] == 1 || Map[tempY][PosX] == 11 || Map[tempY][PosX] == 12) {
-				if ((Map[PosY + 1][PosX] == WALL || Map[PosY + 1][PosX] == 11 || Map[PosY + 1][PosX] == 12 || Map[PosY + 1][PosX] == 4) && inLight) {
-					direction = 0;
+			if (Map[tempY][PosX] == WALL || Map[tempY][PosX] == LIGHTUPWALL ||
+				Map[tempY][PosX] == MAP_END || Map[tempY][PosX] == LIGHT_1) {
+				if ((Map[PosY + 1][PosX] == WALL || Map[PosY + 1][PosX] == LIGHTUPWALL ||
+					Map[PosY + 1][PosX] == MAP_END || Map[PosY + 1][PosX] == LIGHT_1 || 
+					Map[PosY + 1][PosX] == GOAL) && inLight) {
+					direction = UP;
 					targetY = tempY;
 					moveY = true;
 					foundLight = true;
 				}
+
 				break;
 			}
-			if (Map[tempY][PosX] == Luminous) {
+			if (Map[tempY][PosX] == LUMINOUS) {
 				targetY = tempY;
 				moveY = true;
 				foundLight = true;
+
 				break;
 			}
 		}
-		if (inLight && (Map[PosY][PosX - 1] != Luminous && Map[PosY][PosX + 1] != Luminous) && !prevlight) {
-			direction = 1;
+		if (inLight && (Map[PosY][PosX - 1] != LUMINOUS && Map[PosY][PosX + 1] != LUMINOUS) 
+			&& !prevlight) {
+			direction = DOWN;
 		}
 	}
 
-	if (!foundLight && hasFoundLightBefore) {
+	if (foundLight) {
 		// éüÇÃÉ}ÉXÇ÷ÇÃà⁄ìÆèàóù
-		if (moveX) {
+		if (moveX && PosX != targetX) {
 			targetX = (PosX > targetX) ? PosX - 1 : PosX + 1;
 		}
-		if (moveY) {
+		if (moveY && PosY != targetY) {
 			targetY = (PosY > targetY) ? PosY - 1 : PosY + 1;
 		}
 		move = true;

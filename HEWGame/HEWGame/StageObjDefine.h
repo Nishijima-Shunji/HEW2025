@@ -19,5 +19,5 @@
 #define MOB_1    (15)	//オニキンメ
 #define MOB_2    (16)	//アンコウ
 #define D_LIGHT  (19)	//デバッグ用ライト
-#define Luminous (20)	//発光マス
+#define LUMINOUS (20)	//発光マス
 #define LIGHTUPWALL	(21)	//光を当てられた壁
