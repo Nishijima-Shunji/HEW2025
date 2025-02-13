@@ -166,8 +166,8 @@ void GameScene::Update() {
 	if (state == 0) {
 		// ゲーム時間の計測開始
 		start = std::chrono::high_resolution_clock::now();
-		g_Sound.RoadBGM(BGM01);
-		g_Sound.PlayBGM();
+		//g_Sound.RoadBGM(BGM01);
+		//g_Sound.PlayBGM();
 		//g_Sound.SetVolBGM(0.0f);
 		state = 1;
 	}
@@ -477,7 +477,6 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 	}
 	else {
 		obj->Init(textureManager, L"asset/default.png");
-		//obj->Init(textureManager, L"asset/map_0.png");
 	}
 
 	return obj;
@@ -487,12 +486,15 @@ std::unique_ptr<Object> GameScene::CreateObject(int objectType, TextureManager* 
 void GameScene::MapUpdate() {
 	//マップデータの更新
 	for (int i = 0; i < maplist.size(); ++i) {
-		//mapdata[i].resize(maplist[i].size()); // 各行をリサイズ
 		for (int j = 0; j < maplist[i].size(); ++j) {
 
 			//古いマップデータと比較
 			int OldObject = oldlist[i][j];
 			int NewObject = maplist[i][j];
+
+			if (NewObject == LIGHT_1 || NewObject == LIGHT_2 || NewObject == LIGHT_3) {
+				mapdata[i][j]->SetAngle(play.GetAngle(i, j));
+			}
 
 			//マップデータが変化しているなら
 			if (NewObject != OldObject)
@@ -515,6 +517,19 @@ void GameScene::MapUpdate() {
 						obj->SetSize(30.0f, 30.0f, 0.0f);
 						obj->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 						obj->SetXY(j, i);
+
+						if (objectType == LIGHT_1 || objectType == LIGHT_2 || objectType == LIGHT_3) {
+							obj->SetAngle(play.GetAngle(i, j));
+						}
+
+						if (objectType == Luminous) {
+							if (maplist[i][j - 1] == Luminous || maplist[i][j + 1] == Luminous ||
+								maplist[i][j - 1] == LIGHT_1 || maplist[i][j + 1] == LIGHT_1 ||
+								maplist[i][j - 1] == LIGHT_2 || maplist[i][j + 1] == LIGHT_2 ||
+								maplist[i][j - 1] == LIGHT_3 || maplist[i][j + 1] == LIGHT_3) {
+								obj->SetAngle(90.0f);
+							}
+						}
 
 						mapdata[i][j] = std::move(obj);
 					}
@@ -731,7 +746,7 @@ void GameScene::CheckAndEraseObject(int i, int j, std::vector<std::unique_ptr<Da
 		auto& obj = *it;
 
 		if (obj->GetXY().x == j && obj->GetXY().y == i) {
-			if ((maplist[i][j] == 20) && obj->GetFlg()) {
+			if ((maplist[i][j] == Luminous || maplist[i][j] == LIGHTUPWALL) && obj->GetFlg()) {
 				it = darknessObj.erase(it);
 				continue;
 			}

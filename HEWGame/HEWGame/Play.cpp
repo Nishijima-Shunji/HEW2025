@@ -71,6 +71,7 @@ void Play::CheckLight()
 				LightOn.push_back(false);
 				keepLightOn.push_back(false);
 				LightStop.push_back(true);
+				LightOk.push_back(true);
 				light_max++;
 			}
 		}
@@ -173,7 +174,6 @@ void Play::MoveLight()
 				new_pos_y--;
 			}
 
-
 			if (new_pos_y == 0) {
 				if (old_pos_x == 0) {
 					new_pos_x++;
@@ -186,10 +186,16 @@ void Play::MoveLight()
 
 			if (new_pos_x > 0 && new_pos_x < width &&
 				new_pos_y > 0 && new_pos_y < height) {
-				Direction[light_number] = UP;
+				if (Map[new_pos_y - 1][new_pos_x] != MAP_END) {
+					Direction[light_number] = UP;
+				}
 			}
-			
-			LightOn[light_number] = false;
+
+			if (LightOn[light_number] == true) {
+				LightOn[light_number] = false;
+				LightOk[light_number] = false;
+				LightStop[light_number] = false;
+			}
 		}
 	}
 
@@ -200,7 +206,6 @@ void Play::MoveLight()
 			if (Map[old_pos_y + 1][old_pos_x] == MAP_END) {
 				new_pos_y++;
 			}
-
 
 			if (new_pos_y == height) {
 				if (old_pos_x == 0) {
@@ -214,10 +219,82 @@ void Play::MoveLight()
 
 			if (new_pos_x > 0 && new_pos_x < width &&
 				new_pos_y > 0 && new_pos_y < height) {
-				Direction[light_number] = DOWN;
+				if (Map[new_pos_y + 1][new_pos_x] != MAP_END) {
+					Direction[light_number] = DOWN;
+				}
 			}
 
-			LightOn[light_number] = false;
+			if (LightOn[light_number] == true) {
+				LightOn[light_number] = false;
+				LightOk[light_number] = false;
+				LightStop[light_number] = false;
+			}
+		}
+	}
+
+	//右
+	if (input.GetKeyTrigger(VK_D) || input.GetButtonTrigger(XINPUT_RIGHT)) {
+		//右に1マス
+		if (old_pos_x < width) {
+			if (Map[old_pos_y][old_pos_x + 1] == MAP_END) {
+				new_pos_x++;
+			}
+
+			if (new_pos_x == width) {
+				if (old_pos_y == 0) {
+					new_pos_y++;
+				}
+				else {
+					new_pos_y--;
+				}
+				Direction[light_number] = LEFT;
+			}
+
+			if (new_pos_x > 0 && new_pos_x < width &&
+				new_pos_y > 0 && new_pos_y < height) {
+				if (Map[new_pos_y][new_pos_x + 1] != MAP_END) {
+					Direction[light_number] = RIGHT;
+				}
+			}
+
+			if (LightOn[light_number] == true) {
+				LightOn[light_number] = false;
+				LightOk[light_number] = false;
+				LightStop[light_number] = false;
+			}
+		}
+	}
+
+	//左
+	if (input.GetKeyTrigger(VK_A) || input.GetButtonTrigger(XINPUT_LEFT)) {
+		//右に1マス
+		if (old_pos_x > 0) {
+			if (Map[old_pos_y][old_pos_x - 1] == MAP_END) {
+				new_pos_x--;
+			}
+
+			if (new_pos_x == 0) {
+				if (old_pos_y == 0) {
+					new_pos_y++;
+				}
+				else {
+					new_pos_y--;
+				}
+				Direction[light_number] = RIGHT;
+			}
+
+			if (new_pos_x > 0 && new_pos_x < width &&
+				new_pos_y > 0 && new_pos_y < height) {
+				if (Map[new_pos_y][new_pos_x - 1] != MAP_END) {
+					Direction[light_number] = LEFT;
+				}
+			}
+
+			if (LightOn[light_number] == true) {
+				LightOn[light_number] = false;
+				LightOk[light_number] = false;
+				LightStop[light_number] = false;
+			}
 		}
 	}
 }
@@ -227,8 +304,9 @@ void Play::LightUp()
 	if (input.GetKeyTrigger(VK_SPACE) || input.GetButtonTrigger(XINPUT_A)) {
 		if (LightOn[light_number]) {
 			LightOn[light_number] = false;
+			LightOk[light_number] = false;
 		}
-		else {
+		else if(LightOk[light_number] == true){
 			LightOn[light_number] = true;
 		}
 	}
@@ -289,12 +367,17 @@ bool Play::Flash(const int pos_x, const int pos_y,
 		if (LightUpMap[pos_y][pos_x] != NOTLIGHTUP) {
 			LightUpMap[pos_y][pos_x]++;
 		}
-		else if(Map[pos_y][pos_x] == WALL) {
-			Map[pos_y][pos_x] = WALL;
-			stop = true;
-		}
-		else {
-			stop = true;
+		else{
+			switch (Map[pos_y][pos_x]) {
+			case GOAL:
+				break;
+
+			case WALL:
+				Map[pos_y][pos_x] = LIGHTUPWALL;
+			default:
+				stop = true;
+				break;
+			}
 		}
 
 		//ギミックに対する動き
@@ -312,7 +395,15 @@ bool Play::Flash(const int pos_x, const int pos_y,
 			LightUpMap[pos_y][pos_x]--;
 		}
 		else {
-			stop = true;
+			switch (Map[pos_y][pos_x]) {
+			case GOAL:
+				break;
+
+			default:
+				stop = true;
+				LightOk[nowlight] = true;
+				break;
+			}
 		}
 
 		//ギミックに対する動き
@@ -406,4 +497,30 @@ void Play::DebugMap()
 		std::cout << std::endl;
 	}
 	//======================
+}
+
+//値を返す
+float Play::GetAngle(int y, int x)
+{
+	for (int light = 0; light < light_max; light++) {
+		if (LightPos_x[light] == x && LightPos_y[light] == y) {
+			switch (Direction[light]) {
+			case UP:
+				return 0.0f;
+				break;
+
+			case DOWN:
+				return 180.0f;
+				break;
+			case RIGHT:
+				return 270.0f;
+				break;
+			case LEFT:
+				return 90.0f;
+				break;
+			}
+		}
+	}
+
+	return 0.0f;
 }

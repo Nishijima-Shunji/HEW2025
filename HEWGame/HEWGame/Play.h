@@ -28,17 +28,20 @@ private:
 	int Gimmick[HEIGHT][WIDTH];
 	int LightUpMap[HEIGHT][WIDTH];
 
-	std::vector<int> LightPos_x, LightPos_y,keep_pos_x, keep_pos_y, Direction, keep_Direction;
-	std::vector<bool> LightOn, LightStop, keepLightOn;
+	std::vector<int> LightPos_x, LightPos_y, keep_pos_x, keep_pos_y;
+	std::vector<int> Direction, keep_Direction;
+	std::vector<bool> LightOn, LightOk, LightStop, keepLightOn;
 	std::vector<std::vector<int>> Map;
 
 	Input input;
 
+	//初期化系
 	void CheckEdge();
 	void CheckLight();
 	void SetGimmick();
 	void SetLightUpMap();
 
+	//更新系
 	void ChangeLight();
 	void MoveLight();
 	void LightUp();
@@ -46,6 +49,7 @@ private:
 		const bool light_on, const int nowlight);
 	void Reflection(const int pos_x, const int pos_y, const int nowlight);
 
+	//マップデータ更新
 	void MapUpdate();
 	void DebugMap();
 
@@ -53,4 +57,6 @@ public:
 	void Init(std::vector<std::vector<int>> MapList);
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>> MapList);
 	void Uninit();
+
+	float GetAngle(int y, int x);
 };

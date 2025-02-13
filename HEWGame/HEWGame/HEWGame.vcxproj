@@ -144,7 +144,6 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Kagamidai.cpp" />
     <ClCompile Include="Kairyu.cpp" />
-    <ClCompile Include="LightData.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mapfile.cpp" />
     <ClCompile Include="Mendako.cpp" />
@@ -184,7 +183,6 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Kagamidai.h" />
     <ClInclude Include="Kairyu.h" />
-    <ClInclude Include="LightData.h" />
     <ClInclude Include="mapfile.h" />
     <ClInclude Include="Mendako.h" />
     <ClInclude Include="o2.h" />
