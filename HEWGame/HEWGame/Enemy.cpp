@@ -1,6 +1,8 @@
 #include "Enemy.h"
 #include "GameScene.h"
 
+//‚ ‚Ù
+
 Enemy::Enemy() {
 
 }
