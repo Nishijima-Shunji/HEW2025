@@ -1,10 +1,10 @@
 #pragma once
 #include "Object.h"
 
-#define UP		(0)
-#define RIGHT	(1)
-#define DOWN	(2)
-#define LEFT	(3)
+#define E_UP		(0)
+#define E_RIGHT	(1)
+#define E_DOWN	(2)
+#define E_LEFT	(3)
 
 #define WIDTH	(32)
 #define HEIGHT	(18)
@@ -22,7 +22,7 @@ private:
 	int speed = 1.0f;
 
 	bool move = false;
-	int direction = UP;
+	int direction = E_UP;
 	bool inLight = false;
 	int framecount;
 	int animcount;

@@ -146,9 +146,9 @@ void Play::ChangeLight()
 {
 	//ライトチェンジ
 	if (input.GetKeyTrigger(VK_Q) || input.GetButtonTrigger(XINPUT_LEFT_SHOULDER)) {	//前に戻る
-		Map[LightPos_x[light_number]][LightPos_y[light_number]] = LIGHT_1;
+		//Map[LightPos_x[light_number]][LightPos_y[light_number]] = LIGHT_1;
 		light_number--;
-		Map[LightPos_x[light_number]][LightPos_y[light_number]] = LIGHT_2;
+		//Map[LightPos_x[light_number]][LightPos_y[light_number]] = LIGHT_2;
 		if (light_number < 0) {
 			//最大値は1~なため
 			light_number = light_max - 1;
@@ -156,9 +156,9 @@ void Play::ChangeLight()
 	}
 
 	if (input.GetKeyTrigger(VK_E) || input.GetButtonTrigger(XINPUT_RIGHT_SHOULDER)) {	//次に進む
-		Map[LightPos_x[light_number]][LightPos_y[light_number]] = LIGHT_1;
+		//Map[LightPos_x[light_number]][LightPos_y[light_number]] = LIGHT_1;
 		light_number++;
-		Map[LightPos_x[light_number]][LightPos_y[light_number]] = LIGHT_2;
+		//Map[LightPos_x[light_number]][LightPos_y[light_number]] = LIGHT_2;
 		if (light_number >= light_max) {
 			light_number = 0;
 		}
