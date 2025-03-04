@@ -184,10 +184,12 @@ void Player::Stream(int gimmic)
 {
     if (gimmic == STREAM_R) {
         targetX += 1;
+        holdDire = P_RIGHT;
         move = true;
     }
     else {
         targetX -= 1;
+        holdDire = P_LEFT;
         move = true;
     }
 }

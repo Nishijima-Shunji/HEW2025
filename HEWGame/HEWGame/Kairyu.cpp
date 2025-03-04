@@ -43,28 +43,28 @@ std::vector<std::vector<int>> Kairyu::Update(std::vector<std::vector<int>> MapDa
 	// GameScene から characterObj を取得
 	auto& characterObj = game.GetCharacterObjects(); // 参照を使う
 
-	for (const auto& obj : characterObj) {
-		// Player オブジェクトかどうかを確認
-		Player* player = dynamic_cast<Player*>(obj.get());
-		if (player) {
-			float deltaX = 0.0f;
-			if (this->CheckCollision(*player)) {
-				// 右
-				if (direction == 0) {
-					deltaX = 1.0f;
-				}
-				// 左
-				else if (direction == 1) {
-					deltaX = -1.0f;
-				}
+	//for (const auto& obj : characterObj) {
+	//	// Player オブジェクトかどうかを確認
+	//	Player* player = dynamic_cast<Player*>(obj.get());
+	//	if (player) {
+	//		float deltaX = 0.0f;
+	//		if (this->CheckCollision(*player)) {
+	//			// 右
+	//			if (direction == 0) {
+	//				deltaX = 1.0f;
+	//			}
+	//			// 左
+	//			else if (direction == 1) {
+	//				deltaX = -1.0f;
+	//			}
 
-				// プレイヤーの位置を更新
-				player->SetPos(player->GetPos().x + deltaX, player->GetPos().y, 0.0f);
+	//			// プレイヤーの位置を更新
+	//			player->SetPos(player->GetPos().x + deltaX, player->GetPos().y, 0.0f);
 
-				break; // ループを終了
-			}
-		}
-	}
+	//			break; // ループを終了
+	//		}
+	//	}
+	//}
 		// 待機アニメーション
 	SetUV(animcount % 5, (animcount / 5) % 2);
 	if (framecount % 5 == 0) {
