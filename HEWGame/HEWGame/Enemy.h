@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
 
-#define E_UP		(0)
+#define E_UP	(0)
 #define E_RIGHT	(1)
 #define E_DOWN	(2)
 #define E_LEFT	(3)

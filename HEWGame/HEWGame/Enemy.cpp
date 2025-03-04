@@ -56,7 +56,6 @@ void Enemy::FindLight() {
 			case E_UP:
 				if (up_check) {
 					exitCheck = CheckAllDirection(PosY - i, PosX, E_UP);
-					if (exitCheck == STOP_MOVE) break;
 					if (exitCheck == STOP_CHECK)	up_check = false;
 				}
 				break;
@@ -64,7 +63,6 @@ void Enemy::FindLight() {
 			case E_RIGHT:
 				if (right_check) {
 					exitCheck = CheckAllDirection(PosY, PosX + i, E_RIGHT);
-					if (exitCheck == STOP_MOVE) break;
 					if (exitCheck == STOP_CHECK)	right_check = false;
 				}
 				break;
@@ -72,7 +70,6 @@ void Enemy::FindLight() {
 			case E_DOWN:
 				if (down_check) {
 					exitCheck = CheckAllDirection(PosY + i, PosX, E_DOWN);
-					if (exitCheck == STOP_MOVE) break;
 					if (exitCheck == STOP_CHECK)	down_check = false;
 				}
 				break;
@@ -80,7 +77,6 @@ void Enemy::FindLight() {
 			case E_LEFT:
 				if (left_check) {
 					exitCheck = CheckAllDirection(PosY, PosX - i, E_LEFT);
-					if (exitCheck == STOP_MOVE)	break;
 					if (exitCheck == STOP_CHECK)	left_check = false;
 				}
 				break;

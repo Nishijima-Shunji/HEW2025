@@ -138,6 +138,13 @@ GameScene::GameScene(const int _stage) {
 	}
 	g_Sound.RoadBGM(BGM_GameStage);
 	g_Sound.PlayBGM();
+
+	for (auto& obj : characterObj) {
+		Player* player = dynamic_cast<Player*>(obj.get());
+		if (player) {  // dynamic_castが成功した場合のみ処理
+			player->Init(maplist);
+		}
+	}
 }
 
 GameScene::~GameScene() {
@@ -168,7 +175,7 @@ void GameScene::Update() {
 		start = std::chrono::high_resolution_clock::now();
 		//g_Sound.RoadBGM(BGM01);
 		//g_Sound.PlayBGM();
-		//g_Sound.SetVolBGM(0.0f);
+		g_Sound.SetVolBGM(0.0f);
 		state = 1;
 	}
 	else if (state == 1) {
@@ -215,7 +222,7 @@ void GameScene::Update() {
 		for (auto& obj : characterObj) {
 			Player* player = dynamic_cast<Player*>(obj.get());
 			if (player) {  // dynamic_castが成功した場合のみ処理
-				goalFlg = player->GetFlg();
+				goalFlg = player->GetFg();
 				if (goalFlg) {
 					break;
 				}

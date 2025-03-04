@@ -9,6 +9,7 @@
 //	Include header files.
 //-----------------------------------------------------------------------------
 #include "Player.h"
+#include "GameScene.h"
 
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
@@ -30,16 +31,48 @@
 //!	@retval 
 //==============================================================================
 
+void Player::Init(std::vector<std::vector<int>> MapData)
+{
+    for (int i = 0; i < 18; i++) {
+        for (int j = 0; j < 32; j++) {
+            switch (MapData[i][j]) {
+            case P_DIVER:
+                MapList[i][j] = P_DIVER;
+                break;
+
+            case GOAL:
+                MapList[i][j] = GOAL;
+                break;
+
+            case STREAM_R:
+                MapList[i][j] = STREAM_R;
+                break;
+
+            case STREAM_L:
+                MapList[i][j] = STREAM_L;
+                break;
+
+            case MIRROR_U:
+                MapList[i][j] = MIRROR_U;
+                break;
+
+            case MIRROR_D:
+                MapList[i][j] = MIRROR_D;
+                break;
+            }
+        }
+    }
+}
+
 std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapData,GameScene& game)
 {
     Map = MapData;
-    if (Start == false)
-    {
-        SetUp();
-        Start = true;
+
+    if (MapList[PosY][PosX] == GOAL) {
+        goalFg = true;
     }
 
-    Move();
+    PlayerMove();
 
     // 待機アニメーション
     SetUV(animcount % 4 , (animcount / 4) % 2);
@@ -52,197 +85,182 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
     return Map;
 }
 
-void Player::SetUp()//ステージ更新ごとに行う
+void Player::PlayerMove()
 {
-    for (int i = 0; i < 18; i++) {
-        for (int j = 0; j < 32; j++) {
-            if (Map[i][j] == P_DIVER)
-            {   //プレイヤーを登録
+    bool inLight = false;
 
-                MoveList[i][j] = P_DIVER;
-                Map[i][j] = DARKNESS;
+    if (Map[PosY][PosX] == LUMINOUS) {
+        inLight = true;
+    }
 
-                X = i;
-                Y = j;
-                targetX = pos.x;
-                targetY = pos.y;
-            }
-            else if (Map[i][j] == GOAL)
-            {   //ゴールを登録
+    if (inLight && !move) {
+        CheckMove();
+    }
 
-                MoveList[i][j] = GOAL;
-                Goal_X = i;
-                Goal_Y = j;
-            }
-            else if (Map[i][j] == MENDAKO)
-            {   //メンダコを登録
-
-                MoveList[i][j] = MENDAKO;
-                Map[i][j] = DARKNESS;
-            }
-            else if (Map[i][j] == TRAP)
-            {   //トラップを登録
-
-                MoveList[i][j] = TRAP;
-                Map[i][j] = DARKNESS;
-            }
-            else if (Map[i][j] == STREAM_R)
-            {   //海流(右)を登録
-
-                MoveList[i][j] = STREAM_R;
-                Map[i][j] = DARKNESS;
-            }
-            else if (Map[i][j] == STREAM_L)
-            {   //海流(左)を登録
-
-                MoveList[i][j] = STREAM_L;
-                Map[i][j] = DARKNESS;
-            }
-            else if (Map[i][j] == MOB_1)
-            {   //オニキンメを登録
-
-                MoveList[i][j] = MOB_1;
-                Map[i][j] = DARKNESS;
-            }
-            else
-            {
-                //   MoveList[i][j] = SPACE;
-            }
-        }
+    if (move) {
+        MovePlayer();
     }
 }
 
-
-void Player::Move()
+void Player::CheckMove()
 {
-    DirectX::XMFLOAT3 pos = GetPos();
+    bool up_check = true, down_check = true,
+        left_check = true, right_check = true;
+    bool gimmicFg = false;
 
-    if (Map[X][Y] == GOAL)
-    {
-        goalFlg = true;
+    targetX = PosX;
+    targetY = PosY;
+
+    gimmicFg = CheckGimmic();
+
+    bool exit = false;
+    if (!gimmicFg) {
+        for (int check_dir = 0; check_dir < 4; check_dir++) {
+            switch ((direction + check_dir) % 4) {
+            case P_UP:
+                exit = CheckMap(PosY - 1, PosX, P_UP);
+                break;
+
+            case P_RIGHT:
+                exit = CheckMap(PosY, PosX + 1, P_RIGHT);
+                break;
+
+            case P_DOWN:
+                exit = CheckMap(PosY + 1, PosX, P_DOWN);
+                break;
+
+            case P_LEFT:
+                exit = CheckMap(PosY, PosX - 1, P_LEFT);
+                break;
+            }
+            if (exit)    break;
+        }
     }
-    
-    if (targetX == pos.x && targetY == pos.y)//移動が完了した
-    {
-        //ライトとの接触確認
-        //照射中
-        if (Map[X][Y] == LUMINOUS)
-        {
-            //上下マスの発光を確認
-            if (Map[X - 1][Y] == LUMINOUS || Map[X + 1][Y] == LUMINOUS)
-            {
-                Vertical = true;
-            }
-            else
-            {
-                Vertical = false;
-            }
-            //左右マスの発光を確認
-            if (Map[X][Y - 1] == LUMINOUS || Map[X][Y + 1] == LUMINOUS)
-            {
-                Horizontal = true;
-            }
-            else
-            {
-                Horizontal = false;
-            }
+    direction = holdDire;
+}
+//ギミック別の処理
+bool Player::CheckGimmic()
+{
+    switch (MapList[PosY][PosX]) {
+    case MIRROR_D:
+    case MIRROR_U:
+        Reflection(MapList[PosY][PosX]);
+        return false;
 
-            //上下移動
-            if (Vertical == true)
-            {
-                if (Map[X - 1][Y] != LUMINOUS && Map[X - 1][Y] != GOAL)      //上のマスが発光していない
-                {
-                    Reverse = false;
-                }
-                else if (Map[X + 1][Y] != LUMINOUS && Map[X + 1][Y] != GOAL) //下のマスが発光していない
-                {
-                    Reverse = true;
-                }
-
-                if (Reverse == false)
-                {
-                    targetY -= 30.0f;
-                    X += 1;
-                }
-                else if (Reverse == true)
-                {
-                    targetY += 30.0f;
-                    X -= 1;
-                }
-            }
-
-            //左右移動
-            if (Horizontal == true)
-            {
-                if (Map[X][Y - 1] != LUMINOUS && Map[X][Y - 1] != GOAL)      //左のマスが発光していない
-                {
-                    Reverse = false;
-                }
-                else if (Map[X][Y + 1] != LUMINOUS && Map[X][Y + 1] != GOAL) //右のマスが発光していない
-                {
-                    Reverse = true;
-                }
-                if (Reverse == false)
-                {
-                    targetX += 30.0f;
-                    Y += 1;
-                }
-                else if (Reverse == true)
-                {
-                    targetX -= 30.0f;
-                    Y -= 1;
-                }
-            }
-
-        }
-        //非照射
-        else
-        {
-            Vertical = false;
-            Horizontal = false;
-            Reverse = false;
-        }
-
+    case STREAM_R:
+    case STREAM_L:
+        Stream(MapList[PosY][PosX]);
+        return true;
     }
-    else//移動中
-    {
-        // 滑らかに目標座標へ移動
-        //目標座標より上に存在
-        if (pos.x < targetX)
-        {
-            pos.x += 1.0f;
-        }
-        //目標座標より下に存在
-        else if (pos.x > targetX)
-        {
-            pos.x -= 1.0f;
-        }
-        //目標座標より右に存在
-        else if (pos.y > targetY)
-        {
-            pos.y -= 1.0f;
-        }
-        //目標座標より左に存在
-        else if (pos.y < targetY)
-        {
-            pos.y += 1.0f;
-        }
 
-        SetPos(pos.x, pos.y, pos.z);
+    return false;
+}
+//鏡鯛の処理
+void Player::Reflection(int gimmic)
+{
+    if (gimmic == MIRROR_D) {
+        switch (direction) {
+        case P_UP:
+        case P_DOWN:
+            direction = (direction + 3) % 4;
+            break;
+        case P_RIGHT:
+        case P_LEFT:
+            direction = (direction + 1) % 4;
+            break;
+        }
+    }
+    else {
+        switch (direction) {
+        case P_UP:
+        case P_DOWN:
+            direction = (direction + 1) % 4;
+            break;
+        case P_RIGHT:
+        case P_LEFT:
+            direction = (direction + 3) % 4;
+            break;
+        }
+    }
+}
+void Player::Stream(int gimmic)
+{
+    if (gimmic == STREAM_R) {
+        targetX += 1;
+        move = true;
+    }
+    else {
+        targetX -= 1;
+        move = true;
+    }
+}
+bool Player::CheckMap(int pos_y, int pos_x, int dire)
+{
+    if (Map[pos_y][pos_x] == LUMINOUS || Map[pos_y][pos_x] == GOAL) {
+        DirectionCase(dire);
+        holdDire = dire;
+        move = true;
+        return true;
+    }
+    //止まる場所の検知
+    if (Map[pos_y][pos_x] == WALL || Map[pos_y][pos_x] == LIGHTUPWALL ||
+        Map[pos_y][pos_x] == MAP_END || Map[pos_y][pos_x] == LIGHT_1 || Map[pos_y][pos_x] == LIGHT_2) {
+        holdDire = (dire + 2) % 4;
+    }
+
+    return false;
+}
+void Player::DirectionCase(int dire)
+{
+    switch (dire)
+    {
+    case P_UP:
+        targetY = PosY - 1;
+        break;
+    case P_RIGHT:
+        targetX = PosX + 1;
+        break;
+    case P_DOWN:
+        targetY = PosY + 1;
+        break;
+    case P_LEFT:
+        targetX = PosX - 1;
+        break;
     }
 }
 
-void Player::DebugList()
+void Player::MovePlayer()
 {
-    std::cout << "マップ更新:Player" << std::endl;
-    //デバッグ	マップ数値表示
-    for (int i = 0; i < 18; i++) {
-        for (int j = 0; j < 32; j++) {
-            std::cout << MoveList[i][j] << ",";
-        }
-        std::cout << std::endl;
+    switch (direction) {
+    case P_UP:
+        pos.y += speed;
+        Vertical = true;
+        break;
+
+    case P_RIGHT:
+        pos.x += speed;
+        Horizontal = true;
+        break;
+
+    case P_DOWN:
+        pos.y -= speed;
+        Vertical = true;
+        break;
+
+    case P_LEFT:
+        pos.x -= speed;
+        Horizontal = true;
+        break;
     }
-    //======================
+
+    if (std::abs(std::abs(pos.x) - abs(targetX * 30.0f)) < 0.1f &&
+        std::abs(std::abs(pos.y) - abs(targetY * 30.0f)) < 0.1f) {
+        PosX = targetX;
+        PosY = targetY;
+        Vertical = false;
+        Horizontal = false;
+        move = false;
+    }
 }
 
 //******************************************************************************
