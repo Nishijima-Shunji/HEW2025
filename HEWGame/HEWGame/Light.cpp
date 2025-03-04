@@ -32,6 +32,8 @@ std::vector<std::vector<int>> Light::Update(std::vector<std::vector<int>> MapDat
 	//新しいマップ情報を取得
 	Map = MapData;
 
+	
+
 	return Map;	//MapDate = Map
 }
 ////******************************************************************************

@@ -11,6 +11,7 @@ class Player : public Object
 private:
     int targetX, targetY; // 移動先のマス座標
 
+	int height, width;
 	int X;
 	int Y;
 	int Goal_X;
@@ -28,6 +29,13 @@ private:
 	int framecount;
 	int animcount;
 
+	int moveState = 0;
+	enum class MoveState {
+		Stop,
+		Move,
+		isTrap
+	};
+
 public:
 
 	//右上から何個目を切り抜いて表示するか
@@ -41,7 +49,8 @@ public:
 	bool GetFlg() { return goalFlg; };
 	void SetUp();
 	void Move();
-	void Animation();
-
-	void DebugList();
+	void SetMoveState(int);
+	void Animation(GameScene& game);
+	void CheckEdge();
+	void CheckDistance(std::vector<std::vector<int>> Map, int , int );
 };

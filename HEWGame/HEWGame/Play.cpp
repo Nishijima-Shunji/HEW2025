@@ -78,16 +78,16 @@ void Play::CheckLight()
 	}
 
 	for (int i = 0; i < light_max; i++) {
-		if (LightPos_y[i] == height){
+		if (LightPos_y[i] == height) {
 			Direction.push_back(UP);
 		}
-		else if (LightPos_y[i] == 0){
+		else if (LightPos_y[i] == 0) {
 			Direction.push_back(DOWN);
 		}
-		else if (LightPos_x[i] == 0){
+		else if (LightPos_x[i] == 0) {
 			Direction.push_back(RIGHT);
 		}
-		else if (LightPos_x[i] == width){
+		else if (LightPos_x[i] == width) {
 			Direction.push_back(LEFT);
 		}
 
@@ -354,7 +354,7 @@ void Play::LightUp()
 			LightOn[light_number] = false;
 			LightOk[light_number] = false;
 		}
-		else if(LightOk[light_number] == true){
+		else if (LightOk[light_number] == true) {
 			LightOn[light_number] = true;
 		}
 	}
@@ -405,7 +405,7 @@ void Play::LightUp()
 		}
 	}
 }
-bool Play::Flash(const int pos_x, const int pos_y, 
+bool Play::Flash(const int pos_x, const int pos_y,
 	const bool light_on, const int nowlight)
 {
 	bool stop = false;
@@ -415,7 +415,7 @@ bool Play::Flash(const int pos_x, const int pos_y,
 		if (LightUpMap[pos_y][pos_x] != NOTLIGHTUP) {
 			LightUpMap[pos_y][pos_x]++;
 		}
-		else{
+		else {
 			switch (Map[pos_y][pos_x]) {
 			case GOAL:
 				break;
@@ -430,7 +430,7 @@ bool Play::Flash(const int pos_x, const int pos_y,
 
 		//ギミックに対する動き
 		switch (Gimmick[pos_y][pos_x]) {
-		//鏡鯛
+			//鏡鯛
 		case MIRROR_U:
 		case MIRROR_D:
 			Map[pos_y][pos_x] = LUMINOUS; //発光
@@ -456,16 +456,16 @@ bool Play::Flash(const int pos_x, const int pos_y,
 
 		//ギミックに対する動き
 		switch (Gimmick[pos_y][pos_x]) {
-		//鏡鯛
+			//鏡鯛
 		case MIRROR_U:
 		case MIRROR_D:
 			Reflection(pos_x, pos_y, nowlight);
 
-		//オニキンメ
+			//オニキンメ
 		case MOB_1:
 			break;
 
-		//アンコウ
+			//アンコウ
 		case MOB_2:
 			break;
 		}
@@ -476,7 +476,7 @@ bool Play::Flash(const int pos_x, const int pos_y,
 			if (LightUpMap[i][j] > 0) {
 				Map[i][j] = LUMINOUS;
 			}
-			else if(Map[i][j] == LUMINOUS){
+			else if (Map[i][j] == LUMINOUS) {
 				Map[i][j] = SPACE;
 			}
 			else {
@@ -490,8 +490,8 @@ bool Play::Flash(const int pos_x, const int pos_y,
 void Play::Reflection(const int pos_x, const int pos_y, const int nowlight)
 {
 	//鏡鯛（右上がり
-	if (Gimmick[pos_y][pos_x] == MIRROR_U){
-		switch (keep_Direction[nowlight]){
+	if (Gimmick[pos_y][pos_x] == MIRROR_U) {
+		switch (keep_Direction[nowlight]) {
 		case UP:
 			keep_Direction[nowlight] = RIGHT;
 			break;
@@ -507,8 +507,8 @@ void Play::Reflection(const int pos_x, const int pos_y, const int nowlight)
 		}
 	}
 	//鏡鯛（右下がり
-	else{
-		switch (keep_Direction[nowlight]){
+	else {
+		switch (keep_Direction[nowlight]) {
 		case UP:
 			keep_Direction[nowlight] = LEFT;
 			break;

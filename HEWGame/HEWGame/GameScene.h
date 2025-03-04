@@ -61,6 +61,7 @@ private:
     bool goalFlg = false;
     int framecount = 0;
     int mendakoScore = 0;
+    bool o2Initflg = false;
 
     struct ButtonParams {
         float amplitude;  // —h‚ê‚Ì‘å‚«‚³
@@ -91,7 +92,6 @@ public:
 
     void LoadMapData(const int _stage);
     std::unique_ptr<Object> CreateObject(int objectType, TextureManager* textureManager);
-    std::unique_ptr<Object> DeleteObject(int objectType, TextureManager* textureManager);
 
     void CheckDead();
     void CheckAndEraseObject(int i, int j, std::vector<std::unique_ptr<Darkness>>& darknessObj, std::vector<std::vector<int>>& maplist);
