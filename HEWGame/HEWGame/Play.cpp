@@ -200,7 +200,7 @@ void Play::MoveLight()
 			}
 
 			if (new_pos_x > 0 && new_pos_x < width &&
-				new_pos_y > 0 && new_pos_y < height) {
+				new_pos_y > 0) {
 				if (Map[new_pos_y - 1][new_pos_x] != MAP_END) {
 					Direction[light_number] = UP;
 				}
@@ -244,7 +244,7 @@ void Play::MoveLight()
 			}
 
 			if (new_pos_x > 0 && new_pos_x < width &&
-				new_pos_y > 0 && new_pos_y < height) {
+				new_pos_y < height) {
 				if (Map[new_pos_y + 1][new_pos_x] != MAP_END) {
 					Direction[light_number] = DOWN;
 				}
@@ -331,7 +331,7 @@ void Play::MoveLight()
 				Direction[light_number] = UP;
 			}
 
-			if (new_pos_x > 0 && new_pos_x < width &&
+			if (new_pos_x > 0 &&
 				new_pos_y > 0 && new_pos_y < height) {
 				if (Map[new_pos_y][new_pos_x - 1] != MAP_END) {
 					Direction[light_number] = LEFT;

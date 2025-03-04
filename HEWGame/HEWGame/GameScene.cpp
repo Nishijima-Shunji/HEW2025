@@ -773,13 +773,13 @@ void GameScene::ChangeCamera()
 		g_Camera.SetCamera(190.0f, -100.0f, 3.5f);
 		break;
 	case 4:
-		g_Camera.SetCamera(220.0f, -130.0f, 3.0f);
+		g_Camera.SetCamera(220.0f, -120.0f, 3.0f);
 		break;
 	case 5:
 		g_Camera.SetCamera(315.0f, -210.0f, 2.0f);
 		break;
 	case 6:
-		g_Camera.SetCamera(250.0f, -160.0f, 2.0f);
+		g_Camera.SetCamera(250.0f, -220.0f, 2.0f);
 		break;
 	case 7:
 		g_Camera.SetCamera(250.0f, -155.0f, 2.5f);

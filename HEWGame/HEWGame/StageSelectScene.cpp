@@ -303,7 +303,7 @@ void StageSelectScene::Select() {
 		if ((input.GetKeyTrigger(VK_A) || input.GetButtonPress(XINPUT_LEFT)) && nowStage > 1) {
 			nextStage -= 1;
 		}
-		if ((input.GetKeyTrigger(VK_D) || input.GetButtonPress(XINPUT_RIGHT)) && nowStage < 8) {
+		if ((input.GetKeyTrigger(VK_D) || input.GetButtonPress(XINPUT_RIGHT)) && nowStage < 7) {
 			nextStage += 1;
 		}
 		// Œˆ’è
