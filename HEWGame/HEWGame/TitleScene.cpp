@@ -247,13 +247,13 @@ void TitleScene::Select(Input* input) {
 		}
 	}
 	else {
-		if (input->GetKeyTrigger(VK_LEFT) || (stick.x < 0.7f && trigger) || input->GetButtonTrigger(XINPUT_LEFT)) {
+		if (input->GetKeyTrigger(VK_A) || (stick.x < 0.7f && trigger) || input->GetButtonTrigger(XINPUT_LEFT)) {
 			if (nowButton > 1) {
 				selectButton--;
 				g_Sound.PlaySE(SE_CursolMove1);
 			}
 		}
-		if (input->GetKeyTrigger(VK_RIGHT) || (stick.x > 0.7f && trigger) || input->GetButtonTrigger(XINPUT_RIGHT)) {
+		if (input->GetKeyTrigger(VK_D) || (stick.x > 0.7f && trigger) || input->GetButtonTrigger(XINPUT_RIGHT)) {
 			if (nowButton < 3) {
 				selectButton++;
 				g_Sound.PlaySE(SE_CursolMove1);
@@ -314,7 +314,7 @@ void TitleScene::Select(Input* input) {
 void TitleScene::OptionSelect(Input* input) {
 	static int select = 1;
 	DirectX::XMFLOAT2 stick = input->GetLeftAnalogStick();
-	if (input->GetKeyTrigger(VK_UP) || input->GetButtonTrigger(XINPUT_UP)) {
+	if (input->GetKeyTrigger(VK_W) || input->GetButtonTrigger(XINPUT_UP)) {
 		select--;
 		// カーソル移動音
 		g_Sound.PlaySE(SE_CursolMove1);
@@ -323,7 +323,7 @@ void TitleScene::OptionSelect(Input* input) {
 			select = 2;
 		}
 	}
-	if (input->GetKeyTrigger(VK_DOWN) || input->GetButtonTrigger(XINPUT_DOWN)) {
+	if (input->GetKeyTrigger(VK_S) || input->GetButtonTrigger(XINPUT_DOWN)) {
 		select++;
 		// カーソル移動音
 		g_Sound.PlaySE(SE_CursolMove1);

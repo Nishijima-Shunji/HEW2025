@@ -107,7 +107,7 @@ void ResultScene::Update() {
 	}
 	// =====ƒ{ƒ^ƒ““ü—ÍŽó•t=====
 	else if (state == 2) {
-		if (input.GetKeyTrigger(VK_SPACE) || input.GetButtonTrigger(XINPUT_A)) {
+		if (input.GetKeyTrigger(VK_RETURN) || input.GetButtonTrigger(XINPUT_A)) {
 			g_Sound.PlaySE(SE_FloatOn);
 			state = 3;
 		}

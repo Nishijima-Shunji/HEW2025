@@ -260,6 +260,25 @@ void Player::MovePlayer()
     }
 }
 
+void Player::Animation(GameScene& game) {
+    TextureManager* texture = game.GetTexture_ptr();
+    // 方向に応じてテクスチャ変更
+    switch (direction) {
+    case P_UP:      SetTexture(texture, L"asset/survivor2.png", 4, 2); break;
+    case P_LEFT:    SetTexture(texture, L"asset/survivor1.png", 4, 2); break;
+    case P_RIGHT:   SetTexture(texture, L"asset/survivor1.png", 4, 2); break;
+    default:        SetTexture(texture, L"asset/survivor3.png", 4, 2);
+    }
+
+    // アニメーション再生
+    SetUV(animcount % 4, (animcount / 4) % 2);
+    if (framecount % 5 == 0) {
+        animcount++;
+    }
+
+    framecount++;
+}
+
 //******************************************************************************
 //	End of file.
 //******************************************************************************

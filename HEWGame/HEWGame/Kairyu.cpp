@@ -66,7 +66,7 @@ std::vector<std::vector<int>> Kairyu::Update(std::vector<std::vector<int>> MapDa
 		}
 	}
 		// 待機アニメーション
-	SetUV(animcount % 4, (animcount / 4) % 2);
+	SetUV(animcount % 5, (animcount / 5) % 2);
 	if (framecount % 5 == 0) {
 		animcount++;
 	}

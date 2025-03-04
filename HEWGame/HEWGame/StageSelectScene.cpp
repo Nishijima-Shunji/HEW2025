@@ -300,10 +300,10 @@ void StageSelectScene::Select() {
 	// 移動
 	if (!move && loadstate == 0) {
 		// ステージ移動
-		if ((input.GetKeyTrigger(VK_LEFT) || input.GetButtonPress(XINPUT_LEFT)) && nowStage > 1) {
+		if ((input.GetKeyTrigger(VK_A) || input.GetButtonPress(XINPUT_LEFT)) && nowStage > 1) {
 			nextStage -= 1;
 		}
-		if ((input.GetKeyTrigger(VK_RIGHT) || input.GetButtonPress(XINPUT_RIGHT)) && nowStage < 4) {
+		if ((input.GetKeyTrigger(VK_D) || input.GetButtonPress(XINPUT_RIGHT)) && nowStage < 8) {
 			nextStage += 1;
 		}
 		// 決定

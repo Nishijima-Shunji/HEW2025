@@ -173,9 +173,6 @@ void GameScene::Update() {
 	if (state == 0) {
 		// ゲーム時間の計測開始
 		start = std::chrono::high_resolution_clock::now();
-		//g_Sound.RoadBGM(BGM01);
-		//g_Sound.PlayBGM();
-		g_Sound.SetVolBGM(0.0f);
 		state = 1;
 	}
 	else if (state == 1) {
@@ -547,13 +544,13 @@ void GameScene::MapUpdate() {
 
 void GameScene::PauseSelect(Input* input) {
 	static int selectbutton = 0;
-	if (input->GetKeyTrigger(VK_LEFT) || input->GetButtonTrigger(XINPUT_LEFT)) {
+	if (input->GetKeyTrigger(VK_A) || input->GetButtonTrigger(XINPUT_LEFT)) {
 		selectbutton--;
 		if (selectbutton < 0) {
 			selectbutton = 2;
 		}
 	}
-	if (input->GetKeyTrigger(VK_RIGHT) || input->GetButtonTrigger(XINPUT_RIGHT)) {
+	if (input->GetKeyTrigger(VK_D) || input->GetButtonTrigger(XINPUT_RIGHT)) {
 		selectbutton++;
 		if (selectbutton > 2) {
 			selectbutton = 0;
@@ -710,13 +707,13 @@ void GameScene::OptionSelect(Input* input) {
 		state = 3;
 	}
 	// 選択中を切り替え
-	if (input->GetKeyTrigger(VK_UP) || input->GetButtonTrigger(XINPUT_UP)) {
+	if (input->GetKeyTrigger(VK_W) || input->GetButtonTrigger(XINPUT_UP)) {
 		select--;
 		if (select < 0) {
 			select = 2;
 		}
 	}
-	if (input->GetKeyTrigger(VK_DOWN) || input->GetButtonTrigger(XINPUT_DOWN)) {
+	if (input->GetKeyTrigger(VK_S) || input->GetButtonTrigger(XINPUT_DOWN)) {
 		select++;
 		if (select > 2) {
 			select = 0;
@@ -782,7 +779,7 @@ void GameScene::ChangeCamera()
 		g_Camera.SetCamera(315.0f, -210.0f, 2.0f);
 		break;
 	case 6:
-		g_Camera.SetCamera(250.0f, -130.0f, 1.0f);
+		g_Camera.SetCamera(250.0f, -160.0f, 2.0f);
 		break;
 	case 7:
 		g_Camera.SetCamera(250.0f, -155.0f, 2.5f);
