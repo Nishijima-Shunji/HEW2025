@@ -764,7 +764,7 @@ void GameScene::ChangeCamera()
 {
 	switch (stage) {
 	case 1:
-		g_Camera.SetCamera(90.0f, -80.0f, 4.0f);
+		g_Camera.SetCamera(120.0f, -120.0f, 3.5f);
 		break;
 	case 2:
 		g_Camera.SetCamera(250.0f, -130.0f, 2.5f);
