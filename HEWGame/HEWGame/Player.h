@@ -51,4 +51,5 @@ public:
 	std::vector<std::vector<int>> Update(std::vector<std::vector<int>>,GameScene&);
 
 	bool GetFg() { return goalFg; };
+	void Animation(GameScene& game);
 };

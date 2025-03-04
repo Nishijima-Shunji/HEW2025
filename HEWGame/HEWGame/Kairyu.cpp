@@ -65,28 +65,6 @@ std::vector<std::vector<int>> Kairyu::Update(std::vector<std::vector<int>> MapDa
 			}
 		}
 	}
-
-	//for (const auto& obj : characterObj) {
-	//	// Player オブジェクトかどうかを確認
-	//	Enemy* enemy = dynamic_cast<Enemy*>(obj.get());
-	//	if (enemy) {
-	//		float deltaX = 0.0f;
-	//		if (this->CheckCollision(*player))
-	//			// 右
-	//			if (direction == 0) {
-	//				deltaX = 1.0f;
-	//			}
-	//		// 左
-	//			else if (direction == 1) {
-	//				deltaX = -1.0f;
-	//			}
-
-	//		// プレイヤーの位置を更新
-	//		enemy->SetPos(player->GetPos().x + deltaX, player->GetPos().y, 0.0f);
-
-	//		break; // ループを終了
-	//	}
-	//}
 		// 待機アニメーション
 	SetUV(animcount % 4, (animcount / 4) % 2);
 	if (framecount % 5 == 0) {

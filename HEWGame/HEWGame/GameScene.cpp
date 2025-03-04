@@ -235,12 +235,6 @@ void GameScene::Update() {
 				Mendako* mendako = dynamic_cast<Mendako*>(obj.get()); // characterObj の要素を Mendako 型にキャスト
 				if (mendako) {  // dynamic_cast が成功した場合のみ処理
 					bool menFg = mendako->GetFg_men(); // Mendako のフラグを取得
-
-					//if (menFg) { // menFg が true の場合、アニメーションを開始しない
-					//	menGk = true;
-					//	break;
-					//}
-
 					if (!menFg) { // menFg が false の場合、アニメーションを開始
 						e_pos = mendako->GetPos(); // Mendako の位置を取得
 						mendakoAnime_g = true; // アニメーションを開始
@@ -347,13 +341,14 @@ void GameScene::Draw() {
 		Mendako_e->Draw();
 	}
 
-	if (state >= 2) {
 		// ポーズ画面
+	if (state >= 2) {
 		pause->Draw();
 		for (const auto& obj : button) {
 			obj->Draw();
 		}
 	}
+	// オプション
 	if (state == 5) {
 		setting->Draw();
 		for (int i = 0; i < 2; i++) {
@@ -363,6 +358,7 @@ void GameScene::Draw() {
 		close->Draw();
 	}
 
+	// 操作説明
 	if (state == 0) {
 		control->Draw();
 		Abutton->Draw();
@@ -650,6 +646,11 @@ void GameScene::o2Gauge(std::chrono::milliseconds time) {
 	}
 
 	static int lastCheckedTime = 0;
+	// 1度だけ初期化(staticのためシーン切り替えても前情報が保持されるのを防ぐ)
+	if (!o2Initflg) {
+		lastCheckedTime = 0;
+		o2Initflg = true;
+	}
 	float remainingTime = (MAXTIME / 3) - (time.count() - lastCheckedTime);
 
 	if (o2.size() == 1) {
@@ -775,7 +776,7 @@ void GameScene::ChangeCamera()
 		g_Camera.SetCamera(190.0f, -100.0f, 3.5f);
 		break;
 	case 4:
-		g_Camera.SetCamera(220.0f, -230.0f, 1.8f);
+		g_Camera.SetCamera(220.0f, -130.0f, 3.0f);
 		break;
 	case 5:
 		g_Camera.SetCamera(315.0f, -210.0f, 2.0f);

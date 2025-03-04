@@ -74,15 +74,12 @@ std::vector<std::vector<int>> Player::Update(std::vector<std::vector<int>> MapDa
 
     PlayerMove();
 
-    // 待機アニメーション
-    SetUV(animcount % 4 , (animcount / 4) % 2);
-    if (framecount % 5 == 0) {
-        animcount++;
-    }
+	Animation(game);
 
-    framecount++;
+	// =====アニメーション=====
+	
 
-    return Map;
+	return Map;
 }
 
 void Player::PlayerMove()
