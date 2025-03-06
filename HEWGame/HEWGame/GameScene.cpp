@@ -190,7 +190,7 @@ void GameScene::Update() {
 			for (const auto& obj : row) {
 				if (obj) {
 					// それ以外の場合
-					maplist = obj->Update(maplist,*this);
+					maplist = obj->Update(maplist, *this);
 				}
 			}
 		}
@@ -278,8 +278,13 @@ void GameScene::Update() {
 			state = 2;
 		}
 
+		if (deadFlg) {
+			timescore = elapsed.count();
+			state = 10;
+		}
+
 		// リザルトシーンに移動
-		if (deadFlg || goalFlg || input.GetKeyTrigger(VK_3)) {
+		if (goalFlg || input.GetKeyTrigger(VK_3)) {
 			// めんだこスコア
 			for (auto& obj : characterObj) {
 				Mendako* mendako = dynamic_cast<Mendako*>(obj.get()); // characterObj の要素を Mendako 型にキャスト
@@ -288,10 +293,6 @@ void GameScene::Update() {
 				}
 			}
 
-			if (deadFlg) {
-				mendakoScore = 0;
-				score = 0;
-			}
 			// スコアをリザルトに渡して移動
 			g_Sound.StopBGM();
 			g_Sound.ReleaseBGM();
@@ -303,6 +304,28 @@ void GameScene::Update() {
 	}
 	else if (state == 5) {
 		OptionSelect(&input);
+	}
+	else if (state == 10) {
+		for (auto& obj : characterObj) {
+			Enemy* enemy = dynamic_cast<Enemy*>(obj.get());
+			if (enemy) {
+				enemy->SetTexture(textureManager, L"asset/shake2.png");
+				enemy->SetUV(animcount % 4, 1);
+			}
+			if (framecount % 5 == 0) {
+				animcount++;
+			}
+		}
+		if (animcount == 5) {
+			if (deadFlg) {
+				mendakoScore = 0;
+				score = 0;
+			}
+			// スコアをリザルトに渡して移動
+			g_Sound.StopBGM();
+			g_Sound.ReleaseBGM();
+			SceneManager::ChangeScene(SceneManager::RESULT, score, mendakoScore, timescore);
+		}
 	}
 	PauseAnimation();
 	framecount++;
@@ -339,7 +362,7 @@ void GameScene::Draw() {
 		Mendako_e->Draw();
 	}
 
-		// ポーズ画面
+	// ポーズ画面
 	if (state >= 2) {
 		pause->Draw();
 		for (const auto& obj : button) {
@@ -392,7 +415,7 @@ void GameScene::LoadMapData(int stage) {
 		//↑データ入ってる
 		for (int j = 0; j < maplist[i].size(); ++j) {
 			int objectType = maplist[i][j];
-			if(objectType == 1 || objectType == 4 || objectType == 11 || objectType == 12 || objectType == 19 || objectType == 20) {
+			if (objectType == 1 || objectType == 4 || objectType == 11 || objectType == 12 || objectType == 19 || objectType == 20) {
 				auto obj = CreateObject(objectType, textureManager); // オブジェクト生成
 				if (obj) {
 					float x = j * 30.0f; // x座標		列 * Objectの大きさ * オフセット
@@ -423,7 +446,7 @@ void GameScene::LoadMapData(int stage) {
 				}
 			}
 			// 最初に見えるオブジェクトの上以外に暗闇を配置
-			if (maplist[i][j] != P_DIVER && maplist[i][j] != E_SHARK && maplist[i][j] != GOAL && 
+			if (maplist[i][j] != P_DIVER && maplist[i][j] != E_SHARK && maplist[i][j] != GOAL &&
 				maplist[i][j] != MENDAKO && maplist[i][j] != MAP_END && maplist[i][j] != LIGHT_1 &&
 				maplist[i][j] != -9 && i != 0 && i != HeightMAX && j != 0 && j != WidthMAX) {
 				darknessObj.emplace_back(std::make_unique<Darkness>());
