@@ -227,9 +227,10 @@ void GameScene::Update() {
 		}
 
 		// メンダコアニメーションの処理
-		if (!mendakoAnime_g && menGk) { // アニメーションが進行中でなく、menGk が true の場合に実行
-			for (auto& obj : characterObj) {
-				Mendako* mendako = dynamic_cast<Mendako*>(obj.get()); // characterObj の要素を Mendako 型にキャスト
+		for (auto& obj : characterObj) {
+			Mendako* mendako = dynamic_cast<Mendako*>(obj.get()); // characterObj の要素を Mendako 型にキャスト
+			menGk = static_cast<Mendako*>(obj.get())->menGk;
+			if (!mendakoAnime_g && menGk) { // アニメーションが進行中でなく、menGk が true の場合に実行
 				if (mendako) {  // dynamic_cast が成功した場合のみ処理
 					bool menFg = mendako->GetFg_men(); // Mendako のフラグを取得
 					if (!menFg) { // menFg が false の場合、アニメーションを開始
@@ -240,7 +241,7 @@ void GameScene::Update() {
 						Mendako_e->SetSize(80.0f, 80.0f, 0.0f);
 						Mendako_e->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-						menGk = false; // アニメーション開始後、menGk を false にする
+						static_cast<Mendako*>(obj.get())->menGk = false; // アニメーション開始後、menGk を false にする
 						break;
 					}
 				}

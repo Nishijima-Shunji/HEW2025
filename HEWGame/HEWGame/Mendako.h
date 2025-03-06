@@ -37,7 +37,7 @@ private:
 
 public:
 
-
+	bool menGk =true;
 	
 	bool GetFg_men() { return menAlive;};
 	bool GetMendakoCount() { return Mendako_C; };
