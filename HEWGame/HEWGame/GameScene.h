@@ -56,10 +56,12 @@ private:
 
     int state = 0;
     int score = 0;
+    int timescore = 0;
     int stage = 0;
     bool deadFlg = false;
     bool goalFlg = false;
     int framecount = 0;
+    int animcount = 0;
     int mendakoScore = 0;
     bool o2Initflg = false;
 
