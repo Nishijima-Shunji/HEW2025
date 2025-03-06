@@ -280,11 +280,11 @@ void GameScene::Update() {
 
 		if (deadFlg) {
 			timescore = elapsed.count();
-			state = 10;
+			//state = 10;
 		}
 
 		// リザルトシーンに移動
-		if (goalFlg || input.GetKeyTrigger(VK_3)) {
+		if (deadFlg || goalFlg || input.GetKeyTrigger(VK_3)) {
 			// めんだこスコア
 			for (auto& obj : characterObj) {
 				Mendako* mendako = dynamic_cast<Mendako*>(obj.get()); // characterObj の要素を Mendako 型にキャスト
